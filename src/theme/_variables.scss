@@ -1,0 +1,272 @@
+// theme/_variables.scss
+@use '@angular/material' as mat;
+
+// ===========================
+// PALETAS DE MATERIAL DESIGN
+// ===========================
+
+$custom-primary-palette: (
+  50: #e8f2ff,
+  100: #c6ddff,
+  200: #a1c7ff,
+  300: #7bb1ff,
+  400: #5e9fff,
+  500: #696cff,
+  // Color principal púrpura del diseño Sneat
+  600: #5f63f2,
+  700: #5449cc,
+  800: #4a3fb8,
+  900: #3c2e8a,
+  A100: #c6ddff,
+  A200: #7bb1ff,
+  A400: #696cff,
+  A700: #5449cc,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: white,
+    A700: white,
+  ),
+);
+
+$custom-accent-palette: (
+  50: #f0f9ff,
+  100: #e0f2fe,
+  200: #bae6fd,
+  300: #7dd3fc,
+  400: #38bdf8,
+  500: #8592a3,
+  // Gris azulado para secundario
+  600: #7a869a,
+  700: #6f7a8a,
+  800: #646e7a,
+  900: #59636a,
+  A100: #bae6fd,
+  A200: #7dd3fc,
+  A400: #38bdf8,
+  A700: #7a869a,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: white,
+    A700: white,
+  ),
+);
+
+$custom-warn-palette: (
+  50: #fef2f2,
+  100: #fee2e2,
+  200: #fecaca,
+  300: #fca5a5,
+  400: #f87171,
+  500: #ff3e1d,
+  // Rojo del diseño Sneat
+  600: #e5381a,
+  700: #cc3217,
+  800: #b22c14,
+  900: #992611,
+  A100: #fee2e2,
+  A200: #fca5a5,
+  A400: #f87171,
+  A700: #cc3217,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: white,
+    A700: white,
+  ),
+);
+
+// ===========================
+// VARIABLES CSS DEL TEMA - LIGHT MODE
+// ===========================
+
+:root {
+  // Colores principales del dashboard
+  --sneat-primary: #696cff;
+  --sneat-primary-light: #8789ff;
+  --sneat-primary-dark: #5f63f2;
+
+  // Colores de estado
+  --sneat-success: #71dd37;
+  --sneat-success-light: #83e542;
+  --sneat-warning: #ffab00;
+  --sneat-warning-light: #ffb733;
+  --sneat-danger: #ff3e1d;
+  --sneat-danger-light: #ff654a;
+  --sneat-info: #03c3ec;
+  --sneat-info-light: #35cff0;
+
+  // Colores específicos para métricas (basados en la imagen)
+  --sneat-profit: #71dd37;
+  --sneat-sales: #696cff;
+  --sneat-payments: #ff3e1d;
+  --sneat-transactions: #696cff;
+
+  // Sistema de grises - Light Mode
+  --sneat-gray-50: #fafafa;
+  --sneat-gray-100: #f5f5f5;
+  --sneat-gray-200: #eeeeee;
+  --sneat-gray-300: #e0e0e0;
+  --sneat-gray-400: #bdbdbd;
+  --sneat-gray-500: #9e9e9e;
+  --sneat-gray-600: #757575;
+  --sneat-gray-700: #616161;
+  --sneat-gray-800: #424242;
+  --sneat-gray-900: #212121;
+
+  // Backgrounds - Light Mode
+  --sneat-bg-primary: #ffffff;
+  --sneat-bg-secondary: #f5f5f9; // Fondo de la página
+  --sneat-bg-sidebar: #ffffff;
+
+  // Textos - Light Mode
+  --sneat-text-primary: #22303e; // rgba(34, 48, 62, 1)
+  --sneat-text-secondary: #22303e; // rgba(34, 48, 62, 0.7)
+  --sneat-text-disabled: #22303e; // rgba(34, 48, 62, 0.4)
+
+  // Bordes y sombras
+  --sneat-border-color: rgba(34, 48, 62, 0.12);
+  --sneat-border-radius: 6px;
+  --sneat-border-radius-lg: 8px;
+
+  // Sombras - Light Mode
+  --sneat-shadow-xs: 0 1px 2px rgba(34, 48, 62, 0.06);
+  --sneat-shadow-sm: 0 2px 6px rgba(34, 48, 62, 0.08);
+  --sneat-shadow: 0 4px 8px rgba(34, 48, 62, 0.1);
+  --sneat-shadow-lg: 0 10px 25px rgba(34, 48, 62, 0.14);
+  --sneat-shadow-xl: 0 20px 40px rgba(34, 48, 62, 0.18);
+
+  // Espaciado consistente
+  --sneat-spacing-xs: 4px;
+  --sneat-spacing-sm: 8px;
+  --sneat-spacing-md: 16px;
+  --sneat-spacing-lg: 24px;
+  --sneat-spacing-xl: 32px;
+  --sneat-spacing-xxl: 48px;
+
+  // Variables específicas del layout
+  --sneat-navbar-height: 64px;
+  --sneat-sidebar-width: 260px;
+  --sneat-sidebar-collapsed-width: 80px;
+}
+
+// ===========================
+// VARIABLES CSS DEL TEMA - DARK MODE
+// ===========================
+
+[data-theme='dark'] {
+  // Backgrounds - Dark Mode
+  --sneat-bg-primary: #2b2c40; // superficie de cards
+  --sneat-bg-secondary: #232333; // fondo de la página
+  --sneat-bg-sidebar: #2b2c40;
+
+  // Textos - Dark Mode
+  --sneat-text-primary: #e6e6f1; // rgba(230, 230, 241, 1)
+  --sneat-text-secondary: #e6e6f1; // rgba(230, 230, 241, 0.7)
+  --sneat-text-disabled: #e6e6f1; // rgba(230, 230, 241, 0.4)
+
+  // Sistema de grises - Dark Mode
+  --sneat-gray-50: #262a3a;
+  --sneat-gray-100: #2f3349;
+  --sneat-gray-200: #262a3a;
+  --sneat-gray-300: #4a5072;
+  --sneat-gray-400: #5e6692;
+  --sneat-gray-500: #7983bb;
+  --sneat-gray-600: #aab3de;
+  --sneat-gray-700: #b6bee3;
+  --sneat-gray-800: #cfd3ec;
+  --sneat-gray-900: #e7e9f6;
+
+  // Bordes - Dark Mode
+  --sneat-border-color: rgba(230, 230, 241, 0.12);
+
+  // Sombras - Dark Mode (más intensas y con tono más oscuro)
+  --sneat-shadow-xs: 0 1px 2px rgba(20, 20, 29, 0.18);
+  --sneat-shadow-sm: 0 2px 6px rgba(20, 20, 29, 0.2);
+  --sneat-shadow: 0 4px 8px rgba(20, 20, 29, 0.22);
+  --sneat-shadow-lg: 0 10px 25px rgba(20, 20, 29, 0.24);
+  --sneat-shadow-xl: 0 20px 40px rgba(20, 20, 29, 0.26);
+
+  // Variables del tema Vuetify equivalentes para dark mode
+  --v-theme-surface: 43, 44, 64;
+  --v-theme-on-surface: 34, 48, 62;
+  --v-border-color: 230, 230, 241;
+  --v-shadow-key-umbra-color: 20, 20, 29;
+  --v-shadow-sm-opacity: 0.2;
+
+  --v-medium-emphasis-opacity: 0.4;
+}
+
+// ===========================
+// UTILIDADES PARA TOGGLE TEMA
+// ===========================
+
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: var(--sneat-border-radius);
+  cursor: pointer;
+  color: var(--sneat-text-primary);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(var(--sneat-primary), 0.1);
+  }
+}
+
+// ===========================
+// MIXINS ÚTILES
+// ===========================
+
+@mixin card-style {
+  background-color: var(--sneat-bg-primary);
+  border: 1px solid var(--sneat-border-color);
+  border-radius: var(--sneat-border-radius-lg);
+  box-shadow: var(--sneat-shadow-sm);
+  color: var(--sneat-text-primary);
+}
+
+@mixin sidebar-style {
+  background-color: var(--sneat-bg-sidebar);
+  border-right: 1px solid var(--sneat-border-color);
+  box-shadow: var(--sneat-shadow-sm);
+}
+
+@mixin navbar-style {
+  background-color: rgba(var(--sneat-bg-primary), 0.88);
+  backdrop-filter: blur(3px);
+  border-bottom: 1px solid var(--sneat-border-color);
+  box-shadow: var(--sneat-shadow-sm);
+}

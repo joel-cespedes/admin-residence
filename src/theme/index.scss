@@ -1,0 +1,10 @@
+@use '@angular/material' as mat;
+
+@use './variables';
+@use './grids';
+@use './components';
+
+// Exportar las paletas para que puedan ser usadas en styles.scss
+$custom-primary-palette: variables.$custom-primary-palette !default;
+$custom-accent-palette: variables.$custom-accent-palette !default;
+$custom-warn-palette: variables.$custom-warn-palette !default;

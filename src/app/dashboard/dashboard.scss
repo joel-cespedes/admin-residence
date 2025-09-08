@@ -1,0 +1,1079 @@
+// ===========================
+// LAYOUT - BEM METHODOLOGY
+// ===========================
+.layout {
+  display: flex;
+  min-height: 100vh;
+
+  &--nav-vertical {
+    .layout__content {
+      @media screen and (min-width: 1280px) {
+        padding-left: 260px;
+      }
+    }
+  }
+
+  &__sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    z-index: 1003;
+    background-color: rgb(var(--v-theme-surface, 255, 255, 255));
+    box-shadow: 0 2px 6px
+      rgba(var(--v-shadow-key-umbra-color, 34, 48, 62), var(--v-shadow-sm-opacity, 0.08));
+    transition: transform 0.2s ease-in-out;
+
+    @media (max-width: 1279px) {
+      transform: translateX(-100%);
+
+      &--open {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 100vh;
+    width: 100%;
+    transition: padding-left 0.2s ease-in-out;
+  }
+}
+
+// ===========================
+// SIDEBAR - BEM
+// ===========================
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: rgba(var(--v-theme-on-surface, 34, 48, 62), var(--v-high-emphasis-opacity, 0.9));
+
+  &__header {
+    padding: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__logo-icon {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #696cff, #8789ff);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+
+    mat-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__logo-text {
+    font-weight: 600;
+    color: rgba(var(--v-theme-on-surface, 34, 48, 62), var(--v-high-emphasis-opacity, 0.9));
+    letter-spacing: -0.5px;
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+  }
+}
+
+// ===========================
+// NAVIGATION - BEM
+// ===========================
+.nav {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0 0;
+
+  &__item {
+    list-style: none;
+  }
+
+  &__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 0.9375rem;
+    margin: 0 1rem 0.25rem;
+    height: 2.625rem;
+    border-radius: 0.375rem;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(var(--v-theme-on-surface, 34, 48, 62), var(--v-hover-opacity, 0.06));
+    }
+
+    &--active {
+      background-color: rgba(
+        var(--v-theme-primary, 105, 108, 255),
+        var(--v-activated-opacity, 0.16)
+      );
+      color: rgb(var(--v-theme-primary, 105, 108, 255));
+
+      .nav__icon {
+        color: rgb(var(--v-theme-primary, 105, 108, 255));
+      }
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 1.375rem;
+    height: 1.375rem;
+    margin-right: 0.5rem;
+    color: rgba(var(--v-theme-on-surface, 34, 48, 62), var(--v-medium-emphasis-opacity, 0.7));
+  }
+
+  &__title {
+    flex: 1;
+    font-weight: 400;
+    line-height: 1.375rem;
+    color: rgba(var(--v-theme-on-surface, 34, 48, 62), var(--v-high-emphasis-opacity, 0.9));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__badge {
+    color: rgb(var(--v-theme-primary, 105, 108, 255));
+    width: 6px;
+    height: 6px;
+    margin-left: auto;
+  }
+
+  &__badge-text {
+    background-color: rgba(var(--v-theme-primary, 105, 108, 255), var(--v-activated-opacity, 0.16));
+    color: rgb(var(--v-theme-primary, 105, 108, 255));
+    font-weight: 500;
+    padding: 0 0.625rem;
+    height: 1.5rem;
+    border-radius: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+
+  &__section-title {
+    font-weight: 400;
+    color: rgba(var(--v-theme-on-surface, 34, 48, 62), var(--v-medium-emphasis-opacity, 0.4));
+    text-transform: uppercase;
+    letter-spacing: normal;
+    line-height: 1.375rem;
+    margin: 26px 16px 18px;
+    padding: 0 0.9375rem;
+    list-style: none;
+  }
+}
+
+// ===========================
+// NAVBAR - BEM
+// ===========================
+.navbar {
+  z-index: 11;
+
+  margin-bottom: 16px;
+
+  &--blur {
+    .navbar__container {
+      backdrop-filter: blur(3px);
+      background-color: rgba(var(--v-theme-surface, 255, 255, 255), 0.88);
+    }
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 1.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(var(--v-border-color, 34, 48, 62), var(--v-border-opacity, 0.12));
+    box-shadow: 0 2px 6px
+      rgba(var(--v-shadow-key-umbra-color, 34, 48, 62), var(--v-shadow-sm-opacity, 0.08));
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__menu-toggle {
+    display: none;
+
+    @media (max-width: 1279px) {
+      display: flex;
+    }
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--sneat-bg-secondary);
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--sneat-border-color);
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    min-width: 200px;
+
+    &:hover {
+      border-color: var(--sneat-primary);
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &__search-icon {
+    color: var(--sneat-text-secondary);
+
+    width: 18px;
+    height: 18px;
+  }
+
+  &__search-text {
+    color: var(--sneat-text-secondary);
+    flex: 1;
+  }
+
+  &__search-shortcut {
+    background-color: var(--sneat-gray-200);
+    color: var(--sneat-text-secondary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  &__btn {
+    color: var(--sneat-text-primary);
+
+    &:hover {
+      background-color: rgba(var(--sneat-primary), 0.08);
+    }
+  }
+
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+// ===========================
+// DASHBOARD - BEM
+// ===========================
+.dashboard {
+  padding: 16px 24px;
+  box-sizing: border-box;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  &__section {
+    margin-bottom: 24px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// ===========================
+// WELCOME CARD - BEM
+// ===========================
+.welcome-card {
+  background: linear-gradient(135deg, var(--sneat-primary) 0%, var(--sneat-primary-light) 100%);
+  color: white;
+  border: none !important;
+  box-shadow: var(--sneat-shadow-lg) !important;
+
+  &__content {
+    padding: 32px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+      padding: 24px !important;
+    }
+  }
+
+  &__text {
+    flex: 1;
+  }
+
+  &__title {
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  &__subtitle {
+    opacity: 0.9;
+    margin: 0 0 24px;
+    line-height: 1.5;
+  }
+
+  &__btn {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.3) !important;
+    }
+  }
+
+  &__illustration {
+    @media (max-width: 768px) {
+      margin-top: 24px;
+    }
+  }
+
+  &__img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+
+    @media (max-width: 768px) {
+      max-width: 150px;
+    }
+  }
+}
+
+// ===========================
+// METRIC CARD - BEM
+// ===========================
+.metric-card {
+  height: 100%;
+
+  &--profit &__icon-container {
+    background-color: rgba(113, 221, 55, 0.1);
+
+    .metric-card__icon {
+      color: var(--sneat-success);
+    }
+  }
+
+  &--sales &__icon-container {
+    background-color: rgba(105, 108, 255, 0.1);
+
+    .metric-card__icon {
+      color: var(--sneat-primary);
+    }
+  }
+
+  &--payments &__icon-container {
+    background-color: rgba(255, 62, 29, 0.1);
+
+    .metric-card__icon {
+      color: var(--sneat-danger);
+    }
+  }
+
+  &--transactions &__icon-container {
+    background-color: rgba(105, 108, 255, 0.1);
+
+    .metric-card__icon {
+      color: var(--sneat-primary);
+    }
+  }
+
+  &__content {
+    padding: 24px !important;
+    text-align: center;
+
+    @media (max-width: 768px) {
+      padding: 16px !important;
+    }
+  }
+
+  &__icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  &__number {
+    font-weight: 700;
+    color: var(--sneat-text-primary);
+    margin-bottom: 4px;
+
+    @media (max-width: 768px) {
+    }
+  }
+
+  &__change {
+    font-weight: 500;
+    margin-bottom: 4px;
+
+    &--positive {
+      color: var(--sneat-success);
+
+      &::before {
+        content: '↗';
+        margin-right: 2px;
+      }
+    }
+
+    &--negative {
+      color: var(--sneat-danger);
+
+      &::before {
+        content: '↘';
+        margin-right: 2px;
+      }
+    }
+  }
+
+  &__label {
+    color: var(--sneat-text-secondary);
+
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ===========================
+// CHART CARD - BEM
+// ===========================
+.chart-card {
+  height: 100%;
+  min-height: 400px;
+
+  &__legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  &__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+
+    &--primary {
+      background-color: var(--sneat-primary);
+    }
+
+    &--info {
+      background-color: var(--sneat-info);
+    }
+  }
+
+  &__chart {
+    height: 300px;
+  }
+}
+
+// ===========================
+// GROWTH CARD - BEM
+// ===========================
+.growth-card {
+  height: 100%;
+  min-height: 400px;
+
+  &__content {
+    text-align: center;
+  }
+
+  &__circle {
+    position: relative;
+    display: inline-block;
+    margin: 24px 0;
+  }
+
+  &__circle-chart {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--sneat-primary) 0deg 280deg,
+      var(--sneat-gray-200) 280deg 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-color: var(--sneat-bg-primary);
+      border-radius: 50%;
+    }
+  }
+
+  &__percentage {
+    font-weight: 700;
+    color: var(--sneat-text-primary);
+    position: relative;
+    z-index: 1;
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+
+  &__stat {
+    text-align: center;
+  }
+
+  &__stat-year {
+    color: var(--sneat-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  &__stat-value {
+    font-weight: 600;
+    color: var(--sneat-text-primary);
+  }
+}
+
+// ===========================
+// PROFILE CARD - BEM
+// ===========================
+.profile-card {
+  height: 100%;
+  min-height: 400px;
+
+  &__content {
+    text-align: center;
+    padding-top: 20px !important;
+  }
+
+  &__change {
+    color: var(--sneat-success);
+    font-weight: 500;
+    margin-bottom: 8px;
+
+    &::before {
+      content: '↗';
+      margin-right: 4px;
+    }
+  }
+
+  &__amount {
+    font-weight: 700;
+    color: var(--sneat-text-primary);
+    margin-bottom: 20px;
+  }
+
+  &__chart {
+    height: 60px;
+    margin-top: auto;
+  }
+
+  &__svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// ===========================
+// ORDERS CARD - BEM
+// ===========================
+.orders-card {
+  height: 100%;
+  min-height: 500px;
+
+  &__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  &__number {
+    font-weight: 700;
+    color: var(--sneat-text-primary);
+    margin-bottom: 4px;
+  }
+
+  &__label {
+    color: var(--sneat-text-secondary);
+  }
+
+  &__weekly-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--sneat-success) 0deg 137deg,
+      var(--sneat-gray-200) 137deg 360deg
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-color: var(--sneat-bg-primary);
+      border-radius: 50%;
+    }
+  }
+
+  &__weekly-percentage {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--sneat-text-primary);
+    position: relative;
+    z-index: 1;
+  }
+
+  &__weekly-label {
+    font-size: 0.625rem;
+    color: var(--sneat-text-secondary);
+    position: relative;
+    z-index: 1;
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--sneat-border-color);
+  }
+
+  &__tab {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    color: var(--sneat-text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+
+    &--active {
+      color: var(--sneat-primary);
+      border-bottom-color: var(--sneat-primary);
+    }
+
+    &:hover {
+      color: var(--sneat-primary);
+    }
+  }
+
+  &__profit {
+    margin-bottom: 20px;
+  }
+
+  &__profit-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    .orders-card__profit-label {
+      color: var(--sneat-text-secondary);
+    }
+
+    .orders-card__profit-amount {
+      font-weight: 600;
+      color: var(--sneat-text-primary);
+    }
+
+    .orders-card__profit-change {
+      background-color: rgba(var(--sneat-success), 0.1);
+      color: var(--sneat-success);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+  }
+
+  &__chart {
+    height: 80px;
+    margin-bottom: 20px;
+  }
+
+  &__categories {
+    // Contenedor para las categorías
+  }
+}
+
+// ===========================
+// CATEGORY - BEM
+// ===========================
+.category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--sneat-border-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      color: white;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__name {
+    font-weight: 500;
+    color: var(--sneat-text-primary);
+    margin-bottom: 2px;
+  }
+
+  &__subtitle {
+    font-size: 0.75rem;
+    color: var(--sneat-text-secondary);
+  }
+
+  &__stats {
+    text-align: right;
+  }
+
+  &__percentage {
+    font-weight: 600;
+    color: var(--sneat-text-primary);
+    margin-bottom: 2px;
+  }
+
+  &__count {
+    font-size: 0.75rem;
+    color: var(--sneat-text-secondary);
+  }
+}
+
+// ===========================
+// TRANSACTIONS CARD - BEM
+// ===========================
+.transactions-card {
+  height: 100%;
+  min-height: 500px;
+}
+
+// ===========================
+// TRANSACTION - BEM
+// ===========================
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--sneat-border-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      color: white;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__type {
+    font-weight: 500;
+    color: var(--sneat-text-primary);
+    margin-bottom: 2px;
+  }
+
+  &__company {
+    font-size: 0.75rem;
+    color: var(--sneat-text-secondary);
+  }
+
+  &__amount {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &--positive {
+      color: var(--sneat-success);
+    }
+
+    &--negative {
+      color: var(--sneat-danger);
+    }
+  }
+
+  &__currency {
+    font-size: 0.75rem;
+    color: var(--sneat-text-secondary);
+    font-weight: 400;
+  }
+}
+
+// ===========================
+// ENSURE EQUAL HEIGHTS
+// ===========================
+.mv-grid {
+  display: grid;
+
+  // Make all cards in the same row have equal height
+  &[class*='mv-gap'] {
+    align-items: stretch;
+
+    .mv-col-3,
+    .mv-col-4,
+    .mv-col-6,
+    .mv-col-8 {
+      display: flex;
+      flex-direction: column;
+
+      .mat-mdc-card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .mat-mdc-card-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}
+
+// ===========================
+// APEXCHARTS CUSTOM STYLES
+// ===========================
+::ng-deep {
+  .apexcharts-canvas {
+    .apexcharts-tooltip {
+      background: var(--sneat-bg-primary) !important;
+      border: 1px solid var(--sneat-border-color) !important;
+      box-shadow: var(--sneat-shadow) !important;
+      color: var(--sneat-text-primary) !important;
+    }
+
+    .apexcharts-xaxis-texts-g text {
+      fill: var(--sneat-text-secondary) !important;
+      font-size: 0.75rem !important;
+    }
+
+    .apexcharts-yaxis-texts-g text {
+      fill: var(--sneat-text-secondary) !important;
+      font-size: 0.75rem !important;
+    }
+  }
+
+  // Revenue chart specific styles
+  .chart-card .apexcharts-canvas {
+    .apexcharts-bar-series {
+      .apexcharts-series {
+        &[seriesName='2024'] {
+          .apexcharts-bar-area {
+            fill: var(--sneat-primary) !important;
+          }
+        }
+
+        &[seriesName='2023'] {
+          .apexcharts-bar-area {
+            fill: var(--sneat-info) !important;
+          }
+        }
+      }
+    }
+  }
+
+  // Profit chart specific styles (small sparkline)
+  .orders-card__chart .apexcharts-canvas {
+    .apexcharts-area-series {
+      .apexcharts-series {
+        .apexcharts-area {
+          fill: url(#SvgjsLinearGradient1000) !important;
+        }
+
+        .apexcharts-line {
+          stroke: var(--sneat-primary) !important;
+        }
+      }
+    }
+  }
+}
+
+// ===========================
+// MATERIAL DESIGN OVERRIDES
+// ===========================
+::ng-deep {
+  .mat-mdc-card {
+    background-color: var(--sneat-bg-primary) !important;
+    border: 1px solid var(--sneat-border-color) !important;
+    border-radius: 8px !important;
+    box-shadow: var(--sneat-shadow-sm) !important;
+    height: 100%;
+
+    .mat-mdc-card-header {
+      padding: 24px 24px 16px !important;
+
+      .mat-mdc-card-title {
+        color: var(--sneat-text-primary) !important;
+        font-size: 1.125rem !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+      }
+
+      .mat-mdc-card-subtitle {
+        color: var(--sneat-text-secondary) !important;
+        font-size: 0.875rem !important;
+        margin: 4px 0 0 !important;
+      }
+    }
+
+    .mat-mdc-card-content {
+      padding: 16px 24px !important;
+      color: var(--sneat-text-primary) !important;
+      flex: 1;
+    }
+  }
+
+  .mat-mdc-button,
+  .mat-mdc-raised-button {
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+  }
+}
+
+// ===========================
+// RESPONSIVE ADJUSTMENTS
+// ===========================
+@media (max-width: 768px) {
+  .chart-card,
+  .growth-card,
+  .profile-card,
+  .orders-card,
+  .transactions-card {
+    min-height: auto;
+  }
+
+  .mv-grid {
+    .mv-col-3,
+    .mv-col-4,
+    .mv-col-6,
+    .mv-col-8 {
+      .mat-mdc-card {
+        height: auto;
+        min-height: 250px;
+      }
+    }
+  }
+}
+::ng-deep .apexcharts-canvas,
+::ng-deep .apexcharts-text,
+::ng-deep .apexcharts-tooltip,
+::ng-deep .apexcharts-legend-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 12px !important;
+  letter-spacing: 0.2px;
+}
+
+/* Tamaño del texto de ejes/leyenda: igual al demo */
+::ng-deep .apexcharts-xaxis-texts-g text,
+::ng-deep .apexcharts-yaxis-texts-g text,
+::ng-deep .apexcharts-legend-text {
+  font-size: 12px !important;
+  fill: var(--sneat-text-secondary) !important;
+}
+
+/* Tooltip “card” como Sneat */
+::ng-deep .apexcharts-tooltip {
+  border-radius: 8px !important;
+  padding: 8px 10px !important;
+  font-weight: 500 !important;
+}
+
+/* Marcadores de la leyenda redondos y pequeños */
+::ng-deep .apexcharts-legend-marker {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+}

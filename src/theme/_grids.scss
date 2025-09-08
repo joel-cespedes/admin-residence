@@ -1,0 +1,412 @@
+.mv-container {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.mv-container-h {
+  padding: 0 24px;
+}
+
+.mv-container-v {
+  padding: 24px 0;
+}
+
+/* Sistema de Grid de 12 columnas con prefijo mv- */
+.mv-grid {
+  display: grid;
+  grid-auto-flow: dense;
+  grid-auto-rows: auto;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+/* Versión auto-fit para pantallas pequeñas */
+@media (width <= 768px) {
+  .mv-grid {
+    grid-auto-flow: dense;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  /* La clase mv-mobile-full hace que un elemento ocupe todo el ancho en móvil */
+  .mv-mobile-full {
+    grid-column: 1 / -1;
+  }
+
+  /* Fuerza que todos los hijos de .mv-grid ocupen todo el ancho en móvil */
+  .mv-grid > [class^='mv-col-'] {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* Clases para columnas en desktop */
+.mv-col-1 {
+  grid-column-end: span 1;
+}
+
+.mv-col-2 {
+  grid-column-end: span 2;
+}
+
+.mv-col-3 {
+  grid-column-end: span 3;
+}
+
+.mv-col-4 {
+  grid-column-end: span 4;
+}
+
+.mv-col-5 {
+  grid-column-end: span 5;
+}
+
+.mv-col-6 {
+  grid-column-end: span 6;
+}
+
+.mv-col-7 {
+  grid-column-end: span 7;
+}
+
+.mv-col-8 {
+  grid-column-end: span 8;
+}
+
+.mv-col-9 {
+  grid-column-end: span 9;
+}
+
+.mv-col-10 {
+  grid-column-end: span 10;
+}
+
+.mv-col-11 {
+  grid-column-end: span 11;
+}
+
+.mv-col-12 {
+  grid-column-end: span 12;
+}
+
+/* Clases para especificar columnas exactas (inicio / fin) */
+.mv-col-span-1-3 {
+  grid-column: 1 / 3;
+}
+
+.mv-col-span-2-4 {
+  grid-column: 2 / 4;
+}
+
+.mv-col-span-1-7 {
+  grid-column: 1 / 7;
+}
+
+.mv-col-span-7-13 {
+  grid-column: 7 / 13;
+}
+
+.mv-col-span-4-10 {
+  grid-column: 4 / 10;
+}
+
+.mv-col-span-3-11 {
+  grid-column: 3 / 11;
+}
+
+/* Clases para offset */
+.mv-offset-1 {
+  grid-column-start: 2;
+}
+
+.mv-offset-2 {
+  grid-column-start: 3;
+}
+
+.mv-offset-3 {
+  grid-column-start: 4;
+}
+
+.mv-offset-4 {
+  grid-column-start: 5;
+}
+
+.mv-offset-5 {
+  grid-column-start: 6;
+}
+
+.mv-offset-6 {
+  grid-column-start: 7;
+}
+
+.mv-offset-7 {
+  grid-column-start: 8;
+}
+
+.mv-offset-8 {
+  grid-column-start: 9;
+}
+
+.mv-offset-9 {
+  grid-column-start: 10;
+}
+
+.mv-offset-10 {
+  grid-column-start: 11;
+}
+
+.mv-offset-11 {
+  grid-column-start: 12;
+}
+
+.mv-w-full {
+  width: 100%;
+}
+
+/* Helpers para orden */
+.mv-order-first {
+  order: -1;
+}
+
+.mv-order-last {
+  order: 13;
+}
+
+.mv-order-0 {
+  order: 0;
+}
+
+.mv-order-1 {
+  order: 1;
+}
+
+.mv-order-2 {
+  order: 2;
+}
+
+.mv-order-3 {
+  order: 3;
+}
+
+.mv-order-4 {
+  order: 4;
+}
+
+.mv-order-5 {
+  order: 5;
+}
+
+.mv-order-6 {
+  order: 6;
+}
+
+.mv-order-7 {
+  order: 7;
+}
+
+.mv-order-8 {
+  order: 8;
+}
+
+.mv-order-9 {
+  order: 9;
+}
+
+.mv-order-10 {
+  order: 10;
+}
+
+.mv-order-11 {
+  order: 11;
+}
+
+.mv-order-12 {
+  order: 12;
+}
+
+.mv-top-8 {
+  margin-top: 8px;
+}
+
+.mv-top-16 {
+  margin-top: 16px;
+}
+
+.mv-top-24 {
+  margin-top: 24px;
+}
+
+.mv-gap-8 {
+  gap: 8px;
+}
+
+.mv-gap-16 {
+  gap: 16px;
+}
+
+.mv-gap-24 {
+  gap: 24px;
+}
+
+.mv-gap-48 {
+  gap: 48px;
+}
+
+/* Helpers para alineación */
+.mv-flex {
+  display: flex;
+}
+
+.mv-align-start {
+  align-items: flex-start;
+}
+
+.mv-align-center {
+  align-items: center;
+} /* <- se mantiene sin display para evitar duplicado */
+.mv-align-end {
+  display: flex;
+  align-items: flex-end;
+} /* <- corrige 'end' a 'flex-end' */
+
+/* Justify helpers */
+.mv-justify-start {
+  justify-content: flex-start;
+}
+
+.mv-justify-center {
+  justify-content: center;
+}
+
+.mv-justify-end {
+  justify-content: flex-end;
+}
+
+.mv-justify-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mv-justify-around {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Variantes que fuerzan Flex + alineación (evitan duplicados de selectores) */
+.mv-flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.mv-flex-align-end {
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Combos útiles */
+.mv-align-between-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Margins utilitarios */
+.m-left-8 {
+  margin-left: 8px;
+}
+
+.m-left-16 {
+  margin-left: 16px;
+}
+
+.m-left-24 {
+  margin-left: 24px;
+}
+
+.m-right-8 {
+  margin-right: 8px;
+}
+
+.m-right-16 {
+  margin-right: 16px;
+}
+
+.m-right-24 {
+  margin-right: 24px;
+}
+
+.m-b-48 {
+  margin-bottom: 48px;
+}
+
+.m-b-24 {
+  margin-bottom: 24px;
+}
+
+.m-b-16 {
+  margin-bottom: 16px;
+}
+
+.m-b-8 {
+  margin-bottom: 8px;
+}
+
+.m-t-48 {
+  margin-top: 48px;
+}
+
+.m-t-24 {
+  margin-top: 24px;
+}
+
+.m-t-16 {
+  margin-top: 16px;
+}
+
+.m-t-8 {
+  margin-top: 8px;
+}
+
+/* Paddings utilitarios */
+.p-b-48 {
+  padding-bottom: 48px;
+}
+
+.p-b-24 {
+  padding-bottom: 24px;
+}
+
+.p-b-16 {
+  padding-bottom: 16px;
+}
+
+.p-b-8 {
+  padding-bottom: 8px;
+}
+
+.p-t-8 {
+  padding-top: 8px;
+}
+
+.p-t-16 {
+  padding-top: 16px;
+}
+
+.p-t-24 {
+  padding-top: 24px;
+}
+
+.p-t-48 {
+  padding-top: 48px;
+}
+
+.mvda-container-section {
+  > * {
+    margin-top: 24px;
+  }
+}
+
+@font-face {
+  font-family: 'Material Icons Sharp';
+  font-weight: normal;
+  font-style: normal;
+  src: url('./fonts/material-icons-outlined-v110-latin-regular.woff2') format('opentype');
+}

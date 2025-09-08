@@ -1,0 +1,367 @@
+// theme/_components.scss
+
+// ===========================
+// MATERIAL CARDS
+// ===========================
+.mat-mdc-card {
+  border-radius: var(--sneat-border-radius-lg) !important;
+  box-shadow: var(--sneat-shadow) !important;
+  border: 1px solid var(--sneat-border-color) !important;
+  background-color: var(--sneat-bg-primary) !important;
+
+  .mat-mdc-card-header {
+    padding: var(--sneat-spacing-lg) var(--sneat-spacing-lg) var(--sneat-spacing-md) !important;
+
+    .mat-mdc-card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--sneat-gray-800);
+      margin: 0;
+    }
+
+    .mat-mdc-card-subtitle {
+      color: var(--sneat-gray-600);
+      font-size: 0.875rem;
+      margin: 4px 0 0;
+    }
+  }
+
+  .mat-mdc-card-content {
+    padding: var(--sneat-spacing-md) var(--sneat-spacing-lg) !important;
+  }
+
+  .mat-mdc-card-actions {
+    padding: var(--sneat-spacing-md) var(--sneat-spacing-lg) var(--sneat-spacing-lg) !important;
+  }
+}
+
+// ===========================
+// MATERIAL BUTTONS
+// ===========================
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button {
+  border-radius: var(--sneat-border-radius) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+  font-family: inherit !important;
+}
+
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+  border-radius: var(--sneat-border-radius) !important;
+}
+
+// Botón primario personalizado
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--sneat-primary) !important;
+
+  &:hover {
+    background-color: var(--sneat-primary-dark) !important;
+  }
+}
+
+// ===========================
+// FORM FIELDS
+// ===========================
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    border-radius: var(--sneat-border-radius) !important;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    margin-top: 4px !important;
+  }
+
+  // Label personalizado
+  .mat-mdc-form-field-label {
+    color: var(--sneat-gray-600) !important;
+  }
+
+  // Input focus
+  &.mat-focused {
+    .mat-mdc-form-field-label {
+      color: var(--sneat-primary) !important;
+    }
+  }
+}
+
+// Select dropdown
+.mat-mdc-select-panel {
+  border-radius: var(--sneat-border-radius) !important;
+  box-shadow: var(--sneat-shadow-lg) !important;
+  border: 1px solid var(--sneat-border-color) !important;
+}
+
+// ===========================
+// CHIPS
+// ===========================
+.mat-mdc-chip {
+  border-radius: var(--sneat-border-radius) !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+}
+
+// ===========================
+// NAVIGATION (SIDENAV/DRAWER)
+// ===========================
+.mat-drawer {
+  background-color: var(--sneat-bg-sidebar) !important;
+  border-right: 1px solid var(--sneat-border-color) !important;
+}
+
+.mat-drawer-container {
+  background-color: var(--sneat-bg-secondary) !important;
+}
+
+// ===========================
+// TOOLBAR
+// ===========================
+.mat-toolbar {
+  background-color: var(--sneat-bg-primary) !important;
+  border-bottom: 1px solid var(--sneat-border-color) !important;
+  color: var(--sneat-gray-800) !important;
+  box-shadow: var(--sneat-shadow-sm) !important;
+}
+
+// ===========================
+// TABLES
+// ===========================
+.mat-mdc-table {
+  background-color: var(--sneat-bg-primary) !important;
+  border-radius: var(--sneat-border-radius-lg) !important;
+  overflow: hidden;
+  border: 1px solid var(--sneat-border-color) !important;
+
+  .mat-mdc-header-row {
+    background-color: var(--sneat-gray-50) !important;
+  }
+
+  .mat-mdc-row:hover {
+    background-color: var(--sneat-gray-50) !important;
+  }
+
+  .mat-mdc-cell,
+  .mat-mdc-header-cell {
+    border-bottom: 1px solid var(--sneat-border-color) !important;
+    padding: var(--sneat-spacing-md) !important;
+  }
+}
+
+// ===========================
+// SNACKBAR
+// ===========================
+.mat-mdc-snack-bar-container {
+  border-radius: var(--sneat-border-radius) !important;
+  box-shadow: var(--sneat-shadow-lg) !important;
+}
+
+// ===========================
+// DIALOG
+// ===========================
+.mat-mdc-dialog-container {
+  border-radius: var(--sneat-border-radius-lg) !important;
+  box-shadow: var(--sneat-shadow-lg) !important;
+
+  .mat-mdc-dialog-title {
+    color: var(--sneat-gray-800) !important;
+    font-weight: 600 !important;
+  }
+}
+
+// ===========================
+// PROGRESS INDICATORS
+// ===========================
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: var(--sneat-primary) !important;
+}
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: var(--sneat-primary) !important;
+}
+
+// ===========================
+// CLASES UTILITARIAS PERSONALIZADAS
+// ===========================
+
+// Métricas del dashboard
+.metric-card {
+  position: relative;
+  overflow: hidden;
+
+  &.profit {
+    .metric-icon {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--sneat-profit);
+    }
+  }
+
+  &.sales {
+    .metric-icon {
+      background-color: rgba(66, 133, 244, 0.1);
+      color: var(--sneat-sales);
+    }
+  }
+
+  &.payments {
+    .metric-icon {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--sneat-payments);
+    }
+  }
+
+  &.transactions {
+    .metric-icon {
+      background-color: rgba(111, 66, 193, 0.1);
+      color: var(--sneat-transactions);
+    }
+  }
+
+  .metric-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--sneat-border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--sneat-spacing-md);
+  }
+}
+
+.metric-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--sneat-gray-800);
+  margin: 8px 0 4px;
+  line-height: 1.2;
+}
+
+.metric-change {
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &.positive {
+    color: var(--sneat-success);
+  }
+
+  &.negative {
+    color: var(--sneat-danger);
+  }
+
+  &::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+  }
+
+  &.positive::before {
+    border-bottom: 6px solid var(--sneat-success);
+  }
+
+  &.negative::before {
+    border-top: 6px solid var(--sneat-danger);
+  }
+}
+
+.metric-label {
+  color: var(--sneat-gray-600);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+// Integración con tu grid system
+.mv-card {
+  @extend .mat-mdc-card;
+}
+
+.mv-button-primary {
+  background-color: var(--sneat-primary) !important;
+  color: white !important;
+
+  &:hover {
+    background-color: var(--sneat-primary-dark) !important;
+  }
+}
+
+.mv-text-primary {
+  color: var(--sneat-primary) !important;
+}
+
+.mv-text-secondary {
+  color: var(--sneat-gray-600) !important;
+}
+
+.mv-text-muted {
+  color: var(--sneat-gray-500) !important;
+}
+
+.mv-bg-light {
+  background-color: var(--sneat-bg-secondary) !important;
+}
+
+.mv-bg-white {
+  background-color: var(--sneat-bg-primary) !important;
+}
+
+// Estados de color
+.mv-text-success {
+  color: var(--sneat-success) !important;
+}
+
+.mv-text-danger {
+  color: var(--sneat-danger) !important;
+}
+
+.mv-text-warning {
+  color: var(--sneat-warning) !important;
+}
+
+.mv-text-info {
+  color: var(--sneat-info) !important;
+}
+
+// ===========================
+// RESPONSIVE ADJUSTMENTS
+// ===========================
+@media (max-width: 768px) {
+  .mat-mdc-card {
+    .mat-mdc-card-header,
+    .mat-mdc-card-content,
+    .mat-mdc-card-actions {
+      padding-left: var(--sneat-spacing-md) !important;
+      padding-right: var(--sneat-spacing-md) !important;
+    }
+  }
+
+  .metric-number {
+    font-size: 1.5rem;
+  }
+
+  .mat-mdc-table {
+    .mat-mdc-cell,
+    .mat-mdc-header-cell {
+      padding: var(--sneat-spacing-sm) !important;
+    }
+  }
+}
+.mat-icon {
+  display: inline-block;
+  font-family: 'Material Icons Sharp', monospace;
+  font-size: 24px;
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+}
