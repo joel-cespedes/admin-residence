@@ -13,23 +13,26 @@ import { TaskCategoryUpdate } from '../../models/task-category-update';
 
 export interface UpdateCategoryTasksCategoriesCategoryIdPatch$Params {
   category_id: string;
-      body: TaskCategoryUpdate
+  body: TaskCategoryUpdate;
 }
 
-export function updateCategoryTasksCategoriesCategoryIdPatch(http: HttpClient, rootUrl: string, params: UpdateCategoryTasksCategoriesCategoryIdPatch$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskCategoryOut>> {
+export function updateCategoryTasksCategoriesCategoryIdPatch(
+  http: HttpClient,
+  rootUrl: string,
+  params: UpdateCategoryTasksCategoriesCategoryIdPatch$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<TaskCategoryOut>> {
   const rb = new RequestBuilder(rootUrl, updateCategoryTasksCategoriesCategoryIdPatch.PATH, 'patch');
   if (params) {
     rb.path('category_id', params.category_id, {});
     rb.body(params.body, 'application/json');
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<TaskCategoryOut>;
-    })
+    }),
   );
 }
 

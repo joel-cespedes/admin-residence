@@ -34,7 +34,10 @@ export class AuthService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  loginAuthLoginPost$Response(params: LoginAuthLoginPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TokenResponse>> {
+  loginAuthLoginPost$Response(
+    params: LoginAuthLoginPost$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<TokenResponse>> {
     return loginAuthLoginPost(this.http, this.rootUrl, params, context);
   }
 
@@ -50,8 +53,7 @@ export class AuthService extends BaseService {
    */
   loginAuthLoginPost(params: LoginAuthLoginPost$Params, context?: HttpContext): Observable<TokenResponse> {
     return this.loginAuthLoginPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<TokenResponse>): TokenResponse => r.body)
+      map((r: StrictHttpResponse<TokenResponse>): TokenResponse => r.body),
     );
   }
-
 }

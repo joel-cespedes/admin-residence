@@ -11,27 +11,32 @@ import { RequestBuilder } from '../../request-builder';
 import { MeasurementOut } from '../../models/measurement-out';
 
 export interface ListMeasurementsMeasurementsGet$Params {
-  resident_id?: (string | null);
+  resident_id?: string | null;
 
-/**
- * bp|spo2|weight|temperature
- */
-  type?: (string | null);
+  /**
+   * bp|spo2|weight|temperature
+   */
+  type?: string | null;
 
-/**
- * ISO datetime
- */
-  since?: (string | null);
+  /**
+   * ISO datetime
+   */
+  since?: string | null;
 
-/**
- * ISO datetime
- */
-  until?: (string | null);
+  /**
+   * ISO datetime
+   */
+  until?: string | null;
   limit?: number;
-  'X-Residence-Id'?: (string | null);
+  'X-Residence-Id'?: string | null;
 }
 
-export function listMeasurementsMeasurementsGet(http: HttpClient, rootUrl: string, params?: ListMeasurementsMeasurementsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
+export function listMeasurementsMeasurementsGet(
+  http: HttpClient,
+  rootUrl: string,
+  params?: ListMeasurementsMeasurementsGet$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
   const rb = new RequestBuilder(rootUrl, listMeasurementsMeasurementsGet.PATH, 'get');
   if (params) {
     rb.query('resident_id', params.resident_id, {});
@@ -42,13 +47,11 @@ export function listMeasurementsMeasurementsGet(http: HttpClient, rootUrl: strin
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<Array<MeasurementOut>>;
-    })
+    }),
   );
 }
 

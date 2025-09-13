@@ -10,21 +10,23 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ResidentOut } from '../../models/resident-out';
 
-export interface ListResidentsResidentsGet$Params {
-}
+export interface ListResidentsResidentsGet$Params {}
 
-export function listResidentsResidentsGet(http: HttpClient, rootUrl: string, params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ResidentOut>>> {
+export function listResidentsResidentsGet(
+  http: HttpClient,
+  rootUrl: string,
+  params?: ListResidentsResidentsGet$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<Array<ResidentOut>>> {
   const rb = new RequestBuilder(rootUrl, listResidentsResidentsGet.PATH, 'get');
   if (params) {
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<Array<ResidentOut>>;
-    })
+    }),
   );
 }
 

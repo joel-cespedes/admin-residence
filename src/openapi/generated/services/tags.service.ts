@@ -33,7 +33,10 @@ export class TagsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTagsTagsGet$Response(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  listTagsTagsGet$Response(
+    params?: ListTagsTagsGet$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<any>> {
     return listTagsTagsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -48,9 +51,6 @@ export class TagsService extends BaseService {
    * This method doesn't expect any request body.
    */
   listTagsTagsGet(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<any> {
-    return this.listTagsTagsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
-    );
+    return this.listTagsTagsGet$Response(params, context).pipe(map((r: StrictHttpResponse<any>): any => r.body));
   }
-
 }

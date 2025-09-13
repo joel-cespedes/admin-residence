@@ -13,23 +13,26 @@ import { TaskApplicationUpdate } from '../../models/task-application-update';
 
 export interface UpdateApplicationTasksApplicationsApplicationIdPatch$Params {
   application_id: string;
-      body: TaskApplicationUpdate
+  body: TaskApplicationUpdate;
 }
 
-export function updateApplicationTasksApplicationsApplicationIdPatch(http: HttpClient, rootUrl: string, params: UpdateApplicationTasksApplicationsApplicationIdPatch$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskApplicationOut>> {
+export function updateApplicationTasksApplicationsApplicationIdPatch(
+  http: HttpClient,
+  rootUrl: string,
+  params: UpdateApplicationTasksApplicationsApplicationIdPatch$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<TaskApplicationOut>> {
   const rb = new RequestBuilder(rootUrl, updateApplicationTasksApplicationsApplicationIdPatch.PATH, 'patch');
   if (params) {
     rb.path('application_id', params.application_id, {});
     rb.body(params.body, 'application/json');
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<TaskApplicationOut>;
-    })
+    }),
   );
 }
 

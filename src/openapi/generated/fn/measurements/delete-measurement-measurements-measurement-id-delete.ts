@@ -8,26 +8,28 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-
 export interface DeleteMeasurementMeasurementsMeasurementIdDelete$Params {
   measurement_id: string;
-  'X-Residence-Id'?: (string | null);
+  'X-Residence-Id'?: string | null;
 }
 
-export function deleteMeasurementMeasurementsMeasurementIdDelete(http: HttpClient, rootUrl: string, params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function deleteMeasurementMeasurementsMeasurementIdDelete(
+  http: HttpClient,
+  rootUrl: string,
+  params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, deleteMeasurementMeasurementsMeasurementIdDelete.PATH, 'delete');
   if (params) {
     rb.path('measurement_id', params.measurement_id, {});
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
   }
 
-  return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'text', accept: '*/*', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-    })
+    }),
   );
 }
 

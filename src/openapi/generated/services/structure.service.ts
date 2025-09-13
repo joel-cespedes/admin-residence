@@ -37,7 +37,10 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  floorsStructureFloorsResidenceIdGet$Response(params: FloorsStructureFloorsResidenceIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  floorsStructureFloorsResidenceIdGet$Response(
+    params: FloorsStructureFloorsResidenceIdGet$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<any>> {
     return floorsStructureFloorsResidenceIdGet(this.http, this.rootUrl, params, context);
   }
 
@@ -51,9 +54,12 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  floorsStructureFloorsResidenceIdGet(params: FloorsStructureFloorsResidenceIdGet$Params, context?: HttpContext): Observable<any> {
+  floorsStructureFloorsResidenceIdGet(
+    params: FloorsStructureFloorsResidenceIdGet$Params,
+    context?: HttpContext,
+  ): Observable<any> {
     return this.floorsStructureFloorsResidenceIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<any>): any => r.body),
     );
   }
 
@@ -70,7 +76,10 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  roomsStructureRoomsFloorIdGet$Response(params: RoomsStructureRoomsFloorIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  roomsStructureRoomsFloorIdGet$Response(
+    params: RoomsStructureRoomsFloorIdGet$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<any>> {
     return roomsStructureRoomsFloorIdGet(this.http, this.rootUrl, params, context);
   }
 
@@ -86,7 +95,7 @@ export class StructureService extends BaseService {
    */
   roomsStructureRoomsFloorIdGet(params: RoomsStructureRoomsFloorIdGet$Params, context?: HttpContext): Observable<any> {
     return this.roomsStructureRoomsFloorIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<any>): any => r.body),
     );
   }
 
@@ -103,7 +112,10 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bedsStructureBedsRoomIdGet$Response(params: BedsStructureBedsRoomIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  bedsStructureBedsRoomIdGet$Response(
+    params: BedsStructureBedsRoomIdGet$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<any>> {
     return bedsStructureBedsRoomIdGet(this.http, this.rootUrl, params, context);
   }
 
@@ -119,8 +131,7 @@ export class StructureService extends BaseService {
    */
   bedsStructureBedsRoomIdGet(params: BedsStructureBedsRoomIdGet$Params, context?: HttpContext): Observable<any> {
     return this.bedsStructureBedsRoomIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<any>): any => r.body),
     );
   }
-
 }

@@ -8,7 +8,7 @@ export const residenceInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (selectedResidenceId && !req.headers.has('X-Residence-Id')) {
     const residenceReq = req.clone({
-      headers: req.headers.set('X-Residence-Id', selectedResidenceId),
+      headers: req.headers.set('X-Residence-Id', selectedResidenceId)
     });
     return next(residenceReq);
   }

@@ -36,7 +36,10 @@ export class DevicesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listDevicesDevicesGet$Response(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DeviceOut>>> {
+  listDevicesDevicesGet$Response(
+    params?: ListDevicesDevicesGet$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<Array<DeviceOut>>> {
     return listDevicesDevicesGet(this.http, this.rootUrl, params, context);
   }
 
@@ -52,7 +55,7 @@ export class DevicesService extends BaseService {
    */
   listDevicesDevicesGet(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<Array<DeviceOut>> {
     return this.listDevicesDevicesGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<DeviceOut>>): Array<DeviceOut> => r.body)
+      map((r: StrictHttpResponse<Array<DeviceOut>>): Array<DeviceOut> => r.body),
     );
   }
 
@@ -69,7 +72,10 @@ export class DevicesService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createDeviceDevicesPost$Response(params: CreateDeviceDevicesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<DeviceOut>> {
+  createDeviceDevicesPost$Response(
+    params: CreateDeviceDevicesPost$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<DeviceOut>> {
     return createDeviceDevicesPost(this.http, this.rootUrl, params, context);
   }
 
@@ -85,8 +91,7 @@ export class DevicesService extends BaseService {
    */
   createDeviceDevicesPost(params: CreateDeviceDevicesPost$Params, context?: HttpContext): Observable<DeviceOut> {
     return this.createDeviceDevicesPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<DeviceOut>): DeviceOut => r.body)
+      map((r: StrictHttpResponse<DeviceOut>): DeviceOut => r.body),
     );
   }
-
 }

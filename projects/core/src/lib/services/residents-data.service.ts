@@ -4,14 +4,10 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BaseCrudService } from './base-crud.service';
 import { ResidentsService } from '../../../../../src/openapi/generated/services/residents.service';
-import {
-  ResidentOut,
-  ResidentCreate,
-  ResidentChangeBed,
-} from '../../../../../src/openapi/generated/models';
+import { ResidentOut, ResidentCreate, ResidentChangeBed } from '../../../../../src/openapi/generated/models';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ResidentsDataService extends BaseCrudService<ResidentOut> {
   private readonly apiService = inject(ResidentsService);
@@ -50,25 +46,25 @@ export class ResidentsDataService extends BaseCrudService<ResidentOut> {
     return {
       active: items.filter((r) => r.status === 'active'),
       discharged: items.filter((r) => r.status === 'discharged'),
-      deceased: items.filter((r) => r.status === 'deceased'),
+      deceased: items.filter((r) => r.status === 'deceased')
     };
   });
 
   changeBed(residentId: string, newBedId: string): Observable<ResidentOut> {
     const bedChange: ResidentChangeBed = {
-      new_bed_id: newBedId,
+      new_bed_id: newBedId
     };
 
     return this.apiService
       .changeBedResidentsResidentIdBedPatch({
         resident_id: residentId,
-        body: bedChange,
+        body: bedChange
       })
       .pipe(
         tap((updatedResident) => {
           this._state.update((state) => ({
             ...state,
-            items: state.items.map((r) => (r.id === residentId ? updatedResident : r)),
+            items: state.items.map((r) => (r.id === residentId ? updatedResident : r))
           }));
         })
       );

@@ -13,23 +13,26 @@ import { TaskTemplateUpdate } from '../../models/task-template-update';
 
 export interface UpdateTemplateTasksTemplatesTemplateIdPatch$Params {
   template_id: string;
-      body: TaskTemplateUpdate
+  body: TaskTemplateUpdate;
 }
 
-export function updateTemplateTasksTemplatesTemplateIdPatch(http: HttpClient, rootUrl: string, params: UpdateTemplateTasksTemplatesTemplateIdPatch$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskTemplateOut>> {
+export function updateTemplateTasksTemplatesTemplateIdPatch(
+  http: HttpClient,
+  rootUrl: string,
+  params: UpdateTemplateTasksTemplatesTemplateIdPatch$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<TaskTemplateOut>> {
   const rb = new RequestBuilder(rootUrl, updateTemplateTasksTemplatesTemplateIdPatch.PATH, 'patch');
   if (params) {
     rb.path('template_id', params.template_id, {});
     rb.body(params.body, 'application/json');
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<TaskTemplateOut>;
-    })
+    }),
   );
 }
 

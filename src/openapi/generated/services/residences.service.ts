@@ -38,9 +38,16 @@ export class ResidencesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  myResidencesResidencesMineGet$Response(params?: MyResidencesResidencesMineGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
-[key: string]: any;
-}>>> {
+  myResidencesResidencesMineGet$Response(
+    params?: MyResidencesResidencesMineGet$Params,
+    context?: HttpContext,
+  ): Observable<
+    StrictHttpResponse<
+      Array<{
+        [key: string]: any;
+      }>
+    >
+  > {
     return myResidencesResidencesMineGet(this.http, this.rootUrl, params, context);
   }
 
@@ -55,15 +62,26 @@ export class ResidencesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  myResidencesResidencesMineGet(params?: MyResidencesResidencesMineGet$Params, context?: HttpContext): Observable<Array<{
-[key: string]: any;
-}>> {
+  myResidencesResidencesMineGet(
+    params?: MyResidencesResidencesMineGet$Params,
+    context?: HttpContext,
+  ): Observable<
+    Array<{
+      [key: string]: any;
+    }>
+  > {
     return this.myResidencesResidencesMineGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<{
-[key: string]: any;
-}>>): Array<{
-[key: string]: any;
-}> => r.body)
+      map(
+        (
+          r: StrictHttpResponse<
+            Array<{
+              [key: string]: any;
+            }>
+          >,
+        ): Array<{
+          [key: string]: any;
+        }> => r.body,
+      ),
     );
   }
 
@@ -80,9 +98,16 @@ export class ResidencesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listResidencesResidencesGet$Response(params?: ListResidencesResidencesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
-[key: string]: any;
-}>>> {
+  listResidencesResidencesGet$Response(
+    params?: ListResidencesResidencesGet$Params,
+    context?: HttpContext,
+  ): Observable<
+    StrictHttpResponse<
+      Array<{
+        [key: string]: any;
+      }>
+    >
+  > {
     return listResidencesResidencesGet(this.http, this.rootUrl, params, context);
   }
 
@@ -96,15 +121,26 @@ export class ResidencesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listResidencesResidencesGet(params?: ListResidencesResidencesGet$Params, context?: HttpContext): Observable<Array<{
-[key: string]: any;
-}>> {
+  listResidencesResidencesGet(
+    params?: ListResidencesResidencesGet$Params,
+    context?: HttpContext,
+  ): Observable<
+    Array<{
+      [key: string]: any;
+    }>
+  > {
     return this.listResidencesResidencesGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<{
-[key: string]: any;
-}>>): Array<{
-[key: string]: any;
-}> => r.body)
+      map(
+        (
+          r: StrictHttpResponse<
+            Array<{
+              [key: string]: any;
+            }>
+          >,
+        ): Array<{
+          [key: string]: any;
+        }> => r.body,
+      ),
     );
   }
 
@@ -121,9 +157,14 @@ export class ResidencesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getResidenceResidencesResidenceIdGet$Response(params: GetResidenceResidencesResidenceIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-[key: string]: any;
-}>> {
+  getResidenceResidencesResidenceIdGet$Response(
+    params: GetResidenceResidencesResidenceIdGet$Params,
+    context?: HttpContext,
+  ): Observable<
+    StrictHttpResponse<{
+      [key: string]: any;
+    }>
+  > {
     return getResidenceResidencesResidenceIdGet(this.http, this.rootUrl, params, context);
   }
 
@@ -137,16 +178,22 @@ export class ResidencesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getResidenceResidencesResidenceIdGet(params: GetResidenceResidencesResidenceIdGet$Params, context?: HttpContext): Observable<{
-[key: string]: any;
-}> {
+  getResidenceResidencesResidenceIdGet(
+    params: GetResidenceResidencesResidenceIdGet$Params,
+    context?: HttpContext,
+  ): Observable<{
+    [key: string]: any;
+  }> {
     return this.getResidenceResidencesResidenceIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{
-[key: string]: any;
-}>): {
-[key: string]: any;
-} => r.body)
+      map(
+        (
+          r: StrictHttpResponse<{
+            [key: string]: any;
+          }>,
+        ): {
+          [key: string]: any;
+        } => r.body,
+      ),
     );
   }
-
 }

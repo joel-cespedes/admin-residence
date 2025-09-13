@@ -26,8 +26,8 @@ export abstract class BaseCrudService<T extends { id: string }> {
     pagination: {
       page: 1,
       pageSize: 50,
-      total: 0,
-    },
+      total: 0
+    }
   });
 
   // Computed signals públicos
@@ -58,7 +58,7 @@ export abstract class BaseCrudService<T extends { id: string }> {
         this._state.update((state) => ({
           ...state,
           items,
-          isLoading: false,
+          isLoading: false
         }));
       }),
       catchError((error) => {
@@ -78,7 +78,7 @@ export abstract class BaseCrudService<T extends { id: string }> {
         this._state.update((state) => ({
           ...state,
           selectedItem: item,
-          isLoading: false,
+          isLoading: false
         }));
       }),
       catchError((error) => {
@@ -98,7 +98,7 @@ export abstract class BaseCrudService<T extends { id: string }> {
         this._state.update((state) => ({
           ...state,
           items: [...state.items, newItem],
-          isLoading: false,
+          isLoading: false
         }));
       }),
       catchError((error) => {
@@ -119,7 +119,7 @@ export abstract class BaseCrudService<T extends { id: string }> {
           ...state,
           items: state.items.map((i) => (i.id === id ? updatedItem : i)),
           selectedItem: state.selectedItem?.id === id ? updatedItem : state.selectedItem,
-          isLoading: false,
+          isLoading: false
         }));
       }),
       catchError((error) => {
@@ -140,7 +140,7 @@ export abstract class BaseCrudService<T extends { id: string }> {
           ...state,
           items: state.items.filter((i) => i.id !== id),
           selectedItem: state.selectedItem?.id === id ? null : state.selectedItem,
-          isLoading: false,
+          isLoading: false
         }));
       }),
       catchError((error) => {
@@ -154,21 +154,21 @@ export abstract class BaseCrudService<T extends { id: string }> {
   selectItem(item: T | null): void {
     this._state.update((state) => ({
       ...state,
-      selectedItem: item,
+      selectedItem: item
     }));
   }
 
   setFilters(filters: Record<string, any>): void {
     this._state.update((state) => ({
       ...state,
-      filters: { ...state.filters, ...filters },
+      filters: { ...state.filters, ...filters }
     }));
   }
 
   clearFilters(): void {
     this._state.update((state) => ({
       ...state,
-      filters: {},
+      filters: {}
     }));
   }
 

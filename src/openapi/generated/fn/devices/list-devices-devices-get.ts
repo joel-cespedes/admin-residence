@@ -10,21 +10,23 @@ import { RequestBuilder } from '../../request-builder';
 
 import { DeviceOut } from '../../models/device-out';
 
-export interface ListDevicesDevicesGet$Params {
-}
+export interface ListDevicesDevicesGet$Params {}
 
-export function listDevicesDevicesGet(http: HttpClient, rootUrl: string, params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DeviceOut>>> {
+export function listDevicesDevicesGet(
+  http: HttpClient,
+  rootUrl: string,
+  params?: ListDevicesDevicesGet$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<Array<DeviceOut>>> {
   const rb = new RequestBuilder(rootUrl, listDevicesDevicesGet.PATH, 'get');
   if (params) {
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<Array<DeviceOut>>;
-    })
+    }),
   );
 }
 

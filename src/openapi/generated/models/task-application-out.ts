@@ -6,12 +6,12 @@ export interface TaskApplicationOut {
   applied_at: string;
   applied_by: string;
   created_at: string;
-  deleted_at?: (string | null);
+  deleted_at?: string | null;
   id: string;
   residence_id: string;
   resident_id: string;
-  selected_status_index?: (number | null);
-  selected_status_text?: (string | null);
+  selected_status_index?: number | null;
+  selected_status_text?: string | null;
   task_template_id: string;
   updated_at: string;
 }

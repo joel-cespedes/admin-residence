@@ -10,8 +10,18 @@
     "api:generate": "ng-openapi-gen"
   },
   "prettier": {
-    "printWidth": 100,
+    "tabWidth": 2,
+    "useTabs": false,
     "singleQuote": true,
+    "trailingComma": "none",
+    "semi": true,
+    "endOfLine": "auto",
+    "printWidth": 100,
+    "bracketSameLine": true,
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "htmlWhitespaceSensitivity": "ignore",
+    "singleAttributePerLine": false,
     "overrides": [
       {
         "files": "*.html",
@@ -41,15 +51,16 @@
     "@angular/build": "^20.2.2",
     "@angular/cli": "^20.2.2",
     "@angular/compiler-cli": "^20.2.0",
-    "@types/jasmine": "~5.1.0",
+    "angular-eslint": "20.2.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "jasmine-core": "~5.9.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
     "ng-openapi-gen": "^0.53.0",
     "ng-packagr": "^20.2.0",
-    "typescript": "~5.9.2"
+    "prettier": "^3.6.2",
+    "pretty-quick": "^4.2.2",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.43.0"
   }
 }

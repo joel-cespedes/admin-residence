@@ -11,22 +11,25 @@ import { RequestBuilder } from '../../request-builder';
 import { TaskCategoryOut } from '../../models/task-category-out';
 
 export interface ListCategoriesTasksCategoriesGet$Params {
-  'X-Residence-Id'?: (string | null);
+  'X-Residence-Id'?: string | null;
 }
 
-export function listCategoriesTasksCategoriesGet(http: HttpClient, rootUrl: string, params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TaskCategoryOut>>> {
+export function listCategoriesTasksCategoriesGet(
+  http: HttpClient,
+  rootUrl: string,
+  params?: ListCategoriesTasksCategoriesGet$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<Array<TaskCategoryOut>>> {
   const rb = new RequestBuilder(rootUrl, listCategoriesTasksCategoriesGet.PATH, 'get');
   if (params) {
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<Array<TaskCategoryOut>>;
-    })
+    }),
   );
 }
 

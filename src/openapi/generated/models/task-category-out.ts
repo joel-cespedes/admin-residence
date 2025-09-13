@@ -4,7 +4,7 @@
 
 export interface TaskCategoryOut {
   created_at: string;
-  deleted_at?: (string | null);
+  deleted_at?: string | null;
   id: string;
   name: string;
   residence_id: string;

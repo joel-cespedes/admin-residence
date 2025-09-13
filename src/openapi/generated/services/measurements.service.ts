@@ -43,7 +43,10 @@ export class MeasurementsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listMeasurementsMeasurementsGet$Response(params?: ListMeasurementsMeasurementsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
+  listMeasurementsMeasurementsGet$Response(
+    params?: ListMeasurementsMeasurementsGet$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
     return listMeasurementsMeasurementsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -58,9 +61,12 @@ export class MeasurementsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listMeasurementsMeasurementsGet(params?: ListMeasurementsMeasurementsGet$Params, context?: HttpContext): Observable<Array<MeasurementOut>> {
+  listMeasurementsMeasurementsGet(
+    params?: ListMeasurementsMeasurementsGet$Params,
+    context?: HttpContext,
+  ): Observable<Array<MeasurementOut>> {
     return this.listMeasurementsMeasurementsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<MeasurementOut>>): Array<MeasurementOut> => r.body)
+      map((r: StrictHttpResponse<Array<MeasurementOut>>): Array<MeasurementOut> => r.body),
     );
   }
 
@@ -78,7 +84,10 @@ export class MeasurementsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createMeasurementMeasurementsPost$Response(params: CreateMeasurementMeasurementsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
+  createMeasurementMeasurementsPost$Response(
+    params: CreateMeasurementMeasurementsPost$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<MeasurementOut>> {
     return createMeasurementMeasurementsPost(this.http, this.rootUrl, params, context);
   }
 
@@ -93,9 +102,12 @@ export class MeasurementsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createMeasurementMeasurementsPost(params: CreateMeasurementMeasurementsPost$Params, context?: HttpContext): Observable<MeasurementOut> {
+  createMeasurementMeasurementsPost(
+    params: CreateMeasurementMeasurementsPost$Params,
+    context?: HttpContext,
+  ): Observable<MeasurementOut> {
     return this.createMeasurementMeasurementsPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body)
+      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body),
     );
   }
 
@@ -112,7 +124,10 @@ export class MeasurementsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getMeasurementMeasurementsMeasurementIdGet$Response(params: GetMeasurementMeasurementsMeasurementIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
+  getMeasurementMeasurementsMeasurementIdGet$Response(
+    params: GetMeasurementMeasurementsMeasurementIdGet$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<MeasurementOut>> {
     return getMeasurementMeasurementsMeasurementIdGet(this.http, this.rootUrl, params, context);
   }
 
@@ -126,9 +141,12 @@ export class MeasurementsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getMeasurementMeasurementsMeasurementIdGet(params: GetMeasurementMeasurementsMeasurementIdGet$Params, context?: HttpContext): Observable<MeasurementOut> {
+  getMeasurementMeasurementsMeasurementIdGet(
+    params: GetMeasurementMeasurementsMeasurementIdGet$Params,
+    context?: HttpContext,
+  ): Observable<MeasurementOut> {
     return this.getMeasurementMeasurementsMeasurementIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body)
+      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body),
     );
   }
 
@@ -145,7 +163,10 @@ export class MeasurementsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteMeasurementMeasurementsMeasurementIdDelete$Response(params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  deleteMeasurementMeasurementsMeasurementIdDelete$Response(
+    params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<void>> {
     return deleteMeasurementMeasurementsMeasurementIdDelete(this.http, this.rootUrl, params, context);
   }
 
@@ -159,9 +180,12 @@ export class MeasurementsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteMeasurementMeasurementsMeasurementIdDelete(params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params, context?: HttpContext): Observable<void> {
+  deleteMeasurementMeasurementsMeasurementIdDelete(
+    params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params,
+    context?: HttpContext,
+  ): Observable<void> {
     return this.deleteMeasurementMeasurementsMeasurementIdDelete$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<void>): void => r.body),
     );
   }
 
@@ -178,7 +202,10 @@ export class MeasurementsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateMeasurementMeasurementsMeasurementIdPatch$Response(params: UpdateMeasurementMeasurementsMeasurementIdPatch$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
+  updateMeasurementMeasurementsMeasurementIdPatch$Response(
+    params: UpdateMeasurementMeasurementsMeasurementIdPatch$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<MeasurementOut>> {
     return updateMeasurementMeasurementsMeasurementIdPatch(this.http, this.rootUrl, params, context);
   }
 
@@ -192,10 +219,12 @@ export class MeasurementsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateMeasurementMeasurementsMeasurementIdPatch(params: UpdateMeasurementMeasurementsMeasurementIdPatch$Params, context?: HttpContext): Observable<MeasurementOut> {
+  updateMeasurementMeasurementsMeasurementIdPatch(
+    params: UpdateMeasurementMeasurementsMeasurementIdPatch$Params,
+    context?: HttpContext,
+  ): Observable<MeasurementOut> {
     return this.updateMeasurementMeasurementsMeasurementIdPatch$Response(params, context).pipe(
-      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body)
+      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body),
     );
   }
-
 }

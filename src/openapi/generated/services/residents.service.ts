@@ -38,7 +38,10 @@ export class ResidentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listResidentsResidentsGet$Response(params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ResidentOut>>> {
+  listResidentsResidentsGet$Response(
+    params?: ListResidentsResidentsGet$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<Array<ResidentOut>>> {
     return listResidentsResidentsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -52,9 +55,12 @@ export class ResidentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listResidentsResidentsGet(params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<Array<ResidentOut>> {
+  listResidentsResidentsGet(
+    params?: ListResidentsResidentsGet$Params,
+    context?: HttpContext,
+  ): Observable<Array<ResidentOut>> {
     return this.listResidentsResidentsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<ResidentOut>>): Array<ResidentOut> => r.body)
+      map((r: StrictHttpResponse<Array<ResidentOut>>): Array<ResidentOut> => r.body),
     );
   }
 
@@ -71,7 +77,10 @@ export class ResidentsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createResidentResidentsPost$Response(params: CreateResidentResidentsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentOut>> {
+  createResidentResidentsPost$Response(
+    params: CreateResidentResidentsPost$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<ResidentOut>> {
     return createResidentResidentsPost(this.http, this.rootUrl, params, context);
   }
 
@@ -85,9 +94,12 @@ export class ResidentsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createResidentResidentsPost(params: CreateResidentResidentsPost$Params, context?: HttpContext): Observable<ResidentOut> {
+  createResidentResidentsPost(
+    params: CreateResidentResidentsPost$Params,
+    context?: HttpContext,
+  ): Observable<ResidentOut> {
     return this.createResidentResidentsPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body)
+      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body),
     );
   }
 
@@ -104,7 +116,10 @@ export class ResidentsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  changeBedResidentsResidentIdBedPatch$Response(params: ChangeBedResidentsResidentIdBedPatch$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentOut>> {
+  changeBedResidentsResidentIdBedPatch$Response(
+    params: ChangeBedResidentsResidentIdBedPatch$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<ResidentOut>> {
     return changeBedResidentsResidentIdBedPatch(this.http, this.rootUrl, params, context);
   }
 
@@ -118,10 +133,12 @@ export class ResidentsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  changeBedResidentsResidentIdBedPatch(params: ChangeBedResidentsResidentIdBedPatch$Params, context?: HttpContext): Observable<ResidentOut> {
+  changeBedResidentsResidentIdBedPatch(
+    params: ChangeBedResidentsResidentIdBedPatch$Params,
+    context?: HttpContext,
+  ): Observable<ResidentOut> {
     return this.changeBedResidentsResidentIdBedPatch$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body)
+      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body),
     );
   }
-
 }

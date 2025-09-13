@@ -8,26 +8,33 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+export interface MyResidencesResidencesMineGet$Params {}
 
-export interface MyResidencesResidencesMineGet$Params {
-}
-
-export function myResidencesResidencesMineGet(http: HttpClient, rootUrl: string, params?: MyResidencesResidencesMineGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
-[key: string]: any;
-}>>> {
+export function myResidencesResidencesMineGet(
+  http: HttpClient,
+  rootUrl: string,
+  params?: MyResidencesResidencesMineGet$Params,
+  context?: HttpContext,
+): Observable<
+  StrictHttpResponse<
+    Array<{
+      [key: string]: any;
+    }>
+  >
+> {
   const rb = new RequestBuilder(rootUrl, myResidencesResidencesMineGet.PATH, 'get');
   if (params) {
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<{
-      [key: string]: any;
-      }>>;
-    })
+      return r as StrictHttpResponse<
+        Array<{
+          [key: string]: any;
+        }>
+      >;
+    }),
   );
 }
 

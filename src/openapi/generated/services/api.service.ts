@@ -50,9 +50,7 @@ export class ApiService extends BaseService {
    * This method doesn't expect any request body.
    */
   meAuthMeGet(params?: MeAuthMeGet$Params, context?: HttpContext): Observable<any> {
-    return this.meAuthMeGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
-    );
+    return this.meAuthMeGet$Response(params, context).pipe(map((r: StrictHttpResponse<any>): any => r.body));
   }
 
   /** Path part for operation `rootGet()` */
@@ -83,9 +81,6 @@ export class ApiService extends BaseService {
    * This method doesn't expect any request body.
    */
   rootGet(params?: RootGet$Params, context?: HttpContext): Observable<any> {
-    return this.rootGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
-    );
+    return this.rootGet$Response(params, context).pipe(map((r: StrictHttpResponse<any>): any => r.body));
   }
-
 }

@@ -8,22 +8,23 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+export interface ListTagsTagsGet$Params {}
 
-export interface ListTagsTagsGet$Params {
-}
-
-export function listTagsTagsGet(http: HttpClient, rootUrl: string, params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function listTagsTagsGet(
+  http: HttpClient,
+  rootUrl: string,
+  params?: ListTagsTagsGet$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<any>> {
   const rb = new RequestBuilder(rootUrl, listTagsTagsGet.PATH, 'get');
   if (params) {
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
+  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<any>;
-    })
+    }),
   );
 }
 

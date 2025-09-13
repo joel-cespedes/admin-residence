@@ -41,7 +41,7 @@ export class ResidenceService {
     () =>
       !this.authService.isSuperAdmin() &&
       this.hasMultipleResidences() &&
-      !this.selectedResidenceId()
+      !this.selectedResidenceId(),
   );
 
   // LinkedSignal para la residencia seleccionada
@@ -83,7 +83,7 @@ export class ResidenceService {
       catchError((error) => {
         this.setError('Error cargando residencias');
         return of([]);
-      })
+      }),
     );
   }
 

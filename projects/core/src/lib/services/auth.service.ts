@@ -19,7 +19,7 @@ export interface AuthState {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
   private readonly apiAuth = inject(ApiAuthService);
@@ -32,7 +32,7 @@ export class AuthService {
     token: this.getStoredToken(),
     isAuthenticated: false,
     isLoading: false,
-    error: null,
+    error: null
   });
 
   // Computed signals
@@ -90,7 +90,7 @@ export class AuthService {
             ...state,
             user: user as Me,
             isAuthenticated: true,
-            isLoading: false,
+            isLoading: false
           }));
         }),
         catchError((error) => {
@@ -110,7 +110,7 @@ export class AuthService {
     localStorage.setItem('auth_token', token);
     this._authState.update((state) => ({
       ...state,
-      token,
+      token
     }));
   }
 
@@ -125,7 +125,7 @@ export class AuthService {
       token: null,
       isAuthenticated: false,
       isLoading: false,
-      error: null,
+      error: null
     });
   }
 

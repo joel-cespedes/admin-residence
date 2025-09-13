@@ -4,20 +4,20 @@
 
 export interface MeasurementOut {
   created_at: string;
-  deleted_at?: (string | null);
-  device_id?: (string | null);
-  diastolic?: (number | null);
+  deleted_at?: string | null;
+  device_id?: string | null;
+  diastolic?: number | null;
   id: string;
-  pulse_bpm?: (number | null);
+  pulse_bpm?: number | null;
   recorded_by: string;
   residence_id: string;
   resident_id: string;
   source: 'device' | 'voice' | 'manual';
-  spo2?: (number | null);
-  systolic?: (number | null);
+  spo2?: number | null;
+  systolic?: number | null;
   taken_at: string;
-  temperature_c?: (number | null);
+  temperature_c?: number | null;
   type: 'bp' | 'spo2' | 'weight' | 'temperature';
   updated_at: string;
-  weight_kg?: (number | null);
+  weight_kg?: number | null;
 }
