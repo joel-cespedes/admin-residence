@@ -20,7 +20,7 @@ export function applyTaskTasksApplicationsPost(
   rootUrl: string,
   params: ApplyTaskTasksApplicationsPost$Params,
   context?: HttpContext
-): Observable<StrictHttpResponse<TaskApplicationOut>>npx prettier  {
+): Observable<StrictHttpResponse<TaskApplicationOut>> {
   const rb = new RequestBuilder(rootUrl, applyTaskTasksApplicationsPost.PATH, 'post');
   if (params) {
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});

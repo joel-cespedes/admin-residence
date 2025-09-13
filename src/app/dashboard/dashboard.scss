@@ -182,14 +182,9 @@
   }
 }
 
-// ===========================
-// NAVBAR - BEM
-// ===========================
 .navbar {
   z-index: 11;
-
   margin-bottom: 16px;
-
   &--blur {
     .navbar__container {
       display: flex;
@@ -203,10 +198,8 @@
     flex-direction: row !important;
     justify-content: space-between;
     height: 64px;
-    padding: 0 1.5rem;
-    border-radius: 6px;
+    padding: 0 0.5rem;
     border: 1px solid rgba(var(--v-border-color, 34, 48, 62), var(--v-border-opacity, 0.12));
-    box-shadow: 0 2px 6px rgba(var(--v-shadow-key-umbra-color, 34, 48, 62), var(--v-shadow-sm-opacity, 0.08));
   }
 
   &__left {
@@ -233,13 +226,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: var(--sneat-bg-secondary);
     padding: 8px 16px;
     border-radius: 6px;
-    border: 1px solid var(--sneat-border-color);
     cursor: pointer;
     transition: border-color 0.2s ease;
     min-width: 200px;
+    box-shadow: 0px 0px 7px 4px rgba(0, 0, 0, 0.05);
 
     &:hover {
       border-color: var(--sneat-primary);
@@ -255,11 +247,6 @@
 
     width: 18px;
     height: 18px;
-  }
-
-  &__search-text {
-    color: var(--sneat-text-secondary);
-    flex: 1;
   }
 
   &__search-shortcut {
@@ -291,7 +278,7 @@
   box-sizing: border-box;
   width: 100%;
   display: grid;
-  gap: 24px;
+  gap: 22px;
   padding: 24px;
   grid-template-columns: repeat(6, 1fr);
   grid-template-areas:
@@ -348,7 +335,6 @@
 // WELCOME CARD - BEM
 // ===========================
 .welcome-card {
-  background: linear-gradient(135deg, var(--sneat-primary) 0%, var(--sneat-primary-light) 100%);
   color: white;
   border: none !important;
   box-shadow: var(--sneat-shadow-lg) !important;
@@ -371,24 +357,18 @@
   }
 
   &__title {
-    font-weight: 700;
+    font-weight: 500;
+    font-size: 1.125rem;
     margin: 0 0 8px;
+    color: var(--sneat-primary);
   }
 
   &__subtitle {
-    opacity: 0.9;
     margin: 0 0 24px;
+    font-size: 0.9375rem;
     line-height: 1.5;
-  }
-
-  &__btn {
-    background-color: rgba(255, 255, 255, 0.2) !important;
-    color: white !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.3) !important;
-    }
+    font-weight: 400;
+    color: var(--sneat-text-primary);
   }
 
   &__illustration {
@@ -408,15 +388,11 @@
   }
 }
 
-// ===========================
-// METRIC CARD - BEM
-// ===========================
 .metric-card {
   height: 100%;
 
   &--profit &__icon-container {
     background-color: rgba(113, 221, 55, 0.1);
-
     .metric-card__icon {
       color: var(--sneat-success);
     }
@@ -447,11 +423,10 @@
   }
 
   &__content {
-    padding: 24px !important;
-    text-align: center;
+    padding: 8px !important;
 
     @media (max-width: 768px) {
-      padding: 16px !important;
+      padding: 8px !important;
     }
   }
 
@@ -460,22 +435,14 @@
     height: 48px;
     border-radius: 6px;
     display: flex;
+
     align-items: center;
     justify-content: center;
-    margin: 0 auto 16px;
-  }
-
-  &__icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  &__number {
-    font-weight: 700;
-    color: var(--sneat-text-primary);
-    margin-bottom: 4px;
-
-    @media (max-width: 768px) {
+    margin: 8px auto 16px;
+    .mat-icon {
+      font-size: 21px;
+      width: 21px;
+      height: 29px;
     }
   }
 
@@ -504,10 +471,18 @@
 
   &__label {
     color: var(--sneat-text-secondary);
-
-    font-weight: 500;
-    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 4px;
     letter-spacing: 0.5px;
+  }
+  &__number {
+    color: var(--sneat-text-primary);
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-weight: 500;
+    @media (max-width: 768px) {
+    }
   }
 }
 
@@ -874,13 +849,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    mat-icon {
-      color: white;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
   }
 
   &__type {
@@ -991,15 +959,10 @@
   }
 }
 
-// ===========================
-// MATERIAL DESIGN OVERRIDES
-// ===========================
 ::ng-deep {
   .mat-mdc-card {
     background-color: var(--sneat-bg-primary) !important;
     border: 1px solid var(--sneat-border-color) !important;
-    border-radius: 8px !important;
-    box-shadow: var(--sneat-shadow-sm) !important;
     height: 100%;
 
     .mat-mdc-card-header {
@@ -1020,7 +983,7 @@
     }
 
     .mat-mdc-card-content {
-      padding: 16px 24px !important;
+      padding: 24px !important;
       color: var(--sneat-text-primary) !important;
       flex: 1;
     }

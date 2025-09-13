@@ -104,18 +104,13 @@
     <div class="dashboard">
       <mat-card class="navbar__container dashboard__section">
         <div class="navbar__left">
-          <button
-            type="button"
-            mat-icon-button
-            class="navbar__menu-toggle"
-            (click)="toggleSidebar()">
+          <button type="button" mat-icon-button class="navbar__menu-toggle" (click)="toggleSidebar()">
             <span class="mat-icon">menu</span>
           </button>
 
           <div class="navbar__search">
-            <span class="mat-icon" class="navbar__search-icon">search</span>
+            <span class="mat-icon">search</span>
             <span class="navbar__search-text">Search</span>
-            <span class="navbar__search-shortcut">⌘K</span>
           </div>
         </div>
 
@@ -124,27 +119,18 @@
             <span class="mat-icon">{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</span>
           </button>
 
-          <button
-            type="button"
-            mat-icon-button
-            class="navbar__btn"
-            [matBadge]="3"
-            matBadgeColor="warn"
-            matBadgeSize="small">
+          <button type="button" mat-icon-button class="navbar__btn" [matBadge]="3" matBadgeColor="warn" matBadgeSize="small">
             <span class="mat-icon">notifications</span>
           </button>
 
           <button type="button" mat-icon-button class="navbar__btn">
-            <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
-              alt="Profile"
-              class="navbar__avatar" />
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="Profile" class="navbar__avatar" />
           </button>
         </div>
       </mat-card>
 
-      <mat-card class="welcome-card dashboard__section">
-        <mat-card-content class="welcome-card__content">
+      <div class="welcome-card dashboard__section">
+        <div class="welcome-card__content">
           <div class="welcome-card__text">
             <h2 class="welcome-card__title">Congratulations John! 🎉</h2>
             <p class="welcome-card__subtitle">
@@ -152,30 +138,25 @@
               <br />
               Check your new raising badge in your profile.
             </p>
-            <button type="button" mat-raised-button color="primary" class="welcome-card__btn">
-              View Badges
-            </button>
+            <button type="button" mat-raised-button color="primary" class="welcome-card__btn">View Badges</button>
           </div>
           <div class="welcome-card__illustration">
-            <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=150&fit=crop"
-              alt="Congratulations"
-              class="welcome-card__img" />
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=150&fit=crop" alt="Congratulations" class="welcome-card__img" />
           </div>
-        </mat-card-content>
-      </mat-card>
+        </div>
+      </div>
 
       @for (metric of metrics(); track metric.title) {
         <mat-card class="metric-card dashboard__section metric-card--{{ metric.color }}">
           <mat-card-content class="metric-card__content">
             <div class="metric-card__icon-container">
-              <span class="mat-icon" class="metric-card__icon">{{ metric.icon }}</span>
+              <div class="mat-icon" [ngStyle]="{ color: metric.colorIcon }">{{ metric.icon }}</div>
             </div>
+            <div class="metric-card__label">{{ metric.title }}</div>
             <div class="metric-card__number">{{ metric.value }}</div>
             <div class="metric-card__change metric-card__change--{{ metric.changeType }}">
               {{ metric.change }}
             </div>
-            <div class="metric-card__label">{{ metric.title }}</div>
           </mat-card-content>
         </mat-card>
       }
@@ -252,11 +233,7 @@
           <div class="profile-card__amount">$84,686k</div>
           <div class="profile-card__chart">
             <svg viewBox="0 0 100 30" class="profile-card__svg">
-              <polyline
-                points="0,25 20,20 40,15 60,18 80,12 100,8"
-                fill="none"
-                stroke="#ffab00"
-                stroke-width="2" />
+              <polyline points="0,25 20,20 40,15 60,18 80,12 100,8" fill="none" stroke="#ffab00" stroke-width="2" />
             </svg>
           </div>
         </mat-card-content>

@@ -9,13 +9,13 @@ html {
         primary: index.$custom-primary-palette,
         secondary: index.$custom-accent-palette,
         tertiary: mat.$blue-palette,
-        error: index.$custom-warn-palette,
+        error: index.$custom-warn-palette
       ),
       typography: (
         brand-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        plain-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        plain-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       ),
-      density: 0,
+      density: 0
     )
   );
 }

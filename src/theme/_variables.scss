@@ -1,5 +1,5 @@
 // theme/_variables.scss
-@use '@angular/material' as mat;
+//@use '@angular/material' as mat;
 
 // ===========================
 // PALETAS DE MATERIAL DESIGN
@@ -35,8 +35,8 @@ $custom-primary-palette: (
     A100: rgba(black, 0.87),
     A200: rgba(black, 0.87),
     A400: white,
-    A700: white,
-  ),
+    A700: white
+  )
 );
 
 $custom-accent-palette: (
@@ -69,8 +69,8 @@ $custom-accent-palette: (
     A100: rgba(black, 0.87),
     A200: rgba(black, 0.87),
     A400: white,
-    A700: white,
-  ),
+    A700: white
+  )
 );
 
 $custom-warn-palette: (
@@ -103,8 +103,8 @@ $custom-warn-palette: (
     A100: rgba(black, 0.87),
     A200: rgba(black, 0.87),
     A400: white,
-    A700: white,
-  ),
+    A700: white
+  )
 );
 
 // ===========================
@@ -158,7 +158,7 @@ $custom-warn-palette: (
   // Bordes y sombras
   --sneat-border-color: rgba(34, 48, 62, 0.12);
   --sneat-border-radius: 6px;
-  --sneat-border-radius-lg: 8px;
+  --sneat-border-radius-lg: 6px;
 
   // Sombras - Light Mode
   --sneat-shadow-xs: 0 1px 2px rgba(34, 48, 62, 0.06);
@@ -179,6 +179,8 @@ $custom-warn-palette: (
   --sneat-navbar-height: 64px;
   --sneat-sidebar-width: 260px;
   --sneat-sidebar-collapsed-width: 80px;
+
+  --sneat-lienar-gradient: linear-gradient(135deg, var(--sneat-primary) 0%, var(--sneat-primary-light) 100%);
 }
 
 // ===========================
@@ -246,9 +248,18 @@ $custom-warn-palette: (
   }
 }
 
-// ===========================
-// MIXINS ÚTILES
-// ===========================
+.mat-icon {
+  font-family: 'Material Icons Sharp', monospace;
+  font-size: 24px;
+  font-weight: normal;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+}
 
 @mixin card-style {
   background-color: var(--sneat-bg-primary);

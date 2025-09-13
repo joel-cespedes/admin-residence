@@ -1,8 +1,3 @@
-// theme/_components.scss
-
-// ===========================
-// MATERIAL CARDS
-// ===========================
 .mat-mdc-card {
   border-radius: var(--sneat-border-radius-lg) !important;
   box-shadow: var(--sneat-shadow) !important;
@@ -55,8 +50,8 @@
 
 // Botón primario personalizado
 .mat-mdc-raised-button.mat-primary {
-  background-color: var(--sneat-primary) !important;
-
+  background: var(--sneat-lienar-gradient) !important;
+  color: white !important;
   &:hover {
     background-color: var(--sneat-primary-dark) !important;
   }
@@ -352,11 +347,10 @@
   }
 }
 .mat-icon {
-  display: inline-block;
   font-family: 'Material Icons Sharp', monospace;
   font-size: 24px;
   font-weight: normal;
-  line-height: 1;
+
   letter-spacing: normal;
   text-transform: none;
   white-space: nowrap;
