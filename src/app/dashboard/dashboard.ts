@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
-import { CHART_RADIAL, EWVENUE_CHART_DATA, LINE_CHART, METRICS, ORDER_CATEGORIES, PROFIT_CHART_DATA, TRANSACTIONS } from './charts/charts-dashboard';
+import { CHART_RADIAL, CIRCLE_CHART, EWVENUE_CHART_DATA, LINE_CHART, METRICS, ORDER_CATEGORIES, PROFIT_CHART_DATA, TRANSACTIONS } from './charts/charts-dashboard';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatSelectModule } from '@angular/material/select';
 @Component({
@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
   orderCategories = ORDER_CATEGORIES;
   transactions = TRANSACTIONS;
   lineChart = LINE_CHART;
-
+  circleChart = CIRCLE_CHART;
   ngOnInit() {
     // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     //  this.isDarkTheme.set(prefersDark);

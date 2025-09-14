@@ -30,25 +30,21 @@ interface OrderCategory {
 }
 
 export const LINE_CHART = signal({
-  series: [
-    {
-      name: 'Desktops',
-      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-    }
-  ],
+  series: [{ data: [30, 58, 35, 53, 50, 68] }],
   tooltip: { enabled: false },
-  colors: ['rgba(255, 171, 0,1)'],
+  colors: ['#FFAC04', 'red'],
   chart: {
     parentHeightOffset: 0,
     toolbar: { show: false },
-
+    foreColor: '#ffac04',
     dropShadow: {
       top: 12,
       blur: 4,
       left: 0,
       enabled: true,
       opacity: 0.12,
-      color: 'rgba(255, 171, 0,1)'
+
+      color: '#FFAC04'
     }
   } as ApexChart,
   dataLabels: {
@@ -86,7 +82,7 @@ export const METRICS = signal<DashboardMetric[]>([
     changeType: 'positive',
     icon: 'monitoring',
     color: 'profit',
-    colorIcon: '#72DD38'
+    colorIcon: 'btn_green'
   },
   {
     title: 'Sales',
@@ -95,7 +91,7 @@ export const METRICS = signal<DashboardMetric[]>([
     changeType: 'positive',
     icon: 'monitoring',
     color: 'sales',
-    colorIcon: '#67DBF4'
+    colorIcon: 'btn_lightblue'
   },
   {
     title: 'Payments',
@@ -104,7 +100,7 @@ export const METRICS = signal<DashboardMetric[]>([
     changeType: 'negative',
     icon: 'monitoring',
     color: 'payments',
-    colorIcon: '#FF3E1D'
+    colorIcon: 'btn_red'
   },
   {
     title: 'Transactions',
@@ -113,23 +109,24 @@ export const METRICS = signal<DashboardMetric[]>([
     changeType: 'positive',
     icon: 'monitoring',
     color: 'transactions',
-    colorIcon: '#A5A7FF'
+    colorIcon: 'btn_darkblue'
   }
 ]);
 
 // ApexCharts data for Total Revenue
 export const EWVENUE_CHART_DATA = signal({
   series: [
-    { name: '2024', data: [18, 7, 15, 29, 18, 12, 9] },
-    { name: '2023', data: [-13, -18, -9, -14, -5, -17, -15] }
+    { name: `${new Date().getFullYear() - 1}`, data: [18, 10, 15, 29, 18, 12, 9] },
+    { name: `${new Date().getFullYear() - 2}`, data: [-13, -18, -9, -14, -8, -17, -15] }
   ] as ApexAxisChartSeries,
 
   chart: {
     type: 'bar',
-    height: 300,
-    stacked: true,
-    toolbar: { show: false },
-    fontFamily: 'Inter'
+    sparkline: { enabled: true }
+    // height: 300,
+    // stacked: true,
+    // toolbar: { show: false },
+    // fontFamily: 'Inter'
   } satisfies ApexChart,
 
   colors: ['#696cff', '#03c3ec'],
@@ -210,15 +207,15 @@ export const CHART_RADIAL = signal({
         name: {
           offsetY: 25,
           fontWeight: 500,
-          fontSize: '50px',
-          color: '#03c3ec',
+          fontSize: '15px',
+          color: '#000',
           fontFamily: 'Inter'
         },
         value: {
           offsetY: -15,
           fontWeight: 500,
-          fontSize: '50px',
-          color: '#696cff',
+          fontSize: '24px',
+          color: '#000',
           fontFamily: 'Inter'
         }
       }
@@ -276,28 +273,27 @@ export const CHART_RADIAL = signal({
 
 // ApexCharts data for Profit trend (small chart in Order Statistics)
 export const PROFIT_CHART_DATA = signal({
-  series: [
-    {
-      name: 'Profit',
-      data: [3350, 3350, 4800, 4800, 2950, 2950, 1800, 1800, 3750, 3750, 5700, 5700]
-    }
-  ] as ApexAxisChartSeries,
+  series: [{ data: [24, 21, 30, 22, 42, 26, 35, 29] }] as ApexAxisChartSeries,
 
   chart: {
     type: 'area',
-    height: 80,
-    sparkline: { enabled: true },
-    animations: { enabled: false }, // estático como la tarjeta
-    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    height: 230,
+    toolbar: { show: false }
   } satisfies ApexChart,
 
   colors: ['#696cff'],
 
   stroke: {
-    curve: 'smooth',
-    width: 2
+    width: 3,
+    curve: 'smooth'
   } satisfies ApexStroke,
 
+  avatar: 'statsVerticalWallet',
+  title: 'Total Income',
+  stats: '$459.1k',
+  profitLoss: 65,
+  profitLossAmount: '6.5',
+  compareToLastWeek: '$39k',
   states: {
     hover: {
       filter: { type: 'none' }
@@ -309,22 +305,77 @@ export const PROFIT_CHART_DATA = signal({
 
   dataLabels: { enabled: false } as ApexDataLabels,
   grid: {
-    show: false,
+    strokeDashArray: 4.5,
+    borderColor: 'rgba(34,48,62,.3)',
     padding: {
       left: 0,
-      top: -10,
-      right: 7,
-      bottom: -3
+      top: -20,
+      right: 11,
+      bottom: 7
+    }
+  },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      opacityTo: 0.25,
+      opacityFrom: 0.5,
+      stops: [0, 95, 100],
+      shadeIntensity: 0.6,
+      colorStops: [
+        [
+          {
+            offset: 0,
+            opacity: 0.4,
+            color: '#696cff'
+          },
+          {
+            offset: 100,
+            opacity: 0.2,
+            color: '#03c3ec'
+          }
+        ]
+      ]
     }
   },
   xaxis: {
-    labels: { show: false },
+    axisTicks: { show: false },
     axisBorder: { show: false },
-    axisTicks: { show: false }
-  } as ApexXAxis,
-  yaxis: { show: false } as ApexYAxis,
+    categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    offsetY: 20,
+    offsetX: -24,
+    labels: {
+      style: {
+        fontSize: '14px',
+        colors: '#696cff',
+        fontFamily: 'Public Sans'
+      }
+    }
+  },
+  yaxis: {
+    min: 10,
+    max: 50,
+    show: false,
+    tickAmount: 4
+  },
 
-  tooltip: { enabled: false } // tarjeta “limpia” como la del demo
+  markers: {
+    size: 8,
+    strokeWidth: 6,
+    strokeOpacity: 1,
+    offsetX: -10,
+    hover: { size: 8 },
+    colors: ['transparent'],
+    strokeColors: 'transparent',
+    discrete: [
+      {
+        size: 8,
+        seriesIndex: 0,
+        fillColor: '#fff',
+        strokeColor: '#696cff',
+        dataPointIndex: 7
+      }
+    ]
+  }
 });
 
 export const ORDER_CATEGORIES = signal<OrderCategory[]>([
@@ -333,28 +384,28 @@ export const ORDER_CATEGORIES = signal<OrderCategory[]>([
     icon: 'devices',
     percentage: 82.5,
     count: 849,
-    color: 'rgb(105, 108, 255)'
+    color: 'btn_darkblue'
   },
   {
     name: 'Fashion',
     icon: 'checkroom',
     percentage: 23.8,
     count: 237,
-    color: 'rgb(113, 221, 55)'
+    color: 'btn_green'
   },
   {
     name: 'Decor',
     icon: 'palette',
     percentage: 84.9,
     count: 849,
-    color: 'rgb(3, 195, 236)'
+    color: 'btn_lightblue'
   },
   {
     name: 'Sports',
     icon: 'sports_soccer',
     percentage: 9.9,
     count: 99,
-    color: 'rgb(255, 171, 0)'
+    color: 'btn_gray'
   }
 ]);
 
@@ -366,7 +417,7 @@ export const TRANSACTIONS = signal<Transaction[]>([
     amount: '+$82.6',
     status: 'positive',
     icon: 'account_balance',
-    color: '#0070ba'
+    color: 'btn_red'
   },
   {
     id: '2',
@@ -375,7 +426,7 @@ export const TRANSACTIONS = signal<Transaction[]>([
     amount: '+$270.69',
     status: 'positive',
     icon: 'account_balance_wallet',
-    color: 'rgb(105, 108, 255)'
+    color: 'btn_darkblue'
   },
   {
     id: '3',
@@ -384,7 +435,7 @@ export const TRANSACTIONS = signal<Transaction[]>([
     amount: '+$637.91',
     status: 'positive',
     icon: 'swap_horiz',
-    color: 'rgb(3, 195, 236)'
+    color: 'btn_lightblue'
   },
   {
     id: '4',
@@ -393,7 +444,7 @@ export const TRANSACTIONS = signal<Transaction[]>([
     amount: '-$838.71',
     status: 'negative',
     icon: 'credit_card',
-    color: 'rgb(113, 221, 55)'
+    color: 'btn_green'
   },
   {
     id: '5',
@@ -402,7 +453,7 @@ export const TRANSACTIONS = signal<Transaction[]>([
     amount: '+$203.33',
     status: 'positive',
     icon: 'local_cafe',
-    color: 'rgb(105, 108, 255)'
+    color: 'btn_darkblue'
   },
   {
     id: '6',
@@ -411,6 +462,72 @@ export const TRANSACTIONS = signal<Transaction[]>([
     amount: '-$92.45',
     status: 'negative',
     icon: 'restaurant',
-    color: 'rgb(255, 171, 0)'
+    color: 'btn_gray'
   }
 ]);
+
+export const CIRCLE_CHART = signal({
+  series: [45, 80, 20, 40],
+  chart: {
+    sparkline: { enabled: true },
+    animations: { enabled: false },
+    width: 140,
+    height: 120,
+    type: 'donut'
+  } satisfies ApexChart,
+  states: {
+    hover: {
+      filter: { type: 'none' }
+    },
+    active: {
+      filter: { type: 'none' }
+    }
+  },
+  stroke: {
+    width: 6,
+    colors: ['rgb(105, 108, 255)']
+  },
+  legend: { show: false },
+  tooltip: { enabled: false },
+  dataLabels: { enabled: false },
+  labels: ['Fashion', 'Electronic', 'Sports', 'Decor'],
+  grid: {
+    padding: {
+      top: -7,
+      bottom: 5
+    }
+  },
+  plotOptions: {
+    pie: {
+      expandOnClick: false,
+      donut: {
+        size: '85%',
+        labels: {
+          show: true,
+          name: {
+            offsetY: 17,
+            fontSize: '22px',
+            color: 'rgb(3, 195, 236)',
+            fontFamily: 'Public Sans'
+          },
+          value: {
+            offsetY: -17,
+            fontSize: '18px',
+            color: 'rgb(105, 108, 255)',
+            fontFamily: 'Public Sans',
+            fontWeight: 500
+          },
+          total: {
+            show: true,
+            label: 'Weekly',
+            fontSize: '13px',
+            lineHeight: '18px',
+            formatter: () => '38%',
+            color: 'rgb(3, 195, 236)',
+            fontFamily: 'Public Sans'
+          }
+        }
+      }
+    }
+  }
+});

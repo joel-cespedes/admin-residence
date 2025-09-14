@@ -447,14 +447,12 @@
     height: 48px;
     border-radius: 6px;
     display: flex;
-
     align-items: center;
     justify-content: center;
     margin-bottom: 16px;
     .mat-icon {
-      font-size: 21px;
-      width: 21px;
-      height: 29px;
+      width: 22px !important;
+      height: 30px !important;
     }
   }
 
@@ -506,15 +504,21 @@
   .btn_menu {
     margin-top: -20px !important;
   }
-}
-
-.chart-card {
-  height: 100%;
 
   .title {
     font-size: 1.125rem;
     font-weight: 500;
   }
+  .sub-title {
+    font-size: 0.9375rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    line-height: 1.375rem;
+  }
+}
+
+.chart-card {
+  height: 100%;
 
   &__legend {
     display: flex;
@@ -601,6 +605,7 @@
       border-radius: 0.25rem;
       padding: 4px 12.5px;
       font-size: 13px;
+      width: fit-content;
       padding-inline: 0.625rem;
       color: rgba(255, 171, 0, 1);
       border: 1px solid rgba(255, 171, 0, 1);
@@ -638,34 +643,23 @@
   }
 
   &__number {
-    font-weight: 700;
+    font-size: 1.75rem !important;
+    font-weight: 500;
+    line-height: 2.625rem;
     color: var(--sneat-text-primary);
     margin-bottom: 4px;
   }
 
   &__label {
-    color: var(--sneat-text-secondary);
-  }
-
-  &__weekly-circle {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: conic-gradient(var(--sneat-success) 0deg 137deg, var(--sneat-gray-200) 137deg 360deg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      background-color: var(--sneat-bg-primary);
-      border-radius: 50%;
-    }
+    border-radius: 0.25rem;
+    padding: 4px 12.5px;
+    font-size: 13px;
+    width: fit-content;
+    padding-inline: 0.625rem;
+    color: rgb(23, 140, 208);
+    border: 1px solid rgb(0, 13, 255);
+    background-color: rgba(66, 120, 255, 0.265);
+    margin-bottom: 26px;
   }
 
   &__weekly-percentage {
@@ -816,9 +810,6 @@
   min-height: 500px;
 }
 
-// ===========================
-// TRANSACTION - BEM
-// ===========================
 .transaction {
   display: flex;
   justify-content: space-between;
@@ -834,15 +825,6 @@
     display: flex;
     align-items: center;
     gap: 16px;
-  }
-
-  &__icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   &__type {
@@ -956,7 +938,6 @@
 ::ng-deep {
   .mat-mdc-card {
     background-color: var(--sneat-bg-primary) !important;
-
     height: 100%;
 
     .mat-mdc-card-header {
@@ -1013,35 +994,45 @@
 ::ng-deep .apexcharts-text,
 ::ng-deep .apexcharts-tooltip,
 ::ng-deep .apexcharts-legend-text {
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif !important;
-  font-size: 12px !important;
-  letter-spacing: 0.2px;
+  font-family: 'Inter';
 }
 
-/* Tamaño del texto de ejes/leyenda: igual al demo */
-::ng-deep .apexcharts-xaxis-texts-g text,
-::ng-deep .apexcharts-yaxis-texts-g text,
-::ng-deep .apexcharts-legend-text {
-  font-size: 12px !important;
-  fill: var(--sneat-text-secondary) !important;
+.btn_color {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-/* Tooltip “card” como Sneat */
-::ng-deep .apexcharts-tooltip {
-  border-radius: 8px !important;
-  padding: 8px 10px !important;
-  font-weight: 500 !important;
+.btn_lightblue {
+  background-color: rgba(3, 195, 236, 0.1);
+  border: 1px solid rgba(3, 195, 236, 1);
+  color: rgba(3, 195, 236, 1);
 }
-
-/* Marcadores de la leyenda redondos y pequeños */
-::ng-deep .apexcharts-legend-marker {
-  width: 8px !important;
-  height: 8px !important;
-  border-radius: 50% !important;
+.btn_darkblue {
+  background-color: rgba(105, 108, 255, 0.1);
+  border: 1px solid rgba(105, 108, 255, 1);
+  color: rgba(105, 108, 255, 1);
+}
+.btn_green {
+  background-color: rgba(113, 221, 55, 0.1);
+  border: 1px solid rgba(113, 221, 55, 1);
+  color: rgba(113, 221, 55, 1);
+}
+.btn_gray {
+  background-color: rgba(133, 146, 163, 0.1);
+  border: 1px solid rgba(133, 146, 163, 1);
+  color: rgba(133, 146, 163, 1);
+}
+.btn_red {
+  background-color: rgba(255, 62, 29, 0.1);
+  border: 1px solid rgba(255, 62, 29, 1);
+  color: rgba(255, 62, 29, 1);
+}
+.btn_orange {
+  background-color: rgba(255, 171, 0, 0.1);
+  border: 1px solid rgba(255, 171, 0, 1);
+  color: rgba(255, 171, 0, 1);
 }

@@ -251,6 +251,8 @@ $custom-warn-palette: (
 .mat-icon {
   font-family: 'Material Icons Sharp', monospace;
   font-size: 24px;
+  height: auto !important;
+  width: auto !important;
   font-weight: normal;
   letter-spacing: normal;
   text-transform: none;

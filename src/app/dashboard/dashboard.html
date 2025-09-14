@@ -150,8 +150,8 @@
         <mat-card class="metric-card dashboard__section metric-card--{{ metric.color }}">
           <mat-card-content class="metric-card__content">
             <div class="content_header_between">
-              <div class="metric-card__icon-container">
-                <div class="mat-icon" [ngStyle]="{ color: metric.colorIcon }">{{ metric.icon }}</div>
+              <div class="metric-card__icon-container btn_color" [class]="metric.colorIcon">
+                <div class="mat-icon">{{ metric.icon }}</div>
               </div>
 
               <button class="btn_menu" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Acciones">
@@ -258,15 +258,19 @@
 
       <mat-card class="orders-card dashboard__section">
         <mat-card-header>
-          <mat-card-title>Order Statistics</mat-card-title>
-          <mat-card-subtitle>42.82k Total Sales</mat-card-subtitle>
-          <button type="button" mat-icon-button [matMenuTriggerFor]="ordersMenu">
-            <span class="mat-icon">more_vert</span>
-          </button>
-          <mat-menu #ordersMenu="matMenu">
-            <button type="button" mat-menu-item>View All</button>
-            <button type="button" mat-menu-item>Export</button>
-          </mat-menu>
+          <div class="content_header_between">
+            <div>
+              <div class="title">Order Cart</div>
+              <div class="sub-title">42.82k Total Sales</div>
+            </div>
+            <button type="button" mat-icon-button [matMenuTriggerFor]="ordersMenu">
+              <span class="mat-icon">more_vert</span>
+            </button>
+            <mat-menu #ordersMenu="matMenu">
+              <button type="button" mat-menu-item>View All</button>
+              <button type="button" mat-menu-item>Export</button>
+            </mat-menu>
+          </div>
         </mat-card-header>
         <mat-card-content>
           <div class="orders-card__summary">
@@ -275,10 +279,7 @@
               <div class="orders-card__label">Total Orders</div>
             </div>
             <div class="orders-card__weekly">
-              <div class="orders-card__weekly-circle">
-                <span class="orders-card__weekly-percentage">38%</span>
-                <span class="orders-card__weekly-label">Weekly</span>
-              </div>
+              <apx-chart [series]="circleChart().series" [chart]="circleChart().chart" [labels]="circleChart().labels" [plotOptions]="circleChart().plotOptions" ¡></apx-chart>
             </div>
           </div>
 
@@ -286,7 +287,7 @@
             @for (category of orderCategories(); track category.name) {
               <div class="category">
                 <div class="category__info">
-                  <div class="category__icon" [style.background-color]="category.color">
+                  <div class="btn_color" [class]="category.color">
                     <span class="mat-icon">{{ category.icon }}</span>
                   </div>
                   <div class="category__details">
@@ -306,10 +307,9 @@
       <mat-card class="orders-card dashboard__section">
         <mat-card-header>
           <div class="content_header_between">
-            <div class="orders-card__tabs">
-              <button type="button" class="orders-card__tab">Income</button>
-              <button type="button" class="orders-card__tab">Expenses</button>
-              <button type="button" class="orders-card__tab orders-card__tab--active">Profit</button>
+            <div>
+              <div class="title">Residentes</div>
+              <div class="sub-title">últimos 30 días</div>
             </div>
           </div>
         </mat-card-header>
@@ -351,7 +351,7 @@
           @for (transaction of transactions(); track transaction.id) {
             <div class="transaction">
               <div class="transaction__info">
-                <div class="transaction__icon" [style.background-color]="transaction.color">
+                <div class="btn_color" [class]="transaction.color">
                   <span class="mat-icon">{{ transaction.icon }}</span>
                 </div>
                 <div class="transaction__details">
