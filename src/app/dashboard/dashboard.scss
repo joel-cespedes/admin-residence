@@ -292,9 +292,13 @@
   }
 }
 .sub_dashboard {
-  display: grid;
-  gap: 0px;
-  grid-template-columns: 2fr 1fr;
+  display: flex;
+  & > .chart-card {
+    width: 56%;
+  }
+  & > .growth-card {
+    width: 44%;
+  }
 }
 
 .dashboard > .dashboard__section:nth-child(1) {
@@ -486,12 +490,20 @@
   }
 }
 
-// ===========================
-// CHART CARD - BEM
-// ===========================
+.content_header_between {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .chart-card {
   height: 100%;
-  min-height: 400px;
+
+  .title {
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
 
   &__legend {
     display: flex;
@@ -524,68 +536,29 @@
   }
 }
 
-// ===========================
-// GROWTH CARD - BEM
-// ===========================
 .growth-card {
   height: 100%;
-  min-height: 400px;
 
   &__content {
-    text-align: center;
-  }
-
-  &__circle {
-    position: relative;
-    display: inline-block;
-    margin: 24px 0;
-  }
-
-  &__circle-chart {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: conic-gradient(var(--sneat-primary) 0deg 280deg, var(--sneat-gray-200) 280deg 360deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      background-color: var(--sneat-bg-primary);
-      border-radius: 50%;
+    .subtitle {
+      font-size: 0.9375rem !important;
+      font-weight: 500;
+      line-height: 1.375rem;
+      text-align: center;
     }
   }
-
-  &__percentage {
-    font-weight: 700;
-    color: var(--sneat-text-primary);
-    position: relative;
-    z-index: 1;
-  }
-
-  &__stats {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 16px;
-  }
-
-  &__stat {
-    text-align: center;
-  }
-
-  &__stat-year {
-    color: var(--sneat-text-secondary);
-    margin-bottom: 4px;
-  }
-
-  &__stat-value {
-    font-weight: 600;
-    color: var(--sneat-text-primary);
+  &__select {
+    width: fit-content;
+    background-color: var(--sneat-primary);
+    color: white;
+    padding: 2px 24px;
+    border-radius: 6px;
+    border: none;
+    margin: 16px auto;
+    outline: none;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: normal;
   }
 }
 
@@ -594,38 +567,43 @@
 // ===========================
 .profile-card {
   height: 100%;
-  min-height: 400px;
 
   &__content {
-    text-align: center;
-    padding-top: 20px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-
-  &__change {
-    color: var(--sneat-success);
-    font-weight: 500;
-    margin-bottom: 8px;
-
-    &::before {
-      content: '↗';
-      margin-right: 4px;
+  &_left {
+    width: 40%;
+    .title {
+      font-size: 1.125rem !important;
+      font-weight: 500;
+      letter-spacing: normal;
+      margin-bottom: 8px;
+    }
+    .info {
+      border-radius: 0.25rem;
+      padding: 4px 12.5px;
+      font-size: 13px;
+      padding-inline: 0.625rem;
+      color: rgba(255, 171, 0, 1);
+      border: 1px solid rgba(255, 171, 0, 1);
+      background-color: rgba(255, 171, 0, 0.1);
+      margin-bottom: 26px;
+    }
+    .stats {
+      font-size: 0.9375rem;
+      line-height: 1.375rem;
+      color: rgb(113, 221, 55);
+    }
+    .result {
+      font-size: 1.5rem !important;
+      font-weight: 500;
+      line-height: 2.375rem;
     }
   }
-
-  &__amount {
-    font-weight: 700;
-    color: var(--sneat-text-primary);
-    margin-bottom: 20px;
-  }
-
-  &__chart {
-    height: 60px;
-    margin-top: auto;
-  }
-
-  &__svg {
-    width: 100%;
-    height: 100%;
+  &_right {
+    width: 60%;
   }
 }
 
@@ -962,7 +940,7 @@
 ::ng-deep {
   .mat-mdc-card {
     background-color: var(--sneat-bg-primary) !important;
-    border: 1px solid var(--sneat-border-color) !important;
+
     height: 100%;
 
     .mat-mdc-card-header {

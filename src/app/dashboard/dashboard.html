@@ -164,14 +164,16 @@
       <div class="dashboard__section sub_dashboard">
         <mat-card class="chart-card">
           <mat-card-header>
-            <mat-card-title>Total Revenue</mat-card-title>
-            <button type="button" mat-icon-button [matMenuTriggerFor]="revenueMenu">
-              <span class="mat-icon">more_vert</span>
-            </button>
-            <mat-menu #revenueMenu="matMenu">
-              <button type="button" mat-menu-item>View Details</button>
-              <button type="button" mat-menu-item>Export</button>
-            </mat-menu>
+            <div class="content_header_between">
+              <div class="title">Total Revenue</div>
+              <button type="button" mat-icon-button [matMenuTriggerFor]="revenueMenuRevenue">
+                <span class="mat-icon">more_vert</span>
+              </button>
+              <mat-menu #revenueMenuRevenue="matMenu">
+                <button type="button" mat-menu-item>View Details</button>
+                <button type="button" mat-menu-item>Export</button>
+              </mat-menu>
+            </div>
           </mat-card-header>
           <mat-card-content>
             <div class="chart-card__legend">
@@ -200,41 +202,42 @@
 
         <mat-card class="growth-card">
           <mat-card-header>
-            <mat-card-title>Growth</mat-card-title>
-            <mat-card-subtitle>62% Company Growth</mat-card-subtitle>
+            <mat-select class="growth-card__select" value="2023">
+              <mat-option value="2023">2023</mat-option>
+              <mat-option value="2024">2024</mat-option>
+              <mat-option value="2025">2025</mat-option>
+            </mat-select>
           </mat-card-header>
           <mat-card-content class="growth-card__content">
-            <div class="growth-card__circle">
-              <div class="growth-card__circle-chart">
-                <span class="growth-card__percentage">78%</span>
-              </div>
-            </div>
-            <div class="growth-card__stats">
-              <div class="growth-card__stat">
-                <div class="growth-card__stat-year">2023</div>
-                <div class="growth-card__stat-value">$2.54k</div>
-              </div>
-              <div class="growth-card__stat">
-                <div class="growth-card__stat-year">2022</div>
-                <div class="growth-card__stat-value">$4.21k</div>
-              </div>
-            </div>
+            <apx-chart
+              [series]="chartRadial().series"
+              [chart]="chartRadial().chart"
+              [plotOptions]="chartRadial().plotOptions"
+              [labels]="chartRadial().labels"
+              [fill]="chartRadial().fill"
+              [stroke]="chartRadial().stroke"></apx-chart>
+            <div class="subtitle">62% Company Growth</div>
           </mat-card-content>
         </mat-card>
       </div>
 
       <mat-card class="profile-card dashboard__section">
-        <mat-card-header>
-          <mat-card-title>Profile Report</mat-card-title>
-          <mat-card-subtitle>Year 2022</mat-card-subtitle>
-        </mat-card-header>
         <mat-card-content class="profile-card__content">
-          <div class="profile-card__change">+68.2%</div>
-          <div class="profile-card__amount">$84,686k</div>
-          <div class="profile-card__chart">
-            <svg viewBox="0 0 100 30" class="profile-card__svg">
-              <polyline points="0,25 20,20 40,15 60,18 80,12 100,8" fill="none" stroke="#ffab00" stroke-width="2" />
-            </svg>
+          <div class="profile-card_left">
+            <div class="title">Profile Report</div>
+            <div class="info">Year 2022</div>
+            <div class="stats">68.2%</div>
+            <div class="result">$84,686k</div>
+          </div>
+          <div class="profile-card_right">
+            <apx-chart
+              [series]="lineChart().series"
+              [stroke]="lineChart().stroke"
+              [chart]="lineChart().chart"
+              [dataLabels]="lineChart().dataLabels"
+              [grid]="lineChart().grid"
+              [yaxis]="lineChart().yaxis"
+              [xaxis]="lineChart().xaxis"></apx-chart>
           </div>
         </mat-card-content>
       </mat-card>
@@ -288,10 +291,19 @@
       </mat-card>
       <mat-card class="orders-card dashboard__section">
         <mat-card-header>
-          <div class="orders-card__tabs">
-            <button type="button" class="orders-card__tab">Income</button>
-            <button type="button" class="orders-card__tab">Expenses</button>
-            <button type="button" class="orders-card__tab orders-card__tab--active">Profit</button>
+          <div class="content_header_between">
+            <div class="orders-card__tabs">
+              <button type="button" class="orders-card__tab">Income</button>
+              <button type="button" class="orders-card__tab">Expenses</button>
+              <button type="button" class="orders-card__tab orders-card__tab--active">Profit</button>
+            </div>
+            <button type="button" mat-icon-button [matMenuTriggerFor]="revenueMenuProfit">
+              <span class="mat-icon">more_vert</span>
+            </button>
+            <mat-menu #revenueMenuProfit="matMenu">
+              <button type="button" mat-menu-item>View Details</button>
+              <button type="button" mat-menu-item>Export</button>
+            </mat-menu>
           </div>
         </mat-card-header>
         <mat-card-content>
@@ -309,7 +321,6 @@
               [chart]="profitChartData().chart"
               [colors]="profitChartData().colors"
               [stroke]="profitChartData().stroke"
-              [fill]="profitChartData().fill"
               [dataLabels]="profitChartData().dataLabels"
               [grid]="profitChartData().grid"
               [xaxis]="profitChartData().xaxis"
