@@ -4,7 +4,7 @@
   background-color: var(--sneat-bg-primary) !important;
 
   .mat-mdc-card-header {
-    padding: var(--sneat-spacing-lg) var(--sneat-spacing-lg) var(--sneat-spacing-md) !important;
+    padding: 24px 24px 0px 24px !important;
 
     .mat-mdc-card-title {
       font-size: 1.125rem;
@@ -20,13 +20,16 @@
     }
   }
 
-  .mat-mdc-card-content {
-    padding: var(--sneat-spacing-md) var(--sneat-spacing-lg) !important;
+  mat-card-content.mat-mdc-card-content {
+    padding: 24px !important;
   }
 
   .mat-mdc-card-actions {
     padding: var(--sneat-spacing-md) var(--sneat-spacing-lg) var(--sneat-spacing-lg) !important;
   }
+}
+.mat-mdc-menu-panel {
+  background-color: var(--sneat-bg-primary) !important;
 }
 
 // ===========================

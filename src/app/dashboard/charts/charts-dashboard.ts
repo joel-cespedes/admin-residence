@@ -204,7 +204,7 @@ export const CHART_RADIAL = signal({
     radialBar: {
       endAngle: 150,
       startAngle: -140,
-      hollow: { size: '60%' },
+      hollow: { size: '56%' },
       track: { background: 'transparent' },
       dataLabels: {
         name: {

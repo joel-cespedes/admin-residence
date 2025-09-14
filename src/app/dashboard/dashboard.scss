@@ -343,6 +343,14 @@
   border: none !important;
   box-shadow: var(--sneat-shadow-lg) !important;
 
+  &__btn {
+    width: fit-content;
+    background-color: rgba(105, 108, 255, 0.1);
+    border: 1px solid rgba(105, 108, 255, 0.2) !important;
+    color: var(--sneat-primary);
+    border-radius: 6px;
+    padding: 4px 16px;
+  }
   &__content {
     padding: 32px !important;
     display: flex;
@@ -442,7 +450,7 @@
 
     align-items: center;
     justify-content: center;
-    margin: 8px auto 16px;
+    margin-bottom: 16px;
     .mat-icon {
       font-size: 21px;
       width: 21px;
@@ -495,6 +503,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  .btn_menu {
+    margin-top: -20px !important;
+  }
 }
 
 .chart-card {
@@ -546,11 +557,16 @@
       line-height: 1.375rem;
       text-align: center;
     }
+    .chartt {
+      width: 80%;
+      margin: auto;
+    }
   }
   &__select {
     width: fit-content;
-    background-color: var(--sneat-primary);
-    color: white;
+    background-color: rgba(#696cff, 0.1);
+    border: 1px solid rgba(#696cff, 0.2) !important;
+    color: var(--sneat-primary);
     padding: 2px 24px;
     border-radius: 6px;
     border: none;
@@ -944,8 +960,6 @@
     height: 100%;
 
     .mat-mdc-card-header {
-      padding: 24px 24px 16px !important;
-
       .mat-mdc-card-title {
         color: var(--sneat-text-primary) !important;
         font-size: 1.125rem !important;
@@ -961,7 +975,6 @@
     }
 
     .mat-mdc-card-content {
-      padding: 24px !important;
       color: var(--sneat-text-primary) !important;
       flex: 1;
     }

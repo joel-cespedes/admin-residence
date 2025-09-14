@@ -124,7 +124,7 @@
           </button>
 
           <button type="button" mat-icon-button class="navbar__btn">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="Profile" class="navbar__avatar" />
+            <img src="/worker.png" alt="Profile" class="navbar__avatar" />
           </button>
         </div>
       </mat-card>
@@ -138,20 +138,32 @@
               <br />
               Check your new raising badge in your profile.
             </p>
-            <button type="button" mat-raised-button color="primary" class="welcome-card__btn">View Badges</button>
+            <button type="button" size="small" color="primary" class="welcome-card__btn">View Badges</button>
           </div>
           <div class="welcome-card__illustration">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=150&fit=crop" alt="Congratulations" class="welcome-card__img" />
+            <img src="./" alt="Congratulations" class="welcome-card__img" />
           </div>
         </div>
       </div>
 
-      @for (metric of metrics(); track metric.title) {
+      @for (metric of metrics(); track metric.title; let i = $index) {
         <mat-card class="metric-card dashboard__section metric-card--{{ metric.color }}">
           <mat-card-content class="metric-card__content">
-            <div class="metric-card__icon-container">
-              <div class="mat-icon" [ngStyle]="{ color: metric.colorIcon }">{{ metric.icon }}</div>
+            <div class="content_header_between">
+              <div class="metric-card__icon-container">
+                <div class="mat-icon" [ngStyle]="{ color: metric.colorIcon }">{{ metric.icon }}</div>
+              </div>
+
+              <button class="btn_menu" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Acciones">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>Item 1</button>
+                <button mat-menu-item>Item 2</button>
+              </mat-menu>
             </div>
+
             <div class="metric-card__label">{{ metric.title }}</div>
             <div class="metric-card__number">{{ metric.value }}</div>
             <div class="metric-card__change metric-card__change--{{ metric.changeType }}">
@@ -209,13 +221,15 @@
             </mat-select>
           </mat-card-header>
           <mat-card-content class="growth-card__content">
-            <apx-chart
-              [series]="chartRadial().series"
-              [chart]="chartRadial().chart"
-              [plotOptions]="chartRadial().plotOptions"
-              [labels]="chartRadial().labels"
-              [fill]="chartRadial().fill"
-              [stroke]="chartRadial().stroke"></apx-chart>
+            <div class="chartt">
+              <apx-chart
+                [series]="chartRadial().series"
+                [chart]="chartRadial().chart"
+                [plotOptions]="chartRadial().plotOptions"
+                [labels]="chartRadial().labels"
+                [fill]="chartRadial().fill"
+                [stroke]="chartRadial().stroke"></apx-chart>
+            </div>
             <div class="subtitle">62% Company Growth</div>
           </mat-card-content>
         </mat-card>
@@ -297,13 +311,6 @@
               <button type="button" class="orders-card__tab">Expenses</button>
               <button type="button" class="orders-card__tab orders-card__tab--active">Profit</button>
             </div>
-            <button type="button" mat-icon-button [matMenuTriggerFor]="revenueMenuProfit">
-              <span class="mat-icon">more_vert</span>
-            </button>
-            <mat-menu #revenueMenuProfit="matMenu">
-              <button type="button" mat-menu-item>View Details</button>
-              <button type="button" mat-menu-item>Export</button>
-            </mat-menu>
           </div>
         </mat-card-header>
         <mat-card-content>
