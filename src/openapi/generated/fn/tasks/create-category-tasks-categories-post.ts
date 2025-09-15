@@ -12,27 +12,24 @@ import { TaskCategoryCreate } from '../../models/task-category-create';
 import { TaskCategoryOut } from '../../models/task-category-out';
 
 export interface CreateCategoryTasksCategoriesPost$Params {
-  'X-Residence-Id'?: string | null;
-  body: TaskCategoryCreate;
+  'X-Residence-Id'?: (string | null);
+      body: TaskCategoryCreate
 }
 
-export function createCategoryTasksCategoriesPost(
-  http: HttpClient,
-  rootUrl: string,
-  params: CreateCategoryTasksCategoriesPost$Params,
-  context?: HttpContext,
-): Observable<StrictHttpResponse<TaskCategoryOut>> {
+export function createCategoryTasksCategoriesPost(http: HttpClient, rootUrl: string, params: CreateCategoryTasksCategoriesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskCategoryOut>> {
   const rb = new RequestBuilder(rootUrl, createCategoryTasksCategoriesPost.PATH, 'post');
   if (params) {
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
     rb.body(params.body, 'application/json');
   }
 
-  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<TaskCategoryOut>;
-    }),
+    })
   );
 }
 

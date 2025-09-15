@@ -8,28 +8,43 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { TaskCategoryOut } from '../../models/task-category-out';
+import { PaginatedResponse } from '../../models/paginated-response';
 
 export interface ListCategoriesTasksCategoriesGet$Params {
-  'X-Residence-Id'?: string | null;
+  page?: number;
+  size?: number;
+  search?: (string | null);
+  sort_by?: (string | null);
+  sort_order?: ('asc' | 'desc' | null);
+  date_from?: (string | null);
+  date_to?: (string | null);
+  status?: (string | null);
+  type?: (string | null);
+  'X-Residence-Id'?: (string | null);
 }
 
-export function listCategoriesTasksCategoriesGet(
-  http: HttpClient,
-  rootUrl: string,
-  params?: ListCategoriesTasksCategoriesGet$Params,
-  context?: HttpContext,
-): Observable<StrictHttpResponse<Array<TaskCategoryOut>>> {
+export function listCategoriesTasksCategoriesGet(http: HttpClient, rootUrl: string, params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
   const rb = new RequestBuilder(rootUrl, listCategoriesTasksCategoriesGet.PATH, 'get');
   if (params) {
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
+    rb.query('search', params.search, {});
+    rb.query('sort_by', params.sort_by, {});
+    rb.query('sort_order', params.sort_order, {});
+    rb.query('date_from', params.date_from, {});
+    rb.query('date_to', params.date_to, {});
+    rb.query('status', params.status, {});
+    rb.query('type', params.type, {});
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
   }
 
-  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<TaskCategoryOut>>;
-    }),
+      return r as StrictHttpResponse<PaginatedResponse>;
+    })
   );
 }
 

@@ -1,7 +1,7 @@
 // projects/core/src/lib/services/residents-data.service.ts
 import { Injectable, inject, computed } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { BaseCrudService } from './base-crud.service';
 import { ResidentsService } from '../../../../../src/openapi/generated/services/residents.service';
 import { ResidentOut, ResidentCreate, ResidentChangeBed } from '../../../../../src/openapi/generated/models';
@@ -13,7 +13,10 @@ export class ResidentsDataService extends BaseCrudService<ResidentOut> {
   private readonly apiService = inject(ResidentsService);
 
   getAll(): Observable<ResidentOut[]> {
-    return this.apiService.listResidentsResidentsGet();
+    return this.apiService.listResidentsResidentsGet().pipe(
+      map(response => response.items as ResidentOut[]),
+      tap(items => this._state.update(state => ({ ...state, items })))
+    );
   }
 
   getById(id: string): Observable<ResidentOut> {

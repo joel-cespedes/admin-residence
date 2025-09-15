@@ -12,26 +12,25 @@ import { ResidentCreate } from '../../models/resident-create';
 import { ResidentOut } from '../../models/resident-out';
 
 export interface CreateResidentResidentsPost$Params {
-  body: ResidentCreate;
+  'X-Residence-Id'?: (string | null);
+      body: ResidentCreate
 }
 
-export function createResidentResidentsPost(
-  http: HttpClient,
-  rootUrl: string,
-  params: CreateResidentResidentsPost$Params,
-  context?: HttpContext,
-): Observable<StrictHttpResponse<ResidentOut>> {
+export function createResidentResidentsPost(http: HttpClient, rootUrl: string, params: CreateResidentResidentsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentOut>> {
   const rb = new RequestBuilder(rootUrl, createResidentResidentsPost.PATH, 'post');
   if (params) {
+    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
     rb.body(params.body, 'application/json');
   }
 
-  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<ResidentOut>;
-    }),
+    })
   );
 }
 
-createResidentResidentsPost.PATH = '/residents';
+createResidentResidentsPost.PATH = '/residents/';

@@ -11,17 +11,97 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { getResidenceResidencesResidenceIdGet } from '../fn/residences/get-residence-residences-residence-id-get';
-import { GetResidenceResidencesResidenceIdGet$Params } from '../fn/residences/get-residence-residences-residence-id-get';
+import { assignUserToResidenceResidencesIdUsersUserIdPost } from '../fn/residences/assign-user-to-residence-residences-id-users-user-id-post';
+import { AssignUserToResidenceResidencesIdUsersUserIdPost$Params } from '../fn/residences/assign-user-to-residence-residences-id-users-user-id-post';
+import { createResidenceResidencesPost } from '../fn/residences/create-residence-residences-post';
+import { CreateResidenceResidencesPost$Params } from '../fn/residences/create-residence-residences-post';
+import { deleteResidenceResidencesIdDelete } from '../fn/residences/delete-residence-residences-id-delete';
+import { DeleteResidenceResidencesIdDelete$Params } from '../fn/residences/delete-residence-residences-id-delete';
+import { getResidenceResidencesIdGet } from '../fn/residences/get-residence-residences-id-get';
+import { GetResidenceResidencesIdGet$Params } from '../fn/residences/get-residence-residences-id-get';
+import { getResidenceUsersResidencesIdUsersGet } from '../fn/residences/get-residence-users-residences-id-users-get';
+import { GetResidenceUsersResidencesIdUsersGet$Params } from '../fn/residences/get-residence-users-residences-id-users-get';
 import { listResidencesResidencesGet } from '../fn/residences/list-residences-residences-get';
 import { ListResidencesResidencesGet$Params } from '../fn/residences/list-residences-residences-get';
 import { myResidencesResidencesMineGet } from '../fn/residences/my-residences-residences-mine-get';
 import { MyResidencesResidencesMineGet$Params } from '../fn/residences/my-residences-residences-mine-get';
+import { PaginatedResponse } from '../models/paginated-response';
+import { removeUserFromResidenceResidencesIdUsersUserIdDelete } from '../fn/residences/remove-user-from-residence-residences-id-users-user-id-delete';
+import { RemoveUserFromResidenceResidencesIdUsersUserIdDelete$Params } from '../fn/residences/remove-user-from-residence-residences-id-users-user-id-delete';
+import { ResidenceOut } from '../models/residence-out';
+import { updateResidenceResidencesIdPut } from '../fn/residences/update-residence-residences-id-put';
+import { UpdateResidenceResidencesIdPut$Params } from '../fn/residences/update-residence-residences-id-put';
 
 @Injectable({ providedIn: 'root' })
 export class ResidencesService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `listResidencesResidencesGet()` */
+  static readonly ListResidencesResidencesGetPath = '/residences/';
+
+  /**
+   * List Residences.
+   *
+   * List residences with pagination and filters
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listResidencesResidencesGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listResidencesResidencesGet$Response(params?: ListResidencesResidencesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+    return listResidencesResidencesGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * List Residences.
+   *
+   * List residences with pagination and filters
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listResidencesResidencesGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listResidencesResidencesGet(params?: ListResidencesResidencesGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+    return this.listResidencesResidencesGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `createResidenceResidencesPost()` */
+  static readonly CreateResidenceResidencesPostPath = '/residences/';
+
+  /**
+   * Create Residence.
+   *
+   * Create a new residence (superadmin only)
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createResidenceResidencesPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createResidenceResidencesPost$Response(params: CreateResidenceResidencesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidenceOut>> {
+    return createResidenceResidencesPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create Residence.
+   *
+   * Create a new residence (superadmin only)
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createResidenceResidencesPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createResidenceResidencesPost(params: CreateResidenceResidencesPost$Params, context?: HttpContext): Observable<ResidenceOut> {
+    return this.createResidenceResidencesPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ResidenceOut>): ResidenceOut => r.body)
+    );
   }
 
   /** Path part for operation `myResidencesResidencesMineGet()` */
@@ -30,170 +110,245 @@ export class ResidencesService extends BaseService {
   /**
    * My Residences.
    *
-   * Residencias asignadas al usuario (manager / professional).
-   * Superadmin: devuelve todas.
+   * Get residences assigned to current user
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `myResidencesResidencesMineGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  myResidencesResidencesMineGet$Response(
-    params?: MyResidencesResidencesMineGet$Params,
-    context?: HttpContext,
-  ): Observable<
-    StrictHttpResponse<
-      Array<{
-        [key: string]: any;
-      }>
-    >
-  > {
+  myResidencesResidencesMineGet$Response(params?: MyResidencesResidencesMineGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
     return myResidencesResidencesMineGet(this.http, this.rootUrl, params, context);
   }
 
   /**
    * My Residences.
    *
-   * Residencias asignadas al usuario (manager / professional).
-   * Superadmin: devuelve todas.
+   * Get residences assigned to current user
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `myResidencesResidencesMineGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  myResidencesResidencesMineGet(
-    params?: MyResidencesResidencesMineGet$Params,
-    context?: HttpContext,
-  ): Observable<
-    Array<{
-      [key: string]: any;
-    }>
-  > {
+  myResidencesResidencesMineGet(params?: MyResidencesResidencesMineGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
     return this.myResidencesResidencesMineGet$Response(params, context).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            Array<{
-              [key: string]: any;
-            }>
-          >,
-        ): Array<{
-          [key: string]: any;
-        }> => r.body,
-      ),
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
     );
   }
 
-  /** Path part for operation `listResidencesResidencesGet()` */
-  static readonly ListResidencesResidencesGetPath = '/residences';
-
-  /**
-   * List Residences.
-   *
-   * Listado: superadmin ve todas; otros, solo las propias (igual que /mine).
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `listResidencesResidencesGet()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  listResidencesResidencesGet$Response(
-    params?: ListResidencesResidencesGet$Params,
-    context?: HttpContext,
-  ): Observable<
-    StrictHttpResponse<
-      Array<{
-        [key: string]: any;
-      }>
-    >
-  > {
-    return listResidencesResidencesGet(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * List Residences.
-   *
-   * Listado: superadmin ve todas; otros, solo las propias (igual que /mine).
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `listResidencesResidencesGet$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  listResidencesResidencesGet(
-    params?: ListResidencesResidencesGet$Params,
-    context?: HttpContext,
-  ): Observable<
-    Array<{
-      [key: string]: any;
-    }>
-  > {
-    return this.listResidencesResidencesGet$Response(params, context).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            Array<{
-              [key: string]: any;
-            }>
-          >,
-        ): Array<{
-          [key: string]: any;
-        }> => r.body,
-      ),
-    );
-  }
-
-  /** Path part for operation `getResidenceResidencesResidenceIdGet()` */
-  static readonly GetResidenceResidencesResidenceIdGetPath = '/residences/{residence_id}';
+  /** Path part for operation `getResidenceResidencesIdGet()` */
+  static readonly GetResidenceResidencesIdGetPath = '/residences/{id}';
 
   /**
    * Get Residence.
    *
-   * Detalle de una residencia si el usuario tiene acceso (o es superadmin).
+   * Get a specific residence
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getResidenceResidencesResidenceIdGet()` instead.
+   * To access only the response body, use `getResidenceResidencesIdGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getResidenceResidencesResidenceIdGet$Response(
-    params: GetResidenceResidencesResidenceIdGet$Params,
-    context?: HttpContext,
-  ): Observable<
-    StrictHttpResponse<{
-      [key: string]: any;
-    }>
-  > {
-    return getResidenceResidencesResidenceIdGet(this.http, this.rootUrl, params, context);
+  getResidenceResidencesIdGet$Response(params: GetResidenceResidencesIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidenceOut>> {
+    return getResidenceResidencesIdGet(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Get Residence.
    *
-   * Detalle de una residencia si el usuario tiene acceso (o es superadmin).
+   * Get a specific residence
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getResidenceResidencesResidenceIdGet$Response()` instead.
+   * To access the full response (for headers, for example), `getResidenceResidencesIdGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getResidenceResidencesResidenceIdGet(
-    params: GetResidenceResidencesResidenceIdGet$Params,
-    context?: HttpContext,
-  ): Observable<{
-    [key: string]: any;
-  }> {
-    return this.getResidenceResidencesResidenceIdGet$Response(params, context).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            [key: string]: any;
-          }>,
-        ): {
-          [key: string]: any;
-        } => r.body,
-      ),
+  getResidenceResidencesIdGet(params: GetResidenceResidencesIdGet$Params, context?: HttpContext): Observable<ResidenceOut> {
+    return this.getResidenceResidencesIdGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ResidenceOut>): ResidenceOut => r.body)
     );
   }
+
+  /** Path part for operation `updateResidenceResidencesIdPut()` */
+  static readonly UpdateResidenceResidencesIdPutPath = '/residences/{id}';
+
+  /**
+   * Update Residence.
+   *
+   * Update a residence
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateResidenceResidencesIdPut()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateResidenceResidencesIdPut$Response(params: UpdateResidenceResidencesIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidenceOut>> {
+    return updateResidenceResidencesIdPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update Residence.
+   *
+   * Update a residence
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateResidenceResidencesIdPut$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateResidenceResidencesIdPut(params: UpdateResidenceResidencesIdPut$Params, context?: HttpContext): Observable<ResidenceOut> {
+    return this.updateResidenceResidencesIdPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ResidenceOut>): ResidenceOut => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteResidenceResidencesIdDelete()` */
+  static readonly DeleteResidenceResidencesIdDeletePath = '/residences/{id}';
+
+  /**
+   * Delete Residence.
+   *
+   * Soft delete a residence (superadmin only)
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteResidenceResidencesIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteResidenceResidencesIdDelete$Response(params: DeleteResidenceResidencesIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteResidenceResidencesIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Delete Residence.
+   *
+   * Soft delete a residence (superadmin only)
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteResidenceResidencesIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteResidenceResidencesIdDelete(params: DeleteResidenceResidencesIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.deleteResidenceResidencesIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getResidenceUsersResidencesIdUsersGet()` */
+  static readonly GetResidenceUsersResidencesIdUsersGetPath = '/residences/{id}/users';
+
+  /**
+   * Get Residence Users.
+   *
+   * Get users assigned to a residence
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getResidenceUsersResidencesIdUsersGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResidenceUsersResidencesIdUsersGet$Response(params: GetResidenceUsersResidencesIdUsersGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
+    return getResidenceUsersResidencesIdUsersGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Residence Users.
+   *
+   * Get users assigned to a residence
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getResidenceUsersResidencesIdUsersGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResidenceUsersResidencesIdUsersGet(params: GetResidenceUsersResidencesIdUsersGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
+    return this.getResidenceUsersResidencesIdUsersGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
+    );
+  }
+
+  /** Path part for operation `assignUserToResidenceResidencesIdUsersUserIdPost()` */
+  static readonly AssignUserToResidenceResidencesIdUsersUserIdPostPath = '/residences/{id}/users/{user_id}';
+
+  /**
+   * Assign User To Residence.
+   *
+   * Assign a user to a residence
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assignUserToResidenceResidencesIdUsersUserIdPost()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignUserToResidenceResidencesIdUsersUserIdPost$Response(params: AssignUserToResidenceResidencesIdUsersUserIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return assignUserToResidenceResidencesIdUsersUserIdPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Assign User To Residence.
+   *
+   * Assign a user to a residence
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `assignUserToResidenceResidencesIdUsersUserIdPost$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignUserToResidenceResidencesIdUsersUserIdPost(params: AssignUserToResidenceResidencesIdUsersUserIdPost$Params, context?: HttpContext): Observable<any> {
+    return this.assignUserToResidenceResidencesIdUsersUserIdPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `removeUserFromResidenceResidencesIdUsersUserIdDelete()` */
+  static readonly RemoveUserFromResidenceResidencesIdUsersUserIdDeletePath = '/residences/{id}/users/{user_id}';
+
+  /**
+   * Remove User From Residence.
+   *
+   * Remove a user from a residence
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeUserFromResidenceResidencesIdUsersUserIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeUserFromResidenceResidencesIdUsersUserIdDelete$Response(params: RemoveUserFromResidenceResidencesIdUsersUserIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return removeUserFromResidenceResidencesIdUsersUserIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Remove User From Residence.
+   *
+   * Remove a user from a residence
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `removeUserFromResidenceResidencesIdUsersUserIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeUserFromResidenceResidencesIdUsersUserIdDelete(params: RemoveUserFromResidenceResidencesIdUsersUserIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.removeUserFromResidenceResidencesIdUsersUserIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
 }

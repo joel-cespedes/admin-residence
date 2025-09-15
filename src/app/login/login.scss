@@ -71,21 +71,8 @@
     margin-bottom: var(--sneat-spacing-lg);
 
     .logo-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background: var(--sneat-lienar-gradient);
-      border-radius: var(--sneat-border-radius);
-      margin-bottom: var(--sneat-spacing-md);
-
-      .logo-text {
-        color: white;
-        font-weight: 700;
-        font-size: 18px;
-        font-family: 'Inter', sans-serif;
-      }
+      margin: auto;
+      width: 120px;
     }
   }
 

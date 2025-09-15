@@ -11,8 +11,26 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { assignTagToResidentTagsTagIdResidentsResidentIdPost } from '../fn/tags/assign-tag-to-resident-tags-tag-id-residents-resident-id-post';
+import { AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params } from '../fn/tags/assign-tag-to-resident-tags-tag-id-residents-resident-id-post';
+import { createTagTagsPost } from '../fn/tags/create-tag-tags-post';
+import { CreateTagTagsPost$Params } from '../fn/tags/create-tag-tags-post';
+import { deleteTagTagsIdDelete } from '../fn/tags/delete-tag-tags-id-delete';
+import { DeleteTagTagsIdDelete$Params } from '../fn/tags/delete-tag-tags-id-delete';
+import { getTagResidentsTagsTagIdResidentsGet } from '../fn/tags/get-tag-residents-tags-tag-id-residents-get';
+import { GetTagResidentsTagsTagIdResidentsGet$Params } from '../fn/tags/get-tag-residents-tags-tag-id-residents-get';
+import { getTagTagsIdGet } from '../fn/tags/get-tag-tags-id-get';
+import { GetTagTagsIdGet$Params } from '../fn/tags/get-tag-tags-id-get';
+import { listTagsSimpleTagsSimpleGet } from '../fn/tags/list-tags-simple-tags-simple-get';
+import { ListTagsSimpleTagsSimpleGet$Params } from '../fn/tags/list-tags-simple-tags-simple-get';
 import { listTagsTagsGet } from '../fn/tags/list-tags-tags-get';
 import { ListTagsTagsGet$Params } from '../fn/tags/list-tags-tags-get';
+import { PaginatedResponse } from '../models/paginated-response';
+import { removeTagFromResidentTagsTagIdResidentsResidentIdDelete } from '../fn/tags/remove-tag-from-resident-tags-tag-id-residents-resident-id-delete';
+import { RemoveTagFromResidentTagsTagIdResidentsResidentIdDelete$Params } from '../fn/tags/remove-tag-from-resident-tags-tag-id-residents-resident-id-delete';
+import { TagOut } from '../models/tag-out';
+import { updateTagTagsIdPut } from '../fn/tags/update-tag-tags-id-put';
+import { UpdateTagTagsIdPut$Params } from '../fn/tags/update-tag-tags-id-put';
 
 @Injectable({ providedIn: 'root' })
 export class TagsService extends BaseService {
@@ -21,36 +39,316 @@ export class TagsService extends BaseService {
   }
 
   /** Path part for operation `listTagsTagsGet()` */
-  static readonly ListTagsTagsGetPath = '/tags';
+  static readonly ListTagsTagsGetPath = '/tags/';
 
   /**
    * List Tags.
    *
-   *
+   * List tags with pagination and filters
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listTagsTagsGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  listTagsTagsGet$Response(
-    params?: ListTagsTagsGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<any>> {
+  listTagsTagsGet$Response(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
     return listTagsTagsGet(this.http, this.rootUrl, params, context);
   }
 
   /**
    * List Tags.
    *
-   *
+   * List tags with pagination and filters
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listTagsTagsGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  listTagsTagsGet(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<any> {
-    return this.listTagsTagsGet$Response(params, context).pipe(map((r: StrictHttpResponse<any>): any => r.body));
+  listTagsTagsGet(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+    return this.listTagsTagsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+    );
   }
+
+  /** Path part for operation `createTagTagsPost()` */
+  static readonly CreateTagTagsPostPath = '/tags/';
+
+  /**
+   * Create Tag.
+   *
+   * Create a new tag
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createTagTagsPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createTagTagsPost$Response(params: CreateTagTagsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TagOut>> {
+    return createTagTagsPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create Tag.
+   *
+   * Create a new tag
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createTagTagsPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createTagTagsPost(params: CreateTagTagsPost$Params, context?: HttpContext): Observable<TagOut> {
+    return this.createTagTagsPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<TagOut>): TagOut => r.body)
+    );
+  }
+
+  /** Path part for operation `listTagsSimpleTagsSimpleGet()` */
+  static readonly ListTagsSimpleTagsSimpleGetPath = '/tags/simple';
+
+  /**
+   * List Tags Simple.
+   *
+   * Legacy endpoint: List tags without pagination
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listTagsSimpleTagsSimpleGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listTagsSimpleTagsSimpleGet$Response(params?: ListTagsSimpleTagsSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
+    return listTagsSimpleTagsSimpleGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * List Tags Simple.
+   *
+   * Legacy endpoint: List tags without pagination
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listTagsSimpleTagsSimpleGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listTagsSimpleTagsSimpleGet(params?: ListTagsSimpleTagsSimpleGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
+    return this.listTagsSimpleTagsSimpleGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
+    );
+  }
+
+  /** Path part for operation `getTagTagsIdGet()` */
+  static readonly GetTagTagsIdGetPath = '/tags/{id}';
+
+  /**
+   * Get Tag.
+   *
+   * Get a specific tag
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTagTagsIdGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagTagsIdGet$Response(params: GetTagTagsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<TagOut>> {
+    return getTagTagsIdGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Tag.
+   *
+   * Get a specific tag
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTagTagsIdGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagTagsIdGet(params: GetTagTagsIdGet$Params, context?: HttpContext): Observable<TagOut> {
+    return this.getTagTagsIdGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<TagOut>): TagOut => r.body)
+    );
+  }
+
+  /** Path part for operation `updateTagTagsIdPut()` */
+  static readonly UpdateTagTagsIdPutPath = '/tags/{id}';
+
+  /**
+   * Update Tag.
+   *
+   * Update a tag
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateTagTagsIdPut()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateTagTagsIdPut$Response(params: UpdateTagTagsIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<TagOut>> {
+    return updateTagTagsIdPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update Tag.
+   *
+   * Update a tag
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateTagTagsIdPut$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateTagTagsIdPut(params: UpdateTagTagsIdPut$Params, context?: HttpContext): Observable<TagOut> {
+    return this.updateTagTagsIdPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<TagOut>): TagOut => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteTagTagsIdDelete()` */
+  static readonly DeleteTagTagsIdDeletePath = '/tags/{id}';
+
+  /**
+   * Delete Tag.
+   *
+   * Soft delete a tag
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteTagTagsIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteTagTagsIdDelete$Response(params: DeleteTagTagsIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteTagTagsIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Delete Tag.
+   *
+   * Soft delete a tag
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteTagTagsIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteTagTagsIdDelete(params: DeleteTagTagsIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.deleteTagTagsIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `assignTagToResidentTagsTagIdResidentsResidentIdPost()` */
+  static readonly AssignTagToResidentTagsTagIdResidentsResidentIdPostPath = '/tags/{tag_id}/residents/{resident_id}';
+
+  /**
+   * Assign Tag To Resident.
+   *
+   * Assign a tag to a resident
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assignTagToResidentTagsTagIdResidentsResidentIdPost()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignTagToResidentTagsTagIdResidentsResidentIdPost$Response(params: AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return assignTagToResidentTagsTagIdResidentsResidentIdPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Assign Tag To Resident.
+   *
+   * Assign a tag to a resident
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `assignTagToResidentTagsTagIdResidentsResidentIdPost$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  assignTagToResidentTagsTagIdResidentsResidentIdPost(params: AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params, context?: HttpContext): Observable<any> {
+    return this.assignTagToResidentTagsTagIdResidentsResidentIdPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `removeTagFromResidentTagsTagIdResidentsResidentIdDelete()` */
+  static readonly RemoveTagFromResidentTagsTagIdResidentsResidentIdDeletePath = '/tags/{tag_id}/residents/{resident_id}';
+
+  /**
+   * Remove Tag From Resident.
+   *
+   * Remove a tag from a resident
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeTagFromResidentTagsTagIdResidentsResidentIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeTagFromResidentTagsTagIdResidentsResidentIdDelete$Response(params: RemoveTagFromResidentTagsTagIdResidentsResidentIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return removeTagFromResidentTagsTagIdResidentsResidentIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Remove Tag From Resident.
+   *
+   * Remove a tag from a resident
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `removeTagFromResidentTagsTagIdResidentsResidentIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeTagFromResidentTagsTagIdResidentsResidentIdDelete(params: RemoveTagFromResidentTagsTagIdResidentsResidentIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.removeTagFromResidentTagsTagIdResidentsResidentIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getTagResidentsTagsTagIdResidentsGet()` */
+  static readonly GetTagResidentsTagsTagIdResidentsGetPath = '/tags/{tag_id}/residents';
+
+  /**
+   * Get Tag Residents.
+   *
+   * Get residents assigned to a tag
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTagResidentsTagsTagIdResidentsGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagResidentsTagsTagIdResidentsGet$Response(params: GetTagResidentsTagsTagIdResidentsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
+    return getTagResidentsTagsTagIdResidentsGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Tag Residents.
+   *
+   * Get residents assigned to a tag
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTagResidentsTagsTagIdResidentsGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagResidentsTagsTagIdResidentsGet(params: GetTagResidentsTagsTagIdResidentsGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
+    return this.getTagResidentsTagsTagIdResidentsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
+    );
+  }
+
 }

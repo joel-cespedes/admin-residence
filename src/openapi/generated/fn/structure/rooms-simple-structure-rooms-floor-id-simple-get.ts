@@ -8,27 +8,25 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-export interface RoomsStructureRoomsFloorIdGet$Params {
+
+export interface RoomsSimpleStructureRoomsFloorIdSimpleGet$Params {
   floor_id: string;
 }
 
-export function roomsStructureRoomsFloorIdGet(
-  http: HttpClient,
-  rootUrl: string,
-  params: RoomsStructureRoomsFloorIdGet$Params,
-  context?: HttpContext,
-): Observable<StrictHttpResponse<any>> {
-  const rb = new RequestBuilder(rootUrl, roomsStructureRoomsFloorIdGet.PATH, 'get');
+export function roomsSimpleStructureRoomsFloorIdSimpleGet(http: HttpClient, rootUrl: string, params: RoomsSimpleStructureRoomsFloorIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  const rb = new RequestBuilder(rootUrl, roomsSimpleStructureRoomsFloorIdSimpleGet.PATH, 'get');
   if (params) {
     rb.path('floor_id', params.floor_id, {});
   }
 
-  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<any>;
-    }),
+    })
   );
 }
 
-roomsStructureRoomsFloorIdGet.PATH = '/structure/rooms/{floor_id}';
+roomsSimpleStructureRoomsFloorIdSimpleGet.PATH = '/structure/rooms/{floor_id}/simple';

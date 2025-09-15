@@ -9,11 +9,11 @@
       <div class="login-header">
         <div class="logo-container">
           <div class="logo-icon">
-            <span class="logo-text">sneat</span>
+            <img src="logo-black.svg" alt="Logo" />
           </div>
         </div>
-        <h1 class="welcome-title">Welcome to Sneat! 👋</h1>
-        <p class="welcome-subtitle">Please sign-in to your account and start the adventure</p>
+        <h1 class="welcome-title">Bienvenido de nuevo 👋</h1>
+        <p class="welcome-subtitle">Por favor ingresa tu alias y contraseña para continuar</p>
       </div>
 
       <mat-card-content class="login-content">
@@ -53,7 +53,9 @@
 
           <button mat-raised-button color="primary" type="submit" class="login-button" [disabled]="!isFormValid() || isLoading()">
             <mat-spinner diameter="20" *ngIf="isLoading()"></mat-spinner>
-            <span *ngIf="!isLoading()">Login</span>
+            @if (!isLoading()) {
+              <span>Login</span>
+            }
           </button>
         </form>
       </mat-card-content>

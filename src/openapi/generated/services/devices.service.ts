@@ -13,9 +13,18 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createDeviceDevicesPost } from '../fn/devices/create-device-devices-post';
 import { CreateDeviceDevicesPost$Params } from '../fn/devices/create-device-devices-post';
+import { deleteDeviceDevicesIdDelete } from '../fn/devices/delete-device-devices-id-delete';
+import { DeleteDeviceDevicesIdDelete$Params } from '../fn/devices/delete-device-devices-id-delete';
 import { DeviceOut } from '../models/device-out';
+import { getDeviceDevicesIdGet } from '../fn/devices/get-device-devices-id-get';
+import { GetDeviceDevicesIdGet$Params } from '../fn/devices/get-device-devices-id-get';
+import { getDeviceHistoryDevicesIdHistoryGet } from '../fn/devices/get-device-history-devices-id-history-get';
+import { GetDeviceHistoryDevicesIdHistoryGet$Params } from '../fn/devices/get-device-history-devices-id-history-get';
 import { listDevicesDevicesGet } from '../fn/devices/list-devices-devices-get';
 import { ListDevicesDevicesGet$Params } from '../fn/devices/list-devices-devices-get';
+import { PaginatedResponse } from '../models/paginated-response';
+import { updateDeviceDevicesIdPut } from '../fn/devices/update-device-devices-id-put';
+import { UpdateDeviceDevicesIdPut$Params } from '../fn/devices/update-device-devices-id-put';
 
 @Injectable({ providedIn: 'root' })
 export class DevicesService extends BaseService {
@@ -24,65 +33,59 @@ export class DevicesService extends BaseService {
   }
 
   /** Path part for operation `listDevicesDevicesGet()` */
-  static readonly ListDevicesDevicesGetPath = '/devices';
+  static readonly ListDevicesDevicesGetPath = '/devices/';
 
   /**
    * List Devices.
    *
-   *
+   * List devices with pagination and filters
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listDevicesDevicesGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  listDevicesDevicesGet$Response(
-    params?: ListDevicesDevicesGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<Array<DeviceOut>>> {
+  listDevicesDevicesGet$Response(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
     return listDevicesDevicesGet(this.http, this.rootUrl, params, context);
   }
 
   /**
    * List Devices.
    *
-   *
+   * List devices with pagination and filters
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listDevicesDevicesGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  listDevicesDevicesGet(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<Array<DeviceOut>> {
+  listDevicesDevicesGet(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
     return this.listDevicesDevicesGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<DeviceOut>>): Array<DeviceOut> => r.body),
+      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
     );
   }
 
   /** Path part for operation `createDeviceDevicesPost()` */
-  static readonly CreateDeviceDevicesPostPath = '/devices';
+  static readonly CreateDeviceDevicesPostPath = '/devices/';
 
   /**
    * Create Device.
    *
-   *
+   * Create a new device
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createDeviceDevicesPost()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createDeviceDevicesPost$Response(
-    params: CreateDeviceDevicesPost$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<DeviceOut>> {
+  createDeviceDevicesPost$Response(params: CreateDeviceDevicesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<DeviceOut>> {
     return createDeviceDevicesPost(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Create Device.
    *
-   *
+   * Create a new device
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createDeviceDevicesPost$Response()` instead.
@@ -91,7 +94,148 @@ export class DevicesService extends BaseService {
    */
   createDeviceDevicesPost(params: CreateDeviceDevicesPost$Params, context?: HttpContext): Observable<DeviceOut> {
     return this.createDeviceDevicesPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<DeviceOut>): DeviceOut => r.body),
+      map((r: StrictHttpResponse<DeviceOut>): DeviceOut => r.body)
     );
   }
+
+  /** Path part for operation `getDeviceDevicesIdGet()` */
+  static readonly GetDeviceDevicesIdGetPath = '/devices/{id}';
+
+  /**
+   * Get Device.
+   *
+   * Get a specific device
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDeviceDevicesIdGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDeviceDevicesIdGet$Response(params: GetDeviceDevicesIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<DeviceOut>> {
+    return getDeviceDevicesIdGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Device.
+   *
+   * Get a specific device
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDeviceDevicesIdGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDeviceDevicesIdGet(params: GetDeviceDevicesIdGet$Params, context?: HttpContext): Observable<DeviceOut> {
+    return this.getDeviceDevicesIdGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DeviceOut>): DeviceOut => r.body)
+    );
+  }
+
+  /** Path part for operation `updateDeviceDevicesIdPut()` */
+  static readonly UpdateDeviceDevicesIdPutPath = '/devices/{id}';
+
+  /**
+   * Update Device.
+   *
+   * Update a device
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateDeviceDevicesIdPut()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDeviceDevicesIdPut$Response(params: UpdateDeviceDevicesIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<DeviceOut>> {
+    return updateDeviceDevicesIdPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update Device.
+   *
+   * Update a device
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateDeviceDevicesIdPut$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDeviceDevicesIdPut(params: UpdateDeviceDevicesIdPut$Params, context?: HttpContext): Observable<DeviceOut> {
+    return this.updateDeviceDevicesIdPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DeviceOut>): DeviceOut => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteDeviceDevicesIdDelete()` */
+  static readonly DeleteDeviceDevicesIdDeletePath = '/devices/{id}';
+
+  /**
+   * Delete Device.
+   *
+   * Soft delete a device
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteDeviceDevicesIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDeviceDevicesIdDelete$Response(params: DeleteDeviceDevicesIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteDeviceDevicesIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Delete Device.
+   *
+   * Soft delete a device
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteDeviceDevicesIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDeviceDevicesIdDelete(params: DeleteDeviceDevicesIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.deleteDeviceDevicesIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getDeviceHistoryDevicesIdHistoryGet()` */
+  static readonly GetDeviceHistoryDevicesIdHistoryGetPath = '/devices/{id}/history';
+
+  /**
+   * Get Device History.
+   *
+   * Get device history
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDeviceHistoryDevicesIdHistoryGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDeviceHistoryDevicesIdHistoryGet$Response(params: GetDeviceHistoryDevicesIdHistoryGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
+    return getDeviceHistoryDevicesIdHistoryGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Device History.
+   *
+   * Get device history
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDeviceHistoryDevicesIdHistoryGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDeviceHistoryDevicesIdHistoryGet(params: GetDeviceHistoryDevicesIdHistoryGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
+    return this.getDeviceHistoryDevicesIdHistoryGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
+    );
+  }
+
 }

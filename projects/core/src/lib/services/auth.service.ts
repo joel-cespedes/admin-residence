@@ -140,4 +140,26 @@ export class AuthService {
   private clearError(): void {
     this._authState.update((state) => ({ ...state, error: null }));
   }
+
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) return true;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
+  }
+
+  setRedirectUrl(url: string): void {
+    localStorage.setItem('redirect_url', url);
+  }
+
+  getRedirectUrl(): string | null {
+    const url = localStorage.getItem('redirect_url');
+    localStorage.removeItem('redirect_url');
+    return url;
+  }
 }

@@ -12,26 +12,25 @@ import { DeviceCreate } from '../../models/device-create';
 import { DeviceOut } from '../../models/device-out';
 
 export interface CreateDeviceDevicesPost$Params {
-  body: DeviceCreate;
+  'X-Residence-Id'?: (string | null);
+      body: DeviceCreate
 }
 
-export function createDeviceDevicesPost(
-  http: HttpClient,
-  rootUrl: string,
-  params: CreateDeviceDevicesPost$Params,
-  context?: HttpContext,
-): Observable<StrictHttpResponse<DeviceOut>> {
+export function createDeviceDevicesPost(http: HttpClient, rootUrl: string, params: CreateDeviceDevicesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<DeviceOut>> {
   const rb = new RequestBuilder(rootUrl, createDeviceDevicesPost.PATH, 'post');
   if (params) {
+    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
     rb.body(params.body, 'application/json');
   }
 
-  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<DeviceOut>;
-    }),
+    })
   );
 }
 
-createDeviceDevicesPost.PATH = '/devices';
+createDeviceDevicesPost.PATH = '/devices/';

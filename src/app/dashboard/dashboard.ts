@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
+import { RouterModule, RouterLinkActive } from '@angular/router';
 
-import { RouterModule } from '@angular/router';
 @Component({
   selector: 'movsa-dashboard',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, RouterLinkActive],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })

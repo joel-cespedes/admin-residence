@@ -12,27 +12,24 @@ import { MeasurementCreate } from '../../models/measurement-create';
 import { MeasurementOut } from '../../models/measurement-out';
 
 export interface CreateMeasurementMeasurementsPost$Params {
-  'X-Residence-Id'?: string | null;
-  body: MeasurementCreate;
+  'X-Residence-Id'?: (string | null);
+      body: MeasurementCreate
 }
 
-export function createMeasurementMeasurementsPost(
-  http: HttpClient,
-  rootUrl: string,
-  params: CreateMeasurementMeasurementsPost$Params,
-  context?: HttpContext,
-): Observable<StrictHttpResponse<MeasurementOut>> {
+export function createMeasurementMeasurementsPost(http: HttpClient, rootUrl: string, params: CreateMeasurementMeasurementsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
   const rb = new RequestBuilder(rootUrl, createMeasurementMeasurementsPost.PATH, 'post');
   if (params) {
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
     rb.body(params.body, 'application/json');
   }
 
-  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<MeasurementOut>;
-    }),
+    })
   );
 }
 

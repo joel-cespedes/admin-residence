@@ -11,12 +11,46 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { bedsStructureBedsRoomIdGet } from '../fn/structure/beds-structure-beds-room-id-get';
-import { BedsStructureBedsRoomIdGet$Params } from '../fn/structure/beds-structure-beds-room-id-get';
-import { floorsStructureFloorsResidenceIdGet } from '../fn/structure/floors-structure-floors-residence-id-get';
-import { FloorsStructureFloorsResidenceIdGet$Params } from '../fn/structure/floors-structure-floors-residence-id-get';
-import { roomsStructureRoomsFloorIdGet } from '../fn/structure/rooms-structure-rooms-floor-id-get';
-import { RoomsStructureRoomsFloorIdGet$Params } from '../fn/structure/rooms-structure-rooms-floor-id-get';
+import { BedOut } from '../models/bed-out';
+import { bedsSimpleStructureBedsRoomIdSimpleGet } from '../fn/structure/beds-simple-structure-beds-room-id-simple-get';
+import { BedsSimpleStructureBedsRoomIdSimpleGet$Params } from '../fn/structure/beds-simple-structure-beds-room-id-simple-get';
+import { createBedStructureBedsPost } from '../fn/structure/create-bed-structure-beds-post';
+import { CreateBedStructureBedsPost$Params } from '../fn/structure/create-bed-structure-beds-post';
+import { createFloorStructureFloorsPost } from '../fn/structure/create-floor-structure-floors-post';
+import { CreateFloorStructureFloorsPost$Params } from '../fn/structure/create-floor-structure-floors-post';
+import { createRoomStructureRoomsPost } from '../fn/structure/create-room-structure-rooms-post';
+import { CreateRoomStructureRoomsPost$Params } from '../fn/structure/create-room-structure-rooms-post';
+import { deleteBedStructureBedsIdDelete } from '../fn/structure/delete-bed-structure-beds-id-delete';
+import { DeleteBedStructureBedsIdDelete$Params } from '../fn/structure/delete-bed-structure-beds-id-delete';
+import { deleteFloorStructureFloorsIdDelete } from '../fn/structure/delete-floor-structure-floors-id-delete';
+import { DeleteFloorStructureFloorsIdDelete$Params } from '../fn/structure/delete-floor-structure-floors-id-delete';
+import { deleteRoomStructureRoomsIdDelete } from '../fn/structure/delete-room-structure-rooms-id-delete';
+import { DeleteRoomStructureRoomsIdDelete$Params } from '../fn/structure/delete-room-structure-rooms-id-delete';
+import { FloorOut } from '../models/floor-out';
+import { floorsSimpleStructureFloorsResidenceIdSimpleGet } from '../fn/structure/floors-simple-structure-floors-residence-id-simple-get';
+import { FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params } from '../fn/structure/floors-simple-structure-floors-residence-id-simple-get';
+import { getBedStructureBedsIdGet } from '../fn/structure/get-bed-structure-beds-id-get';
+import { GetBedStructureBedsIdGet$Params } from '../fn/structure/get-bed-structure-beds-id-get';
+import { getFloorStructureFloorsIdGet } from '../fn/structure/get-floor-structure-floors-id-get';
+import { GetFloorStructureFloorsIdGet$Params } from '../fn/structure/get-floor-structure-floors-id-get';
+import { getRoomStructureRoomsIdGet } from '../fn/structure/get-room-structure-rooms-id-get';
+import { GetRoomStructureRoomsIdGet$Params } from '../fn/structure/get-room-structure-rooms-id-get';
+import { listBedsStructureBedsGet } from '../fn/structure/list-beds-structure-beds-get';
+import { ListBedsStructureBedsGet$Params } from '../fn/structure/list-beds-structure-beds-get';
+import { listFloorsStructureFloorsGet } from '../fn/structure/list-floors-structure-floors-get';
+import { ListFloorsStructureFloorsGet$Params } from '../fn/structure/list-floors-structure-floors-get';
+import { listRoomsStructureRoomsGet } from '../fn/structure/list-rooms-structure-rooms-get';
+import { ListRoomsStructureRoomsGet$Params } from '../fn/structure/list-rooms-structure-rooms-get';
+import { PaginatedResponse } from '../models/paginated-response';
+import { RoomOut } from '../models/room-out';
+import { roomsSimpleStructureRoomsFloorIdSimpleGet } from '../fn/structure/rooms-simple-structure-rooms-floor-id-simple-get';
+import { RoomsSimpleStructureRoomsFloorIdSimpleGet$Params } from '../fn/structure/rooms-simple-structure-rooms-floor-id-simple-get';
+import { updateBedStructureBedsIdPut } from '../fn/structure/update-bed-structure-beds-id-put';
+import { UpdateBedStructureBedsIdPut$Params } from '../fn/structure/update-bed-structure-beds-id-put';
+import { updateFloorStructureFloorsIdPut } from '../fn/structure/update-floor-structure-floors-id-put';
+import { UpdateFloorStructureFloorsIdPut$Params } from '../fn/structure/update-floor-structure-floors-id-put';
+import { updateRoomStructureRoomsIdPut } from '../fn/structure/update-room-structure-rooms-id-put';
+import { UpdateRoomStructureRoomsIdPut$Params } from '../fn/structure/update-room-structure-rooms-id-put';
 
 @Injectable({ providedIn: 'root' })
 export class StructureService extends BaseService {
@@ -24,114 +58,598 @@ export class StructureService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `floorsStructureFloorsResidenceIdGet()` */
-  static readonly FloorsStructureFloorsResidenceIdGetPath = '/structure/floors/{residence_id}';
+  /** Path part for operation `listFloorsStructureFloorsGet()` */
+  static readonly ListFloorsStructureFloorsGetPath = '/structure/floors';
 
   /**
-   * Floors.
+   * List Floors.
    *
-   *
+   * List floors with pagination
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `floorsStructureFloorsResidenceIdGet()` instead.
+   * To access only the response body, use `listFloorsStructureFloorsGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  floorsStructureFloorsResidenceIdGet$Response(
-    params: FloorsStructureFloorsResidenceIdGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<any>> {
-    return floorsStructureFloorsResidenceIdGet(this.http, this.rootUrl, params, context);
+  listFloorsStructureFloorsGet$Response(params?: ListFloorsStructureFloorsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+    return listFloorsStructureFloorsGet(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Floors.
+   * List Floors.
    *
-   *
+   * List floors with pagination
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `floorsStructureFloorsResidenceIdGet$Response()` instead.
+   * To access the full response (for headers, for example), `listFloorsStructureFloorsGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  floorsStructureFloorsResidenceIdGet(
-    params: FloorsStructureFloorsResidenceIdGet$Params,
-    context?: HttpContext,
-  ): Observable<any> {
-    return this.floorsStructureFloorsResidenceIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body),
+  listFloorsStructureFloorsGet(params?: ListFloorsStructureFloorsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+    return this.listFloorsStructureFloorsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
     );
   }
 
-  /** Path part for operation `roomsStructureRoomsFloorIdGet()` */
-  static readonly RoomsStructureRoomsFloorIdGetPath = '/structure/rooms/{floor_id}';
+  /** Path part for operation `createFloorStructureFloorsPost()` */
+  static readonly CreateFloorStructureFloorsPostPath = '/structure/floors';
 
   /**
-   * Rooms.
+   * Create Floor.
    *
-   *
+   * Create a new floor
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `roomsStructureRoomsFloorIdGet()` instead.
+   * To access only the response body, use `createFloorStructureFloorsPost()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  roomsStructureRoomsFloorIdGet$Response(
-    params: RoomsStructureRoomsFloorIdGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<any>> {
-    return roomsStructureRoomsFloorIdGet(this.http, this.rootUrl, params, context);
+  createFloorStructureFloorsPost$Response(params: CreateFloorStructureFloorsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<FloorOut>> {
+    return createFloorStructureFloorsPost(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Rooms.
+   * Create Floor.
    *
-   *
+   * Create a new floor
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `roomsStructureRoomsFloorIdGet$Response()` instead.
+   * To access the full response (for headers, for example), `createFloorStructureFloorsPost$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  roomsStructureRoomsFloorIdGet(params: RoomsStructureRoomsFloorIdGet$Params, context?: HttpContext): Observable<any> {
-    return this.roomsStructureRoomsFloorIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body),
+  createFloorStructureFloorsPost(params: CreateFloorStructureFloorsPost$Params, context?: HttpContext): Observable<FloorOut> {
+    return this.createFloorStructureFloorsPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FloorOut>): FloorOut => r.body)
     );
   }
 
-  /** Path part for operation `bedsStructureBedsRoomIdGet()` */
-  static readonly BedsStructureBedsRoomIdGetPath = '/structure/beds/{room_id}';
+  /** Path part for operation `floorsSimpleStructureFloorsResidenceIdSimpleGet()` */
+  static readonly FloorsSimpleStructureFloorsResidenceIdSimpleGetPath = '/structure/floors/{residence_id}/simple';
 
   /**
-   * Beds.
+   * Floors Simple.
    *
-   *
+   * Get simple list of floors for a residence (legacy endpoint)
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `bedsStructureBedsRoomIdGet()` instead.
+   * To access only the response body, use `floorsSimpleStructureFloorsResidenceIdSimpleGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  bedsStructureBedsRoomIdGet$Response(
-    params: BedsStructureBedsRoomIdGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<any>> {
-    return bedsStructureBedsRoomIdGet(this.http, this.rootUrl, params, context);
+  floorsSimpleStructureFloorsResidenceIdSimpleGet$Response(params: FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return floorsSimpleStructureFloorsResidenceIdSimpleGet(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Beds.
+   * Floors Simple.
    *
-   *
+   * Get simple list of floors for a residence (legacy endpoint)
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `bedsStructureBedsRoomIdGet$Response()` instead.
+   * To access the full response (for headers, for example), `floorsSimpleStructureFloorsResidenceIdSimpleGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  bedsStructureBedsRoomIdGet(params: BedsStructureBedsRoomIdGet$Params, context?: HttpContext): Observable<any> {
-    return this.bedsStructureBedsRoomIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body),
+  floorsSimpleStructureFloorsResidenceIdSimpleGet(params: FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params, context?: HttpContext): Observable<any> {
+    return this.floorsSimpleStructureFloorsResidenceIdSimpleGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
+
+  /** Path part for operation `getFloorStructureFloorsIdGet()` */
+  static readonly GetFloorStructureFloorsIdGetPath = '/structure/floors/{id}';
+
+  /**
+   * Get Floor.
+   *
+   * Get a specific floor
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getFloorStructureFloorsIdGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFloorStructureFloorsIdGet$Response(params: GetFloorStructureFloorsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<FloorOut>> {
+    return getFloorStructureFloorsIdGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Floor.
+   *
+   * Get a specific floor
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getFloorStructureFloorsIdGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFloorStructureFloorsIdGet(params: GetFloorStructureFloorsIdGet$Params, context?: HttpContext): Observable<FloorOut> {
+    return this.getFloorStructureFloorsIdGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FloorOut>): FloorOut => r.body)
+    );
+  }
+
+  /** Path part for operation `updateFloorStructureFloorsIdPut()` */
+  static readonly UpdateFloorStructureFloorsIdPutPath = '/structure/floors/{id}';
+
+  /**
+   * Update Floor.
+   *
+   * Update a floor
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateFloorStructureFloorsIdPut()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateFloorStructureFloorsIdPut$Response(params: UpdateFloorStructureFloorsIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<FloorOut>> {
+    return updateFloorStructureFloorsIdPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update Floor.
+   *
+   * Update a floor
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateFloorStructureFloorsIdPut$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateFloorStructureFloorsIdPut(params: UpdateFloorStructureFloorsIdPut$Params, context?: HttpContext): Observable<FloorOut> {
+    return this.updateFloorStructureFloorsIdPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FloorOut>): FloorOut => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteFloorStructureFloorsIdDelete()` */
+  static readonly DeleteFloorStructureFloorsIdDeletePath = '/structure/floors/{id}';
+
+  /**
+   * Delete Floor.
+   *
+   * Soft delete a floor
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteFloorStructureFloorsIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteFloorStructureFloorsIdDelete$Response(params: DeleteFloorStructureFloorsIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteFloorStructureFloorsIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Delete Floor.
+   *
+   * Soft delete a floor
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteFloorStructureFloorsIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteFloorStructureFloorsIdDelete(params: DeleteFloorStructureFloorsIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.deleteFloorStructureFloorsIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `listRoomsStructureRoomsGet()` */
+  static readonly ListRoomsStructureRoomsGetPath = '/structure/rooms';
+
+  /**
+   * List Rooms.
+   *
+   * List rooms with pagination
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listRoomsStructureRoomsGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listRoomsStructureRoomsGet$Response(params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+    return listRoomsStructureRoomsGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * List Rooms.
+   *
+   * List rooms with pagination
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listRoomsStructureRoomsGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listRoomsStructureRoomsGet(params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+    return this.listRoomsStructureRoomsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `createRoomStructureRoomsPost()` */
+  static readonly CreateRoomStructureRoomsPostPath = '/structure/rooms';
+
+  /**
+   * Create Room.
+   *
+   * Create a new room
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createRoomStructureRoomsPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createRoomStructureRoomsPost$Response(params: CreateRoomStructureRoomsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<RoomOut>> {
+    return createRoomStructureRoomsPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create Room.
+   *
+   * Create a new room
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createRoomStructureRoomsPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createRoomStructureRoomsPost(params: CreateRoomStructureRoomsPost$Params, context?: HttpContext): Observable<RoomOut> {
+    return this.createRoomStructureRoomsPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<RoomOut>): RoomOut => r.body)
+    );
+  }
+
+  /** Path part for operation `roomsSimpleStructureRoomsFloorIdSimpleGet()` */
+  static readonly RoomsSimpleStructureRoomsFloorIdSimpleGetPath = '/structure/rooms/{floor_id}/simple';
+
+  /**
+   * Rooms Simple.
+   *
+   * Get simple list of rooms for a floor (legacy endpoint)
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `roomsSimpleStructureRoomsFloorIdSimpleGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  roomsSimpleStructureRoomsFloorIdSimpleGet$Response(params: RoomsSimpleStructureRoomsFloorIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return roomsSimpleStructureRoomsFloorIdSimpleGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Rooms Simple.
+   *
+   * Get simple list of rooms for a floor (legacy endpoint)
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `roomsSimpleStructureRoomsFloorIdSimpleGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  roomsSimpleStructureRoomsFloorIdSimpleGet(params: RoomsSimpleStructureRoomsFloorIdSimpleGet$Params, context?: HttpContext): Observable<any> {
+    return this.roomsSimpleStructureRoomsFloorIdSimpleGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `getRoomStructureRoomsIdGet()` */
+  static readonly GetRoomStructureRoomsIdGetPath = '/structure/rooms/{id}';
+
+  /**
+   * Get Room.
+   *
+   * Get a specific room
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getRoomStructureRoomsIdGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRoomStructureRoomsIdGet$Response(params: GetRoomStructureRoomsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<RoomOut>> {
+    return getRoomStructureRoomsIdGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Room.
+   *
+   * Get a specific room
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getRoomStructureRoomsIdGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRoomStructureRoomsIdGet(params: GetRoomStructureRoomsIdGet$Params, context?: HttpContext): Observable<RoomOut> {
+    return this.getRoomStructureRoomsIdGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<RoomOut>): RoomOut => r.body)
+    );
+  }
+
+  /** Path part for operation `updateRoomStructureRoomsIdPut()` */
+  static readonly UpdateRoomStructureRoomsIdPutPath = '/structure/rooms/{id}';
+
+  /**
+   * Update Room.
+   *
+   * Update a room
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateRoomStructureRoomsIdPut()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateRoomStructureRoomsIdPut$Response(params: UpdateRoomStructureRoomsIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<RoomOut>> {
+    return updateRoomStructureRoomsIdPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update Room.
+   *
+   * Update a room
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateRoomStructureRoomsIdPut$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateRoomStructureRoomsIdPut(params: UpdateRoomStructureRoomsIdPut$Params, context?: HttpContext): Observable<RoomOut> {
+    return this.updateRoomStructureRoomsIdPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<RoomOut>): RoomOut => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteRoomStructureRoomsIdDelete()` */
+  static readonly DeleteRoomStructureRoomsIdDeletePath = '/structure/rooms/{id}';
+
+  /**
+   * Delete Room.
+   *
+   * Soft delete a room
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteRoomStructureRoomsIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteRoomStructureRoomsIdDelete$Response(params: DeleteRoomStructureRoomsIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteRoomStructureRoomsIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Delete Room.
+   *
+   * Soft delete a room
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteRoomStructureRoomsIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteRoomStructureRoomsIdDelete(params: DeleteRoomStructureRoomsIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.deleteRoomStructureRoomsIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `listBedsStructureBedsGet()` */
+  static readonly ListBedsStructureBedsGetPath = '/structure/beds';
+
+  /**
+   * List Beds.
+   *
+   * List beds with pagination
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listBedsStructureBedsGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listBedsStructureBedsGet$Response(params?: ListBedsStructureBedsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+    return listBedsStructureBedsGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * List Beds.
+   *
+   * List beds with pagination
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listBedsStructureBedsGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listBedsStructureBedsGet(params?: ListBedsStructureBedsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+    return this.listBedsStructureBedsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `createBedStructureBedsPost()` */
+  static readonly CreateBedStructureBedsPostPath = '/structure/beds';
+
+  /**
+   * Create Bed.
+   *
+   * Create a new bed
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createBedStructureBedsPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createBedStructureBedsPost$Response(params: CreateBedStructureBedsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<BedOut>> {
+    return createBedStructureBedsPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create Bed.
+   *
+   * Create a new bed
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createBedStructureBedsPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createBedStructureBedsPost(params: CreateBedStructureBedsPost$Params, context?: HttpContext): Observable<BedOut> {
+    return this.createBedStructureBedsPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<BedOut>): BedOut => r.body)
+    );
+  }
+
+  /** Path part for operation `bedsSimpleStructureBedsRoomIdSimpleGet()` */
+  static readonly BedsSimpleStructureBedsRoomIdSimpleGetPath = '/structure/beds/{room_id}/simple';
+
+  /**
+   * Beds Simple.
+   *
+   * Get simple list of beds for a room (legacy endpoint)
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `bedsSimpleStructureBedsRoomIdSimpleGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  bedsSimpleStructureBedsRoomIdSimpleGet$Response(params: BedsSimpleStructureBedsRoomIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return bedsSimpleStructureBedsRoomIdSimpleGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Beds Simple.
+   *
+   * Get simple list of beds for a room (legacy endpoint)
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `bedsSimpleStructureBedsRoomIdSimpleGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  bedsSimpleStructureBedsRoomIdSimpleGet(params: BedsSimpleStructureBedsRoomIdSimpleGet$Params, context?: HttpContext): Observable<any> {
+    return this.bedsSimpleStructureBedsRoomIdSimpleGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `getBedStructureBedsIdGet()` */
+  static readonly GetBedStructureBedsIdGetPath = '/structure/beds/{id}';
+
+  /**
+   * Get Bed.
+   *
+   * Get a specific bed
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getBedStructureBedsIdGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getBedStructureBedsIdGet$Response(params: GetBedStructureBedsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<BedOut>> {
+    return getBedStructureBedsIdGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Bed.
+   *
+   * Get a specific bed
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getBedStructureBedsIdGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getBedStructureBedsIdGet(params: GetBedStructureBedsIdGet$Params, context?: HttpContext): Observable<BedOut> {
+    return this.getBedStructureBedsIdGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<BedOut>): BedOut => r.body)
+    );
+  }
+
+  /** Path part for operation `updateBedStructureBedsIdPut()` */
+  static readonly UpdateBedStructureBedsIdPutPath = '/structure/beds/{id}';
+
+  /**
+   * Update Bed.
+   *
+   * Update a bed
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateBedStructureBedsIdPut()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateBedStructureBedsIdPut$Response(params: UpdateBedStructureBedsIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<BedOut>> {
+    return updateBedStructureBedsIdPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update Bed.
+   *
+   * Update a bed
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateBedStructureBedsIdPut$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateBedStructureBedsIdPut(params: UpdateBedStructureBedsIdPut$Params, context?: HttpContext): Observable<BedOut> {
+    return this.updateBedStructureBedsIdPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<BedOut>): BedOut => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteBedStructureBedsIdDelete()` */
+  static readonly DeleteBedStructureBedsIdDeletePath = '/structure/beds/{id}';
+
+  /**
+   * Delete Bed.
+   *
+   * Soft delete a bed
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteBedStructureBedsIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteBedStructureBedsIdDelete$Response(params: DeleteBedStructureBedsIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteBedStructureBedsIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Delete Bed.
+   *
+   * Soft delete a bed
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteBedStructureBedsIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteBedStructureBedsIdDelete(params: DeleteBedStructureBedsIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.deleteBedStructureBedsIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
 }

@@ -12,26 +12,23 @@ import { MeasurementOut } from '../../models/measurement-out';
 
 export interface GetMeasurementMeasurementsMeasurementIdGet$Params {
   measurement_id: string;
-  'X-Residence-Id'?: string | null;
+  'X-Residence-Id'?: (string | null);
 }
 
-export function getMeasurementMeasurementsMeasurementIdGet(
-  http: HttpClient,
-  rootUrl: string,
-  params: GetMeasurementMeasurementsMeasurementIdGet$Params,
-  context?: HttpContext,
-): Observable<StrictHttpResponse<MeasurementOut>> {
+export function getMeasurementMeasurementsMeasurementIdGet(http: HttpClient, rootUrl: string, params: GetMeasurementMeasurementsMeasurementIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
   const rb = new RequestBuilder(rootUrl, getMeasurementMeasurementsMeasurementIdGet.PATH, 'get');
   if (params) {
     rb.path('measurement_id', params.measurement_id, {});
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
   }
 
-  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<MeasurementOut>;
-    }),
+    })
   );
 }
 

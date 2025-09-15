@@ -11,3 +11,4 @@ export { TagsService } from './services/tags.service';
 export { DevicesService } from './services/devices.service';
 export { TasksService } from './services/tasks.service';
 export { MeasurementsService } from './services/measurements.service';
+export { DashboardService } from './services/dashboard.service';

@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,6 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { AuthService } from '@core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoginRequest } from '../../openapi/generated/models/login-request';
 
 @Component({
   selector: 'app-login',
@@ -24,9 +28,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.scss'
 })
 export class Login {
+  // Dependencies
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+
   // Form signals
-  emailOrUsername = signal('');
-  password = signal('');
+  emailOrUsername = signal('superadmin');
+  password = signal('admin123');
   hidePassword = signal(true);
   isLoading = signal(false);
 
@@ -56,17 +65,36 @@ export class Login {
 
     this.isLoading.set(true);
 
-    // Simulate login process
-    setTimeout(() => {
-      console.log('Login attempt:', {
-        emailOrUsername: this.emailOrUsername(),
-        password: this.password()
-      });
+    const loginRequest: LoginRequest = {
+      alias: this.emailOrUsername(),
+      password: this.password()
+    };
 
-      // Here you would typically call your authentication service
-      // Example: this.authService.login(this.emailOrUsername(), this.password())
+    this.authService.login(loginRequest).subscribe({
+      next: () => {
+        this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
 
-      this.isLoading.set(false);
-    }, 2000);
+        const redirectUrl = this.authService.getRedirectUrl();
+        this.router.navigate([redirectUrl || '/dashboard']);
+      },
+      error: (error: any) => {
+        let errorMessage = 'Error al iniciar sesión. Verifique sus credenciales.';
+
+        if (error.error?.detail) {
+          errorMessage = error.error.detail;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
+        this.snackBar.open(errorMessage, 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+        this.isLoading.set(false);
+      }
+    });
   }
 }

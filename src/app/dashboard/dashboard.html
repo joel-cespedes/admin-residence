@@ -11,30 +11,35 @@
       <div class="sidebar__content">
         <ul class="nav">
           <li class="nav__item m-b-48">
-            <a href="#" class="nav__link nav__link--active" routerLink="/dashboard">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard"
+              routerLinkActive="nav__link--active"
+              [routerLinkActiveOptions]="{ exact: true }">
               <span class="mat-icon">dashboard</span>
-              <span class="nav__title">Secciones</span>
+              <span class="nav__title">Dashboard</span>
             </a>
           </li>
 
           <li class="nav__section-title">Residencias</li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/residences">
+            <a href="#" class="nav__link" routerLink="/dashboard/residences" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">maps_home_work</span>
               <span class="nav__title">Residencias</span>
               <span class="nav__badge-text">1</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/residents">
+            <a href="#" class="nav__link" routerLink="/dashboard/residents" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">diversity_1</span>
               <span class="nav__title">Residentes</span>
               <span class="nav__badge-text">22</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/rooms">
+            <a href="#" class="nav__link" routerLink="/dashboard/rooms" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">bedroom_child</span>
               <span class="nav__title">Habitaciones</span>
               <span class="nav__badge-text">5</span>
@@ -44,7 +49,7 @@
           <li class="nav__section-title">Empleados</li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/managers">
+            <a href="#" class="nav__link" routerLink="/dashboard/managers" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">groups_2</span>
               <span class="nav__title">Gestores</span>
               <span class="nav__badge-text">31</span>
@@ -52,7 +57,7 @@
           </li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/professionals">
+            <a href="#" class="nav__link" routerLink="/dashboard/professionals" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">diversity_3</span>
               <span class="nav__title">Profesionales</span>
               <span class="nav__badge-text">1</span>
@@ -61,7 +66,7 @@
 
           <li class="nav__section-title">Tareas</li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/categories">
+            <a href="#" class="nav__link" routerLink="/dashboard/categories" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">source</span>
               <span class="nav__title">Categorias</span>
               <span class="nav__badge-text">5</span>
@@ -69,7 +74,7 @@
           </li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/tasks">
+            <a href="#" class="nav__link" routerLink="/dashboard/tasks" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">fact_check</span>
               <span class="nav__title">Tareas</span>
               <span class="nav__badge-text">8</span>
@@ -78,7 +83,7 @@
 
           <li class="nav__section-title">Adicionales</li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/devices">
+            <a href="#" class="nav__link" routerLink="/dashboard/devices" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">devices_other</span>
               <span class="nav__title">Dispositivos</span>
               <span class="nav__badge-text">4</span>
@@ -87,14 +92,14 @@
 
           <li class="nav__section-title">Analiticas</li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/behavior">
+            <a href="#" class="nav__link" routerLink="/dashboard/behavior" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">assessment</span>
               <span class="nav__title">Comportamiento de residentes</span>
               <span class="nav__badge-text">4</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/movements">
+            <a href="#" class="nav__link" routerLink="/dashboard/movements" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">area_chart</span>
               <span class="nav__title">Accesos y movimientos</span>
               <span class="nav__badge-text">4</span>

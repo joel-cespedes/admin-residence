@@ -112,7 +112,7 @@ export class ResidenceService {
   }
 
   getResidenceById(id: string): Observable<any> {
-    return this.apiResidences.getResidenceResidencesResidenceIdGet({ residence_id: id });
+    return this.apiResidences.getResidenceResidencesIdGet({ id });
   }
 
   private setLoading(isLoading: boolean): void {

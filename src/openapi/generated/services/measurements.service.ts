@@ -15,59 +15,25 @@ import { createMeasurementMeasurementsPost } from '../fn/measurements/create-mea
 import { CreateMeasurementMeasurementsPost$Params } from '../fn/measurements/create-measurement-measurements-post';
 import { deleteMeasurementMeasurementsMeasurementIdDelete } from '../fn/measurements/delete-measurement-measurements-measurement-id-delete';
 import { DeleteMeasurementMeasurementsMeasurementIdDelete$Params } from '../fn/measurements/delete-measurement-measurements-measurement-id-delete';
+import { getMeasurementHistoryMeasurementsMeasurementIdHistoryGet } from '../fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
+import { GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params } from '../fn/measurements/get-measurement-history-measurements-measurement-id-history-get';
 import { getMeasurementMeasurementsMeasurementIdGet } from '../fn/measurements/get-measurement-measurements-measurement-id-get';
 import { GetMeasurementMeasurementsMeasurementIdGet$Params } from '../fn/measurements/get-measurement-measurements-measurement-id-get';
 import { listMeasurementsMeasurementsGet } from '../fn/measurements/list-measurements-measurements-get';
 import { ListMeasurementsMeasurementsGet$Params } from '../fn/measurements/list-measurements-measurements-get';
+import { listMeasurementsSimpleMeasurementsSimpleGet } from '../fn/measurements/list-measurements-simple-measurements-simple-get';
+import { ListMeasurementsSimpleMeasurementsSimpleGet$Params } from '../fn/measurements/list-measurements-simple-measurements-simple-get';
 import { MeasurementOut } from '../models/measurement-out';
-import { updateMeasurementMeasurementsMeasurementIdPatch } from '../fn/measurements/update-measurement-measurements-measurement-id-patch';
-import { UpdateMeasurementMeasurementsMeasurementIdPatch$Params } from '../fn/measurements/update-measurement-measurements-measurement-id-patch';
+import { PaginatedResponse } from '../models/paginated-response';
+import { patchMeasurementMeasurementsMeasurementIdPatch } from '../fn/measurements/patch-measurement-measurements-measurement-id-patch';
+import { PatchMeasurementMeasurementsMeasurementIdPatch$Params } from '../fn/measurements/patch-measurement-measurements-measurement-id-patch';
+import { updateMeasurementMeasurementsMeasurementIdPut } from '../fn/measurements/update-measurement-measurements-measurement-id-put';
+import { UpdateMeasurementMeasurementsMeasurementIdPut$Params } from '../fn/measurements/update-measurement-measurements-measurement-id-put';
 
 @Injectable({ providedIn: 'root' })
 export class MeasurementsService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
-  }
-
-  /** Path part for operation `listMeasurementsMeasurementsGet()` */
-  static readonly ListMeasurementsMeasurementsGetPath = '/measurements';
-
-  /**
-   * List Measurements.
-   *
-   * Lista mediciones en la residencia del contexto (o inferida por resident_id / device_id).
-   * Filtros opcionales: resident_id, type, rango de fechas.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `listMeasurementsMeasurementsGet()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  listMeasurementsMeasurementsGet$Response(
-    params?: ListMeasurementsMeasurementsGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
-    return listMeasurementsMeasurementsGet(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * List Measurements.
-   *
-   * Lista mediciones en la residencia del contexto (o inferida por resident_id / device_id).
-   * Filtros opcionales: resident_id, type, rango de fechas.
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `listMeasurementsMeasurementsGet$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  listMeasurementsMeasurementsGet(
-    params?: ListMeasurementsMeasurementsGet$Params,
-    context?: HttpContext,
-  ): Observable<Array<MeasurementOut>> {
-    return this.listMeasurementsMeasurementsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<MeasurementOut>>): Array<MeasurementOut> => r.body),
-    );
   }
 
   /** Path part for operation `createMeasurementMeasurementsPost()` */
@@ -84,10 +50,7 @@ export class MeasurementsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createMeasurementMeasurementsPost$Response(
-    params: CreateMeasurementMeasurementsPost$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<MeasurementOut>> {
+  createMeasurementMeasurementsPost$Response(params: CreateMeasurementMeasurementsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
     return createMeasurementMeasurementsPost(this.http, this.rootUrl, params, context);
   }
 
@@ -102,12 +65,75 @@ export class MeasurementsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createMeasurementMeasurementsPost(
-    params: CreateMeasurementMeasurementsPost$Params,
-    context?: HttpContext,
-  ): Observable<MeasurementOut> {
+  createMeasurementMeasurementsPost(params: CreateMeasurementMeasurementsPost$Params, context?: HttpContext): Observable<MeasurementOut> {
     return this.createMeasurementMeasurementsPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body),
+      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body)
+    );
+  }
+
+  /** Path part for operation `listMeasurementsMeasurementsGet()` */
+  static readonly ListMeasurementsMeasurementsGetPath = '/measurements/';
+
+  /**
+   * List Measurements.
+   *
+   * List measurements with pagination and filters
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listMeasurementsMeasurementsGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listMeasurementsMeasurementsGet$Response(params?: ListMeasurementsMeasurementsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+    return listMeasurementsMeasurementsGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * List Measurements.
+   *
+   * List measurements with pagination and filters
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listMeasurementsMeasurementsGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listMeasurementsMeasurementsGet(params?: ListMeasurementsMeasurementsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+    return this.listMeasurementsMeasurementsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `listMeasurementsSimpleMeasurementsSimpleGet()` */
+  static readonly ListMeasurementsSimpleMeasurementsSimpleGetPath = '/measurements/simple';
+
+  /**
+   * List Measurements Simple.
+   *
+   * Legacy endpoint: List measurements without pagination
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listMeasurementsSimpleMeasurementsSimpleGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listMeasurementsSimpleMeasurementsSimpleGet$Response(params?: ListMeasurementsSimpleMeasurementsSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
+    return listMeasurementsSimpleMeasurementsSimpleGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * List Measurements Simple.
+   *
+   * Legacy endpoint: List measurements without pagination
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listMeasurementsSimpleMeasurementsSimpleGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listMeasurementsSimpleMeasurementsSimpleGet(params?: ListMeasurementsSimpleMeasurementsSimpleGet$Params, context?: HttpContext): Observable<Array<MeasurementOut>> {
+    return this.listMeasurementsSimpleMeasurementsSimpleGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<MeasurementOut>>): Array<MeasurementOut> => r.body)
     );
   }
 
@@ -117,36 +143,63 @@ export class MeasurementsService extends BaseService {
   /**
    * Get Measurement.
    *
-   *
+   * Get a specific measurement
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getMeasurementMeasurementsMeasurementIdGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getMeasurementMeasurementsMeasurementIdGet$Response(
-    params: GetMeasurementMeasurementsMeasurementIdGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<MeasurementOut>> {
+  getMeasurementMeasurementsMeasurementIdGet$Response(params: GetMeasurementMeasurementsMeasurementIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
     return getMeasurementMeasurementsMeasurementIdGet(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Get Measurement.
    *
-   *
+   * Get a specific measurement
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getMeasurementMeasurementsMeasurementIdGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getMeasurementMeasurementsMeasurementIdGet(
-    params: GetMeasurementMeasurementsMeasurementIdGet$Params,
-    context?: HttpContext,
-  ): Observable<MeasurementOut> {
+  getMeasurementMeasurementsMeasurementIdGet(params: GetMeasurementMeasurementsMeasurementIdGet$Params, context?: HttpContext): Observable<MeasurementOut> {
     return this.getMeasurementMeasurementsMeasurementIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body),
+      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body)
+    );
+  }
+
+  /** Path part for operation `updateMeasurementMeasurementsMeasurementIdPut()` */
+  static readonly UpdateMeasurementMeasurementsMeasurementIdPutPath = '/measurements/{measurement_id}';
+
+  /**
+   * Update Measurement.
+   *
+   * Update a measurement
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateMeasurementMeasurementsMeasurementIdPut()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateMeasurementMeasurementsMeasurementIdPut$Response(params: UpdateMeasurementMeasurementsMeasurementIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
+    return updateMeasurementMeasurementsMeasurementIdPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update Measurement.
+   *
+   * Update a measurement
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateMeasurementMeasurementsMeasurementIdPut$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateMeasurementMeasurementsMeasurementIdPut(params: UpdateMeasurementMeasurementsMeasurementIdPut$Params, context?: HttpContext): Observable<MeasurementOut> {
+    return this.updateMeasurementMeasurementsMeasurementIdPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body)
     );
   }
 
@@ -156,75 +209,105 @@ export class MeasurementsService extends BaseService {
   /**
    * Delete Measurement.
    *
-   *
+   * Soft delete a measurement
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteMeasurementMeasurementsMeasurementIdDelete()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteMeasurementMeasurementsMeasurementIdDelete$Response(
-    params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<void>> {
+  deleteMeasurementMeasurementsMeasurementIdDelete$Response(params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     return deleteMeasurementMeasurementsMeasurementIdDelete(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Delete Measurement.
    *
-   *
+   * Soft delete a measurement
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `deleteMeasurementMeasurementsMeasurementIdDelete$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteMeasurementMeasurementsMeasurementIdDelete(
-    params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params,
-    context?: HttpContext,
-  ): Observable<void> {
+  deleteMeasurementMeasurementsMeasurementIdDelete(params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params, context?: HttpContext): Observable<void> {
     return this.deleteMeasurementMeasurementsMeasurementIdDelete$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body),
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
-  /** Path part for operation `updateMeasurementMeasurementsMeasurementIdPatch()` */
-  static readonly UpdateMeasurementMeasurementsMeasurementIdPatchPath = '/measurements/{measurement_id}';
+  /** Path part for operation `patchMeasurementMeasurementsMeasurementIdPatch()` */
+  static readonly PatchMeasurementMeasurementsMeasurementIdPatchPath = '/measurements/{measurement_id}';
 
   /**
-   * Update Measurement.
+   * Patch Measurement.
    *
-   *
+   * Patch a measurement (legacy endpoint)
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateMeasurementMeasurementsMeasurementIdPatch()` instead.
+   * To access only the response body, use `patchMeasurementMeasurementsMeasurementIdPatch()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateMeasurementMeasurementsMeasurementIdPatch$Response(
-    params: UpdateMeasurementMeasurementsMeasurementIdPatch$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<MeasurementOut>> {
-    return updateMeasurementMeasurementsMeasurementIdPatch(this.http, this.rootUrl, params, context);
+  patchMeasurementMeasurementsMeasurementIdPatch$Response(params: PatchMeasurementMeasurementsMeasurementIdPatch$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
+    return patchMeasurementMeasurementsMeasurementIdPatch(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Update Measurement.
+   * Patch Measurement.
    *
-   *
+   * Patch a measurement (legacy endpoint)
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateMeasurementMeasurementsMeasurementIdPatch$Response()` instead.
+   * To access the full response (for headers, for example), `patchMeasurementMeasurementsMeasurementIdPatch$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateMeasurementMeasurementsMeasurementIdPatch(
-    params: UpdateMeasurementMeasurementsMeasurementIdPatch$Params,
-    context?: HttpContext,
-  ): Observable<MeasurementOut> {
-    return this.updateMeasurementMeasurementsMeasurementIdPatch$Response(params, context).pipe(
-      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body),
+  patchMeasurementMeasurementsMeasurementIdPatch(params: PatchMeasurementMeasurementsMeasurementIdPatch$Params, context?: HttpContext): Observable<MeasurementOut> {
+    return this.patchMeasurementMeasurementsMeasurementIdPatch$Response(params, context).pipe(
+      map((r: StrictHttpResponse<MeasurementOut>): MeasurementOut => r.body)
     );
   }
+
+  /** Path part for operation `getMeasurementHistoryMeasurementsMeasurementIdHistoryGet()` */
+  static readonly GetMeasurementHistoryMeasurementsMeasurementIdHistoryGetPath = '/measurements/{measurement_id}/history';
+
+  /**
+   * Get Measurement History.
+   *
+   * Get measurement history
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMeasurementHistoryMeasurementsMeasurementIdHistoryGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Response(params: GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
+    return getMeasurementHistoryMeasurementsMeasurementIdHistoryGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Measurement History.
+   *
+   * Get measurement history
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMeasurementHistoryMeasurementsMeasurementIdHistoryGet(params: GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
+    return this.getMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
+    );
+  }
+
 }

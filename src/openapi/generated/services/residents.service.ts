@@ -15,9 +15,18 @@ import { changeBedResidentsResidentIdBedPatch } from '../fn/residents/change-bed
 import { ChangeBedResidentsResidentIdBedPatch$Params } from '../fn/residents/change-bed-residents-resident-id-bed-patch';
 import { createResidentResidentsPost } from '../fn/residents/create-resident-residents-post';
 import { CreateResidentResidentsPost$Params } from '../fn/residents/create-resident-residents-post';
+import { deleteResidentResidentsIdDelete } from '../fn/residents/delete-resident-residents-id-delete';
+import { DeleteResidentResidentsIdDelete$Params } from '../fn/residents/delete-resident-residents-id-delete';
+import { getResidentHistoryResidentsIdHistoryGet } from '../fn/residents/get-resident-history-residents-id-history-get';
+import { GetResidentHistoryResidentsIdHistoryGet$Params } from '../fn/residents/get-resident-history-residents-id-history-get';
+import { getResidentResidentsIdGet } from '../fn/residents/get-resident-residents-id-get';
+import { GetResidentResidentsIdGet$Params } from '../fn/residents/get-resident-residents-id-get';
 import { listResidentsResidentsGet } from '../fn/residents/list-residents-residents-get';
 import { ListResidentsResidentsGet$Params } from '../fn/residents/list-residents-residents-get';
+import { PaginatedResponse } from '../models/paginated-response';
 import { ResidentOut } from '../models/resident-out';
+import { updateResidentResidentsIdPut } from '../fn/residents/update-resident-residents-id-put';
+import { UpdateResidentResidentsIdPut$Params } from '../fn/residents/update-resident-residents-id-put';
 
 @Injectable({ providedIn: 'root' })
 export class ResidentsService extends BaseService {
@@ -26,80 +35,167 @@ export class ResidentsService extends BaseService {
   }
 
   /** Path part for operation `listResidentsResidentsGet()` */
-  static readonly ListResidentsResidentsGetPath = '/residents';
+  static readonly ListResidentsResidentsGetPath = '/residents/';
 
   /**
    * List Residents.
    *
-   *
+   * List residents with pagination and filters
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listResidentsResidentsGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  listResidentsResidentsGet$Response(
-    params?: ListResidentsResidentsGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<Array<ResidentOut>>> {
+  listResidentsResidentsGet$Response(params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
     return listResidentsResidentsGet(this.http, this.rootUrl, params, context);
   }
 
   /**
    * List Residents.
    *
-   *
+   * List residents with pagination and filters
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listResidentsResidentsGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  listResidentsResidentsGet(
-    params?: ListResidentsResidentsGet$Params,
-    context?: HttpContext,
-  ): Observable<Array<ResidentOut>> {
+  listResidentsResidentsGet(params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
     return this.listResidentsResidentsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<ResidentOut>>): Array<ResidentOut> => r.body),
+      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
     );
   }
 
   /** Path part for operation `createResidentResidentsPost()` */
-  static readonly CreateResidentResidentsPostPath = '/residents';
+  static readonly CreateResidentResidentsPostPath = '/residents/';
 
   /**
    * Create Resident.
    *
-   *
+   * Create a new resident
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createResidentResidentsPost()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createResidentResidentsPost$Response(
-    params: CreateResidentResidentsPost$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<ResidentOut>> {
+  createResidentResidentsPost$Response(params: CreateResidentResidentsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentOut>> {
     return createResidentResidentsPost(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Create Resident.
    *
-   *
+   * Create a new resident
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createResidentResidentsPost$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createResidentResidentsPost(
-    params: CreateResidentResidentsPost$Params,
-    context?: HttpContext,
-  ): Observable<ResidentOut> {
+  createResidentResidentsPost(params: CreateResidentResidentsPost$Params, context?: HttpContext): Observable<ResidentOut> {
     return this.createResidentResidentsPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body),
+      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body)
+    );
+  }
+
+  /** Path part for operation `getResidentResidentsIdGet()` */
+  static readonly GetResidentResidentsIdGetPath = '/residents/{id}';
+
+  /**
+   * Get Resident.
+   *
+   * Get a specific resident
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getResidentResidentsIdGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResidentResidentsIdGet$Response(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentOut>> {
+    return getResidentResidentsIdGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Resident.
+   *
+   * Get a specific resident
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getResidentResidentsIdGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResidentResidentsIdGet(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<ResidentOut> {
+    return this.getResidentResidentsIdGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body)
+    );
+  }
+
+  /** Path part for operation `updateResidentResidentsIdPut()` */
+  static readonly UpdateResidentResidentsIdPutPath = '/residents/{id}';
+
+  /**
+   * Update Resident.
+   *
+   * Update a resident
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateResidentResidentsIdPut()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateResidentResidentsIdPut$Response(params: UpdateResidentResidentsIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentOut>> {
+    return updateResidentResidentsIdPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update Resident.
+   *
+   * Update a resident
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateResidentResidentsIdPut$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateResidentResidentsIdPut(params: UpdateResidentResidentsIdPut$Params, context?: HttpContext): Observable<ResidentOut> {
+    return this.updateResidentResidentsIdPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteResidentResidentsIdDelete()` */
+  static readonly DeleteResidentResidentsIdDeletePath = '/residents/{id}';
+
+  /**
+   * Delete Resident.
+   *
+   * Soft delete a resident
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteResidentResidentsIdDelete()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteResidentResidentsIdDelete$Response(params: DeleteResidentResidentsIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteResidentResidentsIdDelete(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Delete Resident.
+   *
+   * Soft delete a resident
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteResidentResidentsIdDelete$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteResidentResidentsIdDelete(params: DeleteResidentResidentsIdDelete$Params, context?: HttpContext): Observable<void> {
+    return this.deleteResidentResidentsIdDelete$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
@@ -109,36 +205,72 @@ export class ResidentsService extends BaseService {
   /**
    * Change Bed.
    *
-   *
+   * Change resident's bed assignment
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `changeBedResidentsResidentIdBedPatch()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  changeBedResidentsResidentIdBedPatch$Response(
-    params: ChangeBedResidentsResidentIdBedPatch$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<ResidentOut>> {
+  changeBedResidentsResidentIdBedPatch$Response(params: ChangeBedResidentsResidentIdBedPatch$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentOut>> {
     return changeBedResidentsResidentIdBedPatch(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Change Bed.
    *
-   *
+   * Change resident's bed assignment
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `changeBedResidentsResidentIdBedPatch$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  changeBedResidentsResidentIdBedPatch(
-    params: ChangeBedResidentsResidentIdBedPatch$Params,
-    context?: HttpContext,
-  ): Observable<ResidentOut> {
+  changeBedResidentsResidentIdBedPatch(params: ChangeBedResidentsResidentIdBedPatch$Params, context?: HttpContext): Observable<ResidentOut> {
     return this.changeBedResidentsResidentIdBedPatch$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body),
+      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body)
     );
   }
+
+  /** Path part for operation `getResidentHistoryResidentsIdHistoryGet()` */
+  static readonly GetResidentHistoryResidentsIdHistoryGetPath = '/residents/{id}/history';
+
+  /**
+   * Get Resident History.
+   *
+   * Get resident history
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getResidentHistoryResidentsIdHistoryGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResidentHistoryResidentsIdHistoryGet$Response(params: GetResidentHistoryResidentsIdHistoryGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
+    return getResidentHistoryResidentsIdHistoryGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Resident History.
+   *
+   * Get resident history
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getResidentHistoryResidentsIdHistoryGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResidentHistoryResidentsIdHistoryGet(params: GetResidentHistoryResidentsIdHistoryGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
+    return this.getResidentHistoryResidentsIdHistoryGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
+    );
+  }
+
 }
