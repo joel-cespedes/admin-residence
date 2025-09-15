@@ -1,4 +1,5 @@
-<div class="layout layout--nav-vertical">
+<div class="layout layout--nav-vertical" [class.layout--sidebar-open]="sidebarCollapsed()">
+  <div class="layout-overlay" (click)="closeSidebar()" tabindex="0" role="button" (keydown.enter)="closeSidebar()"></div>
   <nav class="layout__sidebar">
     <div class="sidebar">
       <div class="sidebar__header">
@@ -10,7 +11,7 @@
       <div class="sidebar__content">
         <ul class="nav">
           <li class="nav__item m-b-48">
-            <a href="#" class="nav__link nav__link--active">
+            <a href="#" class="nav__link nav__link--active" routerLink="/dashboard">
               <span class="mat-icon">dashboard</span>
               <span class="nav__title">Secciones</span>
             </a>
@@ -19,24 +20,31 @@
           <li class="nav__section-title">Residencias</li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/residences">
               <span class="mat-icon nav__icon">maps_home_work</span>
               <span class="nav__title">Residencias</span>
               <span class="nav__badge-text">1</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/residents">
               <span class="mat-icon nav__icon">diversity_1</span>
               <span class="nav__title">Residentes</span>
               <span class="nav__badge-text">22</span>
+            </a>
+          </li>
+          <li class="nav__item">
+            <a href="#" class="nav__link" routerLink="/rooms">
+              <span class="mat-icon nav__icon">bedroom_child</span>
+              <span class="nav__title">Habitaciones</span>
+              <span class="nav__badge-text">5</span>
             </a>
           </li>
 
           <li class="nav__section-title">Empleados</li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/managers">
               <span class="mat-icon nav__icon">groups_2</span>
               <span class="nav__title">Gestores</span>
               <span class="nav__badge-text">31</span>
@@ -44,7 +52,7 @@
           </li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/professionals">
               <span class="mat-icon nav__icon">diversity_3</span>
               <span class="nav__title">Profesionales</span>
               <span class="nav__badge-text">1</span>
@@ -53,7 +61,7 @@
 
           <li class="nav__section-title">Tareas</li>
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/categories">
               <span class="mat-icon nav__icon">source</span>
               <span class="nav__title">Categorias</span>
               <span class="nav__badge-text">5</span>
@@ -61,7 +69,7 @@
           </li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/tasks">
               <span class="mat-icon nav__icon">fact_check</span>
               <span class="nav__title">Tareas</span>
               <span class="nav__badge-text">8</span>
@@ -70,7 +78,7 @@
 
           <li class="nav__section-title">Adicionales</li>
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/devices">
               <span class="mat-icon nav__icon">devices_other</span>
               <span class="nav__title">Dispositivos</span>
               <span class="nav__badge-text">4</span>
@@ -79,14 +87,14 @@
 
           <li class="nav__section-title">Analiticas</li>
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/behavior">
               <span class="mat-icon nav__icon">assessment</span>
               <span class="nav__title">Comportamiento de residentes</span>
               <span class="nav__badge-text">4</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link">
+            <a href="#" class="nav__link" routerLink="/movements">
               <span class="mat-icon nav__icon">area_chart</span>
               <span class="nav__title">Accesos y movimientos</span>
               <span class="nav__badge-text">4</span>
@@ -98,276 +106,8 @@
   </nav>
 
   <div class="layout__content">
-    <div class="dashboard">
-      <mat-card class="navbar__container dashboard__section">
-        <div class="navbar__left">
-          <button type="button" mat-icon-button class="navbar__menu-toggle" (click)="toggleSidebar()">
-            <span class="mat-icon">menu</span>
-          </button>
-
-          <!-- <div class="navbar__search">
-            <span class="mat-icon">search</span>
-            <span class="navbar__search-text">Search</span>
-          </div> -->
-        </div>
-
-        <div class="navbar__right">
-          <button type="button" mat-icon-button class="navbar__btn" (click)="toggleTheme()">
-            <span class="mat-icon">{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</span>
-          </button>
-
-          <button type="button" mat-icon-button class="navbar__btn" [matBadge]="3" matBadgeColor="warn" matBadgeSize="small">
-            <span class="mat-icon">notifications</span>
-          </button>
-
-          <div class="img_avatar">
-            <img src="/worker.png" alt="Profile" class="navbar__avatar" />
-          </div>
-        </div>
-      </mat-card>
-
-      <div class="welcome-card dashboard__section">
-        <div class="welcome-card__content">
-          <div class="welcome-card__text">
-            <h2 class="welcome-card__title">Congratulations John! 🎉</h2>
-            <p class="welcome-card__subtitle">
-              You have done 72% more sales today.
-              <br />
-              Check your new raising badge in your profile.
-            </p>
-            <button type="button" size="small" color="primary" class="welcome-card__btn">View Badges</button>
-          </div>
-          <div class="welcome-card__illustration">
-            <img src="worker.png" alt="Congratulations" class="welcome-card__img" />
-          </div>
-        </div>
-      </div>
-
-      @for (metric of metrics(); track metric.title; let i = $index) {
-        <mat-card class="metric-card dashboard__section metric-card--{{ metric.color }}">
-          <mat-card-content class="metric-card__content">
-            <div class="content_header_between">
-              <div class="metric-card__icon-container btn_color" [class]="metric.colorIcon">
-                <div class="mat-icon">{{ metric.icon }}</div>
-              </div>
-
-              <button class="btn_menu" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Acciones">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item>Item 1</button>
-                <button mat-menu-item>Item 2</button>
-              </mat-menu>
-            </div>
-
-            <div class="metric-card__label">{{ metric.title }}</div>
-            <div class="metric-card__number">{{ metric.value }}</div>
-            <div class="metric-card__change metric-card__change--{{ metric.changeType }}">
-              {{ metric.change }}
-            </div>
-          </mat-card-content>
-        </mat-card>
-      }
-
-      <div class="dashboard__section sub_dashboard">
-        <mat-card class="chart-card">
-          <mat-card-header>
-            <div class="content_header_between">
-              <div class="title">Total Revenue</div>
-              <button type="button" mat-icon-button [matMenuTriggerFor]="revenueMenuRevenue">
-                <span class="mat-icon">more_vert</span>
-              </button>
-              <mat-menu #revenueMenuRevenue="matMenu">
-                <button type="button" mat-menu-item>View Details</button>
-                <button type="button" mat-menu-item>Export</button>
-              </mat-menu>
-            </div>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="chart-card__legend">
-              <div class="chart-card__legend-item">
-                <div class="chart-card__legend-color chart-card__legend-color--primary"></div>
-                <span>2024</span>
-              </div>
-              <div class="chart-card__legend-item">
-                <div class="chart-card__legend-color chart-card__legend-color--info"></div>
-                <span>2023</span>
-              </div>
-            </div>
-            <div class="chart-card__chart">
-              <apx-chart
-                [series]="revenueChartData().series"
-                [chart]="revenueChartData().chart"
-                [colors]="revenueChartData().colors"
-                [plotOptions]="revenueChartData().plotOptions"
-                [dataLabels]="revenueChartData().dataLabels"
-                [grid]="revenueChartData().grid"
-                [xaxis]="revenueChartData().xaxis"
-                [yaxis]="revenueChartData().yaxis"></apx-chart>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card class="growth-card">
-          <mat-card-header>
-            <mat-select class="growth-card__select" value="2023">
-              <mat-option value="2023">2023</mat-option>
-              <mat-option value="2024">2024</mat-option>
-              <mat-option value="2025">2025</mat-option>
-            </mat-select>
-          </mat-card-header>
-          <mat-card-content class="growth-card__content">
-            <div class="chartt">
-              <apx-chart
-                [series]="chartRadial().series"
-                [chart]="chartRadial().chart"
-                [plotOptions]="chartRadial().plotOptions"
-                [labels]="chartRadial().labels"
-                [fill]="chartRadial().fill"
-                [stroke]="chartRadial().stroke"></apx-chart>
-            </div>
-            <div class="subtitle">62% Company Growth</div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <mat-card class="profile-card dashboard__section">
-        <mat-card-content class="profile-card__content">
-          <div class="profile-card_left">
-            <div class="title">Profile Report</div>
-            <div class="info">Year 2022</div>
-            <div class="stats">68.2%</div>
-            <div class="result">$84,686k</div>
-          </div>
-          <div class="profile-card_right">
-            <apx-chart
-              [series]="lineChart().series"
-              [stroke]="lineChart().stroke"
-              [chart]="lineChart().chart"
-              [dataLabels]="lineChart().dataLabels"
-              [grid]="lineChart().grid"
-              [yaxis]="lineChart().yaxis"
-              [xaxis]="lineChart().xaxis"></apx-chart>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="orders-card dashboard__section">
-        <mat-card-header>
-          <div class="content_header_between">
-            <div>
-              <div class="title">Order Cart</div>
-              <div class="sub-title">42.82k Total Sales</div>
-            </div>
-            <button type="button" mat-icon-button [matMenuTriggerFor]="ordersMenu">
-              <span class="mat-icon">more_vert</span>
-            </button>
-            <mat-menu #ordersMenu="matMenu">
-              <button type="button" mat-menu-item>View All</button>
-              <button type="button" mat-menu-item>Export</button>
-            </mat-menu>
-          </div>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="orders-card__summary">
-            <div class="orders-card__total">
-              <div class="orders-card__number">8,258</div>
-              <div class="orders-card__label">Total Orders</div>
-            </div>
-            <div class="orders-card__weekly">
-              <apx-chart
-                [series]="circleChart().series"
-                [chart]="circleChart().chart"
-                [labels]="circleChart().labels"
-                [plotOptions]="circleChart().plotOptions"
-                ¡></apx-chart>
-            </div>
-          </div>
-
-          <div class="orders-card__categories">
-            @for (category of orderCategories(); track category.name) {
-              <div class="category">
-                <div class="category__info">
-                  <div class="btn_color" [class]="category.color">
-                    <span class="mat-icon">{{ category.icon }}</span>
-                  </div>
-                  <div class="category__details">
-                    <div class="category__name">{{ category.name }}</div>
-                    <div class="category__subtitle">Mobile, Earbuds, TV</div>
-                  </div>
-                </div>
-                <div class="category__stats">
-                  <div class="category__percentage">{{ category.percentage }}%</div>
-                </div>
-              </div>
-            }
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <mat-card class="orders-card dashboard__section">
-        <mat-card-header>
-          <div class="content_header_between">
-            <div>
-              <div class="title">Residentes</div>
-              <div class="sub-title">últimos 30 días</div>
-            </div>
-          </div>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="orders-card__profit">
-            <div class="orders-card__profit-info">
-              <span class="orders-card__profit-label">Total Profit</span>
-              <span class="orders-card__profit-amount">$459.1k</span>
-              <span class="orders-card__profit-change">+65%</span>
-            </div>
-          </div>
-
-          <div class="orders-card__chart">
-            <apx-chart
-              [series]="profitChartData().series"
-              [chart]="profitChartData().chart"
-              [colors]="profitChartData().colors"
-              [stroke]="profitChartData().stroke"
-              [dataLabels]="profitChartData().dataLabels"
-              [grid]="profitChartData().grid"
-              [xaxis]="profitChartData().xaxis"
-              [yaxis]="profitChartData().yaxis"></apx-chart>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="transactions-card dashboard__section">
-        <mat-card-header>
-          <mat-card-title>Transactions</mat-card-title>
-          <button type="button" mat-icon-button [matMenuTriggerFor]="transactionsMenu">
-            <span class="mat-icon">more_vert</span>
-          </button>
-          <mat-menu #transactionsMenu="matMenu">
-            <button type="button" mat-menu-item>View All</button>
-            <button type="button" mat-menu-item>Export</button>
-          </mat-menu>
-        </mat-card-header>
-        <mat-card-content>
-          @for (transaction of transactions(); track transaction.id) {
-            <div class="transaction">
-              <div class="transaction__info">
-                <div class="btn_color" [class]="transaction.color">
-                  <span class="mat-icon">{{ transaction.icon }}</span>
-                </div>
-                <div class="transaction__details">
-                  <div class="transaction__type">{{ transaction.type }}</div>
-                  <div class="transaction__company">{{ transaction.company }}</div>
-                </div>
-              </div>
-              <div class="transaction__amount transaction__amount--{{ transaction.status }}">
-                {{ transaction.amount }}
-                <span class="transaction__currency">USD</span>
-              </div>
-            </div>
-          }
-        </mat-card-content>
-      </mat-card>
+    <div class="dashboard-container">
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

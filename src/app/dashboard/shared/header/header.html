@@ -1,0 +1,21 @@
+<mat-card class="navbar__container dashboard__section">
+  <div class="navbar__left">
+    <button type="button" mat-icon-button class="navbar__menu-toggle" (click)="toggleSidebar()">
+      <span class="mat-icon">menu</span>
+    </button>
+  </div>
+
+  <div class="navbar__right">
+    <button type="button" mat-icon-button class="navbar__btn" (click)="toggleTheme()">
+      <span class="mat-icon">{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</span>
+    </button>
+
+    <button type="button" mat-icon-button class="navbar__btn" [matBadge]="3" matBadgeColor="warn" matBadgeSize="small">
+      <span class="mat-icon">notifications</span>
+    </button>
+
+    <div class="img_avatar">
+      <img src="/worker.png" alt="Profile" class="navbar__avatar" />
+    </div>
+  </div>
+</mat-card>
