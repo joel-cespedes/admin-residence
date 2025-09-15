@@ -1,1 +1,62 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-shapes">
+    <img src="/img/login/shape1.svg" alt="" class="shape shape-1" />
+    <img src="/img/login/shape2.svg" alt="" class="shape shape-2" />
+  </div>
+
+  <div class="login-card-wrapper">
+    <mat-card class="login-card">
+      <div class="login-header">
+        <div class="logo-container">
+          <div class="logo-icon">
+            <span class="logo-text">sneat</span>
+          </div>
+        </div>
+        <h1 class="welcome-title">Welcome to Sneat! 👋</h1>
+        <p class="welcome-subtitle">Please sign-in to your account and start the adventure</p>
+      </div>
+
+      <mat-card-content class="login-content">
+        <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Email or Username</mat-label>
+            <input
+              matInput
+              type="text"
+              [value]="emailOrUsername()"
+              (input)="onEmailOrUsernameChange($event)"
+              name="emailOrUsername"
+              required
+              autocomplete="username" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              [type]="hidePassword() ? 'password' : 'text'"
+              [value]="password()"
+              (input)="onPasswordChange($event)"
+              name="password"
+              required
+              autocomplete="current-password" />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="!hidePassword()">
+              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" class="login-button" [disabled]="!isFormValid() || isLoading()">
+            <mat-spinner diameter="20" *ngIf="isLoading()"></mat-spinner>
+            <span *ngIf="!isLoading()">Login</span>
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

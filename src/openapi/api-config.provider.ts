@@ -6,11 +6,11 @@ import { ApiConfiguration } from './generated/api-configuration';
 
 export function provideApiConfiguration(): Provider {
   return {
-    provide: ApiConfiguration, // ✅ Correcto
+    provide: ApiConfiguration,
     useFactory: () => {
-      const config = new ApiConfiguration(); // ✅ Correcto
-      config.rootUrl = environment.apiUrl; // ✅ Correcto
+      const config = new ApiConfiguration();
+      config.rootUrl = environment.apiUrl;
       return config;
-    },
+    }
   };
 }

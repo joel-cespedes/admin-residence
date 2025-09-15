@@ -2,13 +2,13 @@ import { Component, signal } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 @Component({
-  selector: 'app-dashboard',
+  selector: 'movsa-dashboard',
   standalone: true,
   imports: [RouterModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
-export class DashboardComponent {
+export class Dashboard {
   sidebarCollapsed = signal(false);
 
   toggleSidebar() {
