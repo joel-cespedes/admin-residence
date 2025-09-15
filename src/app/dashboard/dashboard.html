@@ -3,10 +3,7 @@
     <div class="sidebar">
       <div class="sidebar__header">
         <div class="sidebar__logo">
-          <div class="sidebar__logo-icon">
-            <span class="mat-icon">diamond</span>
-          </div>
-          <span class="sidebar__logo-text">sneat</span>
+          <img src="/logo-black.svg" alt="Logo" class="sidebar__logo-img" />
         </div>
       </div>
 
@@ -50,7 +47,7 @@
             <a href="#" class="nav__link">
               <span class="mat-icon nav__icon">diversity_3</span>
               <span class="nav__title">Profesionales</span>
-              <span class="nav__badge-text">Pro</span>
+              <span class="nav__badge-text">1</span>
             </a>
           </li>
 
@@ -108,10 +105,10 @@
             <span class="mat-icon">menu</span>
           </button>
 
-          <div class="navbar__search">
+          <!-- <div class="navbar__search">
             <span class="mat-icon">search</span>
             <span class="navbar__search-text">Search</span>
-          </div>
+          </div> -->
         </div>
 
         <div class="navbar__right">
@@ -123,9 +120,9 @@
             <span class="mat-icon">notifications</span>
           </button>
 
-          <button type="button" mat-icon-button class="navbar__btn">
+          <div class="img_avatar">
             <img src="/worker.png" alt="Profile" class="navbar__avatar" />
-          </button>
+          </div>
         </div>
       </mat-card>
 
@@ -141,7 +138,7 @@
             <button type="button" size="small" color="primary" class="welcome-card__btn">View Badges</button>
           </div>
           <div class="welcome-card__illustration">
-            <img src="./" alt="Congratulations" class="welcome-card__img" />
+            <img src="worker.png" alt="Congratulations" class="welcome-card__img" />
           </div>
         </div>
       </div>
@@ -279,7 +276,12 @@
               <div class="orders-card__label">Total Orders</div>
             </div>
             <div class="orders-card__weekly">
-              <apx-chart [series]="circleChart().series" [chart]="circleChart().chart" [labels]="circleChart().labels" [plotOptions]="circleChart().plotOptions" ¡></apx-chart>
+              <apx-chart
+                [series]="circleChart().series"
+                [chart]="circleChart().chart"
+                [labels]="circleChart().labels"
+                [plotOptions]="circleChart().plotOptions"
+                ¡></apx-chart>
             </div>
           </div>
 
@@ -297,7 +299,6 @@
                 </div>
                 <div class="category__stats">
                   <div class="category__percentage">{{ category.percentage }}%</div>
-                  <div class="category__count">{{ category.count }}</div>
                 </div>
               </div>
             }

@@ -53,29 +53,17 @@
   color: rgba(var(--v-theme-on-surface, 34, 48, 62), var(--v-high-emphasis-opacity, 0.9));
 
   &__header {
-    padding: 1.5rem;
+    padding: 3rem 0 1.5rem 0;
     margin-bottom: 0.25rem;
-  }
-
-  &__logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  &__logo-icon {
-    width: 30px;
-    height: 30px;
-    background: linear-gradient(135deg, #696cff, #8789ff);
-    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+  }
 
-    mat-icon {
-      width: 18px;
-      height: 18px;
+  &__logo {
+    width: 150px;
+    img {
+      width: 100%;
     }
   }
 
@@ -294,10 +282,10 @@
 .sub_dashboard {
   display: flex;
   & > .chart-card {
-    width: 56%;
+    width: 60%;
   }
   & > .growth-card {
-    width: 44%;
+    width: 40%;
   }
 }
 
@@ -352,7 +340,7 @@
     padding: 4px 16px;
   }
   &__content {
-    padding: 32px !important;
+    padding: 24px !important;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -742,14 +730,11 @@
   }
 }
 
-// ===========================
-// CATEGORY - BEM
-// ===========================
 .category {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 12px 0;
   border-bottom: 1px solid var(--sneat-border-color);
 
   &:last-child {
@@ -794,14 +779,10 @@
   }
 
   &__percentage {
-    font-weight: 600;
+    font-weight: 400;
     color: var(--sneat-text-primary);
     margin-bottom: 2px;
-  }
-
-  &__count {
-    font-size: 0.75rem;
-    color: var(--sneat-text-secondary);
+    font-size: 17px;
   }
 }
 
@@ -839,18 +820,11 @@
   }
 
   &__amount {
-    font-weight: 600;
+    font-size: 18.75px;
+    font-weight: 400;
     display: flex;
     align-items: center;
     gap: 4px;
-
-    &--positive {
-      color: var(--sneat-success);
-    }
-
-    &--negative {
-      color: var(--sneat-danger);
-    }
   }
 
   &__currency {
@@ -860,9 +834,6 @@
   }
 }
 
-// ===========================
-// ENSURE EQUAL HEIGHTS
-// ===========================
 .mv-grid {
   display: grid;
 

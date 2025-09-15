@@ -83,12 +83,15 @@
     }
   }
 }
-
+img {
+  width: 100%;
+}
 // Select dropdown
 .mat-mdc-select-panel {
   border-radius: var(--sneat-border-radius) !important;
   box-shadow: var(--sneat-shadow-lg) !important;
   border: 1px solid var(--sneat-border-color) !important;
+  background-color: var(--sneat-bg-primary) !important;
 }
 
 // ===========================

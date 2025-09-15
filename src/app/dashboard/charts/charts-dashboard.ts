@@ -1,5 +1,15 @@
 import { signal } from '@angular/core';
-import type { ApexOptions, ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexGrid, ApexLegend, ApexPlotOptions, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis } from 'ng-apexcharts';
+import type {
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexDataLabels,
+  ApexGrid,
+  ApexLegend,
+  ApexOptions,
+  ApexPlotOptions,
+  ApexStroke,
+  ApexXAxis
+} from 'ng-apexcharts';
 
 interface DashboardMetric {
   title: string;
@@ -25,7 +35,6 @@ interface OrderCategory {
   name: string;
   icon: string;
   percentage: number;
-  count: number;
   color: string;
 }
 
@@ -122,71 +131,84 @@ export const EWVENUE_CHART_DATA = signal({
 
   chart: {
     type: 'bar',
-    sparkline: { enabled: true }
-    // height: 300,
-    // stacked: true,
-    // toolbar: { show: false },
-    // fontFamily: 'Inter'
+    stacked: true,
+    parentHeightOffset: 6,
+    height: 335,
+    offsetX: -12,
+    toolbar: { show: false }
   } satisfies ApexChart,
-
+  dataLabels: { enabled: false },
+  stroke: {
+    width: 6,
+    lineCap: 'round',
+    colors: ['#000']
+  },
   colors: ['#696cff', '#03c3ec'],
-
+  legend: {
+    offsetX: -22,
+    offsetY: -1,
+    position: 'top',
+    fontSize: '13px',
+    horizontalAlign: 'left',
+    fontFamily: 'Inter',
+    labels: {
+      colors: '#000'
+    },
+    itemMargin: {
+      vertical: 4,
+      horizontal: 10
+    },
+    markers: {
+      width: 11,
+      height: 11,
+      radius: 10,
+      offsetX: -2
+    }
+  } as ApexLegend,
+  states: {
+    hover: {
+      filter: { type: 'none' }
+    },
+    active: {
+      filter: { type: 'none' }
+    }
+  },
+  grid: {
+    strokeDashArray: 6,
+    borderColor: 'rgba(34,48,62,.2)',
+    padding: {
+      bottom: 5
+    }
+  },
   plotOptions: {
     bar: {
-      horizontal: false,
-      columnWidth: '18%',
-      barHeight: '50%',
-      borderRadius: 5,
+      borderRadius: 9,
+      columnWidth: '30%',
       borderRadiusApplication: 'around',
-      distributed: true,
-      dataLabels: { position: 'top' }
+      borderRadiusWhenStacked: 'all'
     }
-  } satisfies ApexPlotOptions,
-
-  dataLabels: { enabled: false } as ApexDataLabels,
-
-  grid: {
-    show: true,
-    borderColor: 'rgba(34,48,62,.12)',
-    strokeDashArray: 3,
-    padding: { left: 0, right: 0, top: 0, bottom: 0 }
-  } as ApexGrid,
-
-  legend: {
-    show: true,
-    position: 'top',
-    horizontalAlign: 'left',
-    offsetY: 6,
-    markers: { width: 8, height: 8, radius: 8 }
-  } as ApexLegend,
-
-  tooltip: {
-    shared: true,
-    intersect: false,
-    x: { show: false },
-    y: { formatter: (v: number) => `${v > 0 ? '' : ''}${v}` }
-  } as ApexTooltip,
-
+  } as ApexPlotOptions,
   xaxis: {
-    categories: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
     axisTicks: { show: false },
+    crosshairs: { opacity: 0 },
     axisBorder: { show: false },
-    tickPlacement: 'on',
-    offsetY: -10,
-    labels: {
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    tooltip: {
       style: {
-        fontSize: '11px',
-        colors: '#696cff',
-        fontFamily: 'Public Sans'
+        fontSize: '13px',
+        fontFamily: 'Inter'
       }
     }
-  } as ApexXAxis,
-
+  } satisfies ApexXAxis,
   yaxis: {
-    // En el demo se perciben ticks simétricos (cuando hay negativos):
-    tickAmount: 4,
-    labels: { style: { fontSize: '12px' } }
-  } as ApexYAxis
+    labels: {
+      style: {
+        fontSize: '13px',
+        colors: '#000',
+        fontFamily: 'Inter'
+      }
+    }
+  }
 });
 
 export const CHART_RADIAL = signal({
@@ -347,7 +369,7 @@ export const PROFIT_CHART_DATA = signal({
       style: {
         fontSize: '14px',
         colors: '#696cff',
-        fontFamily: 'Public Sans'
+        fontFamily: 'Inter'
       }
     }
   },
@@ -383,28 +405,24 @@ export const ORDER_CATEGORIES = signal<OrderCategory[]>([
     name: 'Electronic',
     icon: 'devices',
     percentage: 82.5,
-    count: 849,
     color: 'btn_darkblue'
   },
   {
     name: 'Fashion',
     icon: 'checkroom',
     percentage: 23.8,
-    count: 237,
     color: 'btn_green'
   },
   {
     name: 'Decor',
     icon: 'palette',
     percentage: 84.9,
-    count: 849,
     color: 'btn_lightblue'
   },
   {
     name: 'Sports',
     icon: 'sports_soccer',
     percentage: 9.9,
-    count: 99,
     color: 'btn_gray'
   }
 ]);
@@ -473,7 +491,8 @@ export const CIRCLE_CHART = signal({
     animations: { enabled: false },
     width: 140,
     height: 120,
-    type: 'donut'
+    type: 'donut',
+    fontFamily: 'Inter'
   } satisfies ApexChart,
   states: {
     hover: {
@@ -496,25 +515,26 @@ export const CIRCLE_CHART = signal({
       top: -7,
       bottom: 5
     }
-  },
+  } as ApexGrid,
   plotOptions: {
     pie: {
       expandOnClick: false,
       donut: {
         size: '85%',
+        fontFamily: 'Inter',
         labels: {
           show: true,
           name: {
             offsetY: 17,
             fontSize: '22px',
             color: 'rgb(3, 195, 236)',
-            fontFamily: 'Public Sans'
+            fontFamily: 'Inter'
           },
           value: {
             offsetY: -17,
             fontSize: '18px',
             color: 'rgb(105, 108, 255)',
-            fontFamily: 'Public Sans',
+            fontFamily: 'Inter',
             fontWeight: 500
           },
           total: {
@@ -524,7 +544,7 @@ export const CIRCLE_CHART = signal({
             lineHeight: '18px',
             formatter: () => '38%',
             color: 'rgb(3, 195, 236)',
-            fontFamily: 'Public Sans'
+            fontFamily: 'Inter'
           }
         }
       }

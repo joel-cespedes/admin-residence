@@ -6,13 +6,32 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
-import { CHART_RADIAL, CIRCLE_CHART, EWVENUE_CHART_DATA, LINE_CHART, METRICS, ORDER_CATEGORIES, PROFIT_CHART_DATA, TRANSACTIONS } from './charts/charts-dashboard';
+import {
+  CHART_RADIAL,
+  CIRCLE_CHART,
+  EWVENUE_CHART_DATA,
+  LINE_CHART,
+  METRICS,
+  ORDER_CATEGORIES,
+  PROFIT_CHART_DATA,
+  TRANSACTIONS
+} from './charts/charts-dashboard';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatSelectModule, MatIconModule, MatToolbarModule, MatMenuModule, MatBadgeModule, NgApexchartsModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatBadgeModule,
+    NgApexchartsModule
+  ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
