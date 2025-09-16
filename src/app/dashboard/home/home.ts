@@ -26,6 +26,7 @@ import type {
 } from 'ng-apexcharts';
 import { DashboardData } from '../../../openapi/generated/models/dashboard-data';
 import { TaskCategoryWithCount } from '../../../openapi/generated/models/task-category-with-count';
+import { NewResidentStats } from '../../../openapi/generated/models/new-resident-stats';
 import { DashboardService } from '../../../openapi/generated/services/dashboard.service';
 
 interface Activity {
@@ -62,18 +63,21 @@ export class Home implements OnInit {
   loading = signal(true);
   error = signal<string | null>(null);
   timeFilter = signal<'week' | 'month' | 'year'>('month');
-  selectedResidenceFilter = signal<string | null>(null);
+  // Removed problematic residence filter - now handled by interceptor and residence service
   taskFilter = signal<'all' | 'active' | 'completed'>('all');
 
   // Dashboard data signals
   dashboardData = signal<DashboardData | null>(null);
   taskCategories = signal<TaskCategoryWithCount[]>([]);
+  residentStats = signal<NewResidentStats | null>(null);
 
   // Loading and error states
   isLoadingTaskCategories = signal(false);
   taskCategoriesError = signal<string | null>(null);
   isLoadingRecentActivity = signal(false);
   recentActivityError = signal<string | null>(null);
+  isLoadingResidentStats = signal(false);
+  residentStatsError = signal<string | null>(null);
   recentActivities = signal<any[]>([]);
 
   // Computed signals for charts
@@ -83,7 +87,7 @@ export class Home implements OnInit {
   profitChartData = computed(() => this.transformMeasurementsTrend());
   orderCategories = computed(() => this.residenceDataWithStats());
   categories = computed(() => this.transformTaskCategories());
-  lineChart = computed(() => this.transformActivityTrend());
+  lineChart = computed(() => this.transformResidentStatsLine());
   circleChart = computed(() => this.transformResidenceDistribution());
 
   // Computed signal for daily measurements average
@@ -93,6 +97,22 @@ export class Home implements OnInit {
 
     const last30Days = measurementStats.last_30_days || 0;
     return Math.round(last30Days / 30); // Daily average
+  });
+
+  // Computed signals for resident statistics
+  currentYear = computed(() => {
+    const stats = this.residentStats();
+    return stats?.current_year || new Date().getFullYear();
+  });
+
+  growthPercentage = computed(() => {
+    const stats = this.residentStats();
+    return stats?.growth_percentage || 0;
+  });
+
+  totalResidents = computed(() => {
+    const stats = this.residentStats();
+    return stats?.total_residents || 0;
   });
 
   // Computed signals for totals
@@ -113,25 +133,9 @@ export class Home implements OnInit {
     return residences?.length || 0;
   });
 
-  // Computed signal for residence filter options
-  residenceFilterOptions = computed(() => {
-    const residences = this.residenceService.residences();
-    if (!residences || residences.length <= 1) return [];
+  // Removed problematic residence filter options - now handled by interceptor and residence service
 
-    return [
-      { id: 'all', name: 'Todas las residencias' },
-      ...residences.map(residence => ({
-        id: residence.id,
-        name: residence.name
-      }))
-    ];
-  });
-
-  // Computed signal to check if residence filter should be shown
-  showResidenceFilter = computed(() => {
-    const residences = this.residenceService.residences();
-    return residences && residences.length > 1;
-  });
+  // Removed problematic residence filter show logic - now handled by interceptor and residence service
 
   // Centralized residence data with consistent mock data
   residenceDataWithStats = computed(() => {
@@ -174,6 +178,7 @@ export class Home implements OnInit {
     if (residences && residences.length > 0) {
       this.loadDashboardData();
       this.loadTaskCategories();
+      this.loadResidentStats();
     } else {
       // Wait for residences to load using effect instead of toObservable
       this.waitForResidences();
@@ -206,24 +211,34 @@ export class Home implements OnInit {
     this.isLoadingTaskCategories.set(true);
     this.taskCategoriesError.set(null);
 
-    // Load task categories with optional residence filter
-    const selectedResidence = this.selectedResidenceFilter();
-    const params: Record<string, string> = {};
-
-    if (selectedResidence && selectedResidence !== 'all') {
-      params['X-Residence-Id'] = selectedResidence;
-    }
-
-    this.dashboardService.getTaskCategoriesDashboardTaskCategoriesGet(params).subscribe({
-      next: response => {
+    // The residence interceptor will automatically add the X-Residence-Id header
+    this.dashboardService.getTaskCategoriesWithCountsDashboardTaskCategoriesGet().subscribe({
+      next: (response: any) => {
         this.taskCategories.set(response);
         this.isLoadingTaskCategories.set(false);
       },
-      error: err => {
+      error: (err: any) => {
         console.error('Error loading task categories:', err);
         this.taskCategoriesError.set('Error loading task categories');
         this.taskCategories.set([]);
         this.isLoadingTaskCategories.set(false);
+      }
+    });
+  }
+
+  private loadResidentStats() {
+    this.isLoadingResidentStats.set(true);
+    this.residentStatsError.set(null);
+
+    this.dashboardService.getNewResidentsStatsDashboardNewResidentsStatsGet$Response().subscribe({
+      next: (response: any) => {
+        this.residentStats.set(response.body);
+        this.isLoadingResidentStats.set(false);
+      },
+      error: (err: any) => {
+        console.error('Error loading resident statistics:', err);
+        this.residentStatsError.set('Error loading resident statistics');
+        this.isLoadingResidentStats.set(false);
       }
     });
   }
@@ -469,18 +484,55 @@ export class Home implements OnInit {
       filteredCategories = transformedCategories.filter(category => category.completedTasks > 0);
     }
 
-    // Filter by selected residence if filter is active
-    const selectedResidence = this.selectedResidenceFilter();
-    if (selectedResidence && selectedResidence !== 'all') {
-      filteredCategories = filteredCategories.filter(category => category.residenceId === selectedResidence);
-    }
+    // Removed problematic residence filter - now handled by interceptor and residence service
+    // All data is automatically filtered by the selected residence in the backend
 
     return filteredCategories;
   }
 
-  private transformActivityTrend() {
+  private transformResidentStatsLine() {
+    const stats = this.residentStats();
+    if (!stats) {
+      // Fallback to mock data if no stats available
+      return {
+        series: [{ data: [30, 58, 35, 53, 50, 68] }],
+        tooltip: { enabled: false },
+        colors: ['#FFAC04', 'red'],
+        chart: {
+          parentHeightOffset: 0,
+          toolbar: { show: false },
+          foreColor: '#ffac04',
+          dropShadow: {
+            top: 12,
+            blur: 4,
+            left: 0,
+            enabled: true,
+            opacity: 0.12,
+            color: '#FFAC04'
+          }
+        } as ApexChart,
+        dataLabels: { enabled: false },
+        stroke: {
+          width: 4,
+          curve: 'smooth',
+          lineCap: 'round'
+        } as ApexStroke,
+        grid: { show: false, padding: { top: -21, left: -5, bottom: -8 } },
+        xaxis: {
+          labels: { show: false },
+          axisTicks: { show: false },
+          axisBorder: { show: false }
+        },
+        yaxis: { labels: { show: false } }
+      };
+    }
+
+    // Transform monthly data to line chart format
+    const monthlyData = stats.monthly_data || [];
+    const chartData = monthlyData.map(month => month.value);
+
     return {
-      series: [{ data: [30, 58, 35, 53, 50, 68] }],
+      series: [{ data: chartData.length > 0 ? chartData : [30, 58, 35, 53, 50, 68] }],
       tooltip: { enabled: false },
       colors: ['#FFAC04', 'red'],
       chart: {
@@ -742,10 +794,8 @@ export class Home implements OnInit {
     this.loadDashboardData();
   }
 
-  setResidenceFilter(residenceId: string | null) {
-    this.selectedResidenceFilter.set(residenceId);
-    this.loadTaskCategories();
-  }
+  // Removed problematic setResidenceFilter - now handled by residence service and interceptor
+  // Residence selection is managed globally through the residence service
 
   setTaskFilter(filter: 'all' | 'active' | 'completed') {
     this.taskFilter.set(filter);
@@ -758,6 +808,7 @@ export class Home implements OnInit {
       if (residences && residences.length > 0) {
         this.loadDashboardData();
         this.loadTaskCategories();
+        this.loadResidentStats();
       } else if (this.loading()) {
         // Check again after a delay
         setTimeout(checkResidences, 100);

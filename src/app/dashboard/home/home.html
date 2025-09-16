@@ -129,9 +129,9 @@
     <mat-card-content class="profile-card__content">
       <div class="profile-card_left">
         <div class="title">Nuevos residentes</div>
-        <div class="info">Year 2022</div>
-        <div class="stats">68.2%</div>
-        <div class="result">84,686k</div>
+        <div class="info">Year {{ currentYear() }}</div>
+        <div class="stats">{{ growthPercentage() > 0 ? '+' : '' }}{{ growthPercentage().toFixed(1) }}%</div>
+        <div class="result">{{ totalResidents() }} residentes</div>
       </div>
       <div class="profile-card_right">
         <apx-chart
@@ -251,12 +251,8 @@
             <button type="button" mat-menu-item (click)="setTaskFilter('all')">Todas las tareas</button>
             <button type="button" mat-menu-item (click)="setTaskFilter('active')">Tareas activas</button>
             <button type="button" mat-menu-item (click)="setTaskFilter('completed')">Tareas completadas</button>
-            <div class="mat-divider"></div>
-            @for (residence of residenceFilterOptions(); track residence.id) {
-              <button type="button" mat-menu-item (click)="setResidenceFilter(residence.id === 'all' ? null : residence.id)">
-                {{ residence.name }}
-              </button>
-            }
+            <!-- Removed problematic residence filter - now handled by interceptor and residence service -->
+            <!-- Residence selection is managed globally through the residence service -->
           </mat-menu>
         </div>
       </div>

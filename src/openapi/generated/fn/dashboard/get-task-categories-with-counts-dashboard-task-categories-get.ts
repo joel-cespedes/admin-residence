@@ -8,19 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { TaskTemplateCreate } from '../../models/task-template-create';
-import { TaskTemplateOut } from '../../models/task-template-out';
+import { TaskCategoryWithCount } from '../../models/task-category-with-count';
 
-export interface CreateTemplateTasksTemplatesPost$Params {
+export interface GetTaskCategoriesWithCountsDashboardTaskCategoriesGet$Params {
   'X-Residence-Id'?: (string | null);
-      body: TaskTemplateCreate
 }
 
-export function createTemplateTasksTemplatesPost(http: HttpClient, rootUrl: string, params: CreateTemplateTasksTemplatesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskTemplateOut>> {
-  const rb = new RequestBuilder(rootUrl, createTemplateTasksTemplatesPost.PATH, 'post');
+export function getTaskCategoriesWithCountsDashboardTaskCategoriesGet(http: HttpClient, rootUrl: string, params?: GetTaskCategoriesWithCountsDashboardTaskCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TaskCategoryWithCount>>> {
+  const rb = new RequestBuilder(rootUrl, getTaskCategoriesWithCountsDashboardTaskCategoriesGet.PATH, 'get');
   if (params) {
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -28,9 +25,9 @@ export function createTemplateTasksTemplatesPost(http: HttpClient, rootUrl: stri
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<TaskTemplateOut>;
+      return r as StrictHttpResponse<Array<TaskCategoryWithCount>>;
     })
   );
 }
 
-createTemplateTasksTemplatesPost.PATH = '/tasks/templates';
+getTaskCategoriesWithCountsDashboardTaskCategoriesGet.PATH = '/dashboard/task-categories';

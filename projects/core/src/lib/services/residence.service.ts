@@ -87,6 +87,11 @@ export class ResidenceService {
         if ((residences as Residence[]).length === 1 && !this.selectedResidenceId()) {
           this.selectResidence((residences as Residence[])[0].id);
         }
+
+        // Para superadmin, seleccionar automáticamente la primera residencia si hay varias y no hay ninguna seleccionada
+        if (this.authService.isSuperAdmin() && (residences as Residence[]).length > 0 && !this.selectedResidenceId()) {
+          this.selectResidence((residences as Residence[])[0].id);
+        }
       }),
       catchError(() => {
         this.setError('Error cargando residencias');
