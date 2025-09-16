@@ -557,6 +557,11 @@
   }
 }
 
+.list_tasks {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
 .category {
   display: flex;
   justify-content: space-between;

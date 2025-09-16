@@ -1,9 +1,9 @@
 // projects/core/src/lib/services/residence.service.ts
-import { Injectable, signal, computed, inject, linkedSignal } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { Observable, switchMap, of, catchError, tap } from 'rxjs';
+import { Injectable, signal, computed, inject, linkedSignal, effect } from '@angular/core';
+import { Observable, of, catchError, tap } from 'rxjs';
 import { ResidencesService } from '../../../../../src/openapi/generated/services/residences.service';
 import { AuthService } from './auth.service';
+import { StorageService } from './storage.service';
 
 export interface Residence {
   id: string;
@@ -27,11 +27,12 @@ export interface ResidenceState {
 export class ResidenceService {
   private readonly apiResidences = inject(ResidencesService);
   private readonly authService = inject(AuthService);
+  private readonly storageService = inject(StorageService);
 
   // Estado principal
   private readonly _state = signal<ResidenceState>({
     residences: [],
-    selectedResidenceId: this.getStoredResidenceId(),
+    selectedResidenceId: this.storageService.selectedResidenceId(),
     selectedResidence: null,
     isLoading: false,
     error: null
@@ -63,9 +64,11 @@ export class ResidenceService {
 
   constructor() {
     // Auto-cargar residencias cuando el usuario se autentica
-    toObservable(this.authService.isAuthenticated)
-      .pipe(switchMap(isAuth => (isAuth ? this.loadUserResidences() : of(null))))
-      .subscribe();
+    effect(() => {
+      if (this.authService.isAuthenticated()) {
+        this.loadUserResidences().subscribe();
+      }
+    });
   }
 
   loadUserResidences(): Observable<Residence[]> {
@@ -73,10 +76,10 @@ export class ResidenceService {
     this.clearError();
 
     return this.apiResidences.myResidencesResidencesMineGet().pipe(
-      tap((residences: any) => {
+      tap((residences: any[]) => {
         this._state.update(state => ({
           ...state,
-          residences: residences as Residence[],
+          residences: residences,
           isLoading: false
         }));
 
@@ -102,7 +105,7 @@ export class ResidenceService {
         selectedResidence: residence
       }));
 
-      this.storeSelectedResidenceId(residenceId);
+      this.storageService.setSelectedResidenceId(residenceId);
     }
   }
 
@@ -113,7 +116,7 @@ export class ResidenceService {
       selectedResidence: null
     }));
 
-    this.clearStoredResidenceId();
+    this.storageService.setSelectedResidenceId(null);
   }
 
   getResidenceById(id: string): Observable<Residence> {
@@ -130,17 +133,5 @@ export class ResidenceService {
 
   private clearError(): void {
     this._state.update(state => ({ ...state, error: null }));
-  }
-
-  private getStoredResidenceId(): string | null {
-    return localStorage.getItem('selected_residence_id');
-  }
-
-  private storeSelectedResidenceId(residenceId: string): void {
-    localStorage.setItem('selected_residence_id', residenceId);
-  }
-
-  private clearStoredResidenceId(): void {
-    localStorage.removeItem('selected_residence_id');
   }
 }

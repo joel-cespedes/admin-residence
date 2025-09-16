@@ -1,20 +1,18 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
-import { DashboardService } from '../../../openapi/generated/services/dashboard.service';
-import { DashboardData } from '../../../openapi/generated/models/dashboard-data';
 import { ResidenceService } from '@core';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { take } from 'rxjs';
 import type {
   ApexAxisChartSeries,
   ApexChart,
@@ -26,6 +24,15 @@ import type {
   ApexStroke,
   ApexXAxis
 } from 'ng-apexcharts';
+import { DashboardData } from '../../../openapi/generated/models/dashboard-data';
+import { TaskCategoryWithCount } from '../../../openapi/generated/models/task-category-with-count';
+import { DashboardService } from '../../../openapi/generated/services/dashboard.service';
+
+interface Activity {
+  type: string;
+  status?: string;
+  measurement_type?: string;
+}
 
 @Component({
   selector: 'movsa-home',
@@ -38,6 +45,8 @@ import type {
     MatToolbarModule,
     MatMenuModule,
     MatBadgeModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
     NgApexchartsModule,
     RouterModule
   ],
@@ -52,24 +61,110 @@ export class Home implements OnInit {
   sidebarCollapsed = signal(false);
   loading = signal(true);
   error = signal<string | null>(null);
+  timeFilter = signal<'week' | 'month' | 'year'>('month');
+  selectedResidenceFilter = signal<string | null>(null);
+  taskFilter = signal<'all' | 'active' | 'completed'>('all');
 
   // Dashboard data signals
   dashboardData = signal<DashboardData | null>(null);
+  taskCategories = signal<TaskCategoryWithCount[]>([]);
+
+  // Loading and error states
+  isLoadingTaskCategories = signal(false);
+  taskCategoriesError = signal<string | null>(null);
+  isLoadingRecentActivity = signal(false);
+  recentActivityError = signal<string | null>(null);
+  recentActivities = signal<any[]>([]);
 
   // Computed signals for charts
   metrics = computed(() => this.dashboardData()?.metrics || []);
   revenueChartData = computed(() => this.transformYearlyData());
   chartRadial = computed(() => this.transformTaskCompletionRadial());
   profitChartData = computed(() => this.transformMeasurementsTrend());
-  orderCategories = computed(() => this.transformResidenceData());
-  transactions = computed(() => this.transformRecentActivity());
+  orderCategories = computed(() => this.residenceDataWithStats());
+  categories = computed(() => this.transformTaskCategories());
   lineChart = computed(() => this.transformActivityTrend());
   circleChart = computed(() => this.transformResidenceDistribution());
+
+  // Computed signal for daily measurements average
+  dailyMeasurementsAverage = computed(() => {
+    const measurementStats = this.dashboardData()?.measurement_stats;
+    if (!measurementStats) return 0;
+
+    const last30Days = measurementStats.last_30_days || 0;
+    return Math.round(last30Days / 30); // Daily average
+  });
+
+  // Computed signals for totals
+  totalResidentsFromResidences = computed(() => {
+    const residences = this.residenceService.residences();
+    if (!residences || residences.length === 0) return 0;
+
+    // Calculate total residents from all assigned residences
+    // For now, use mock data - in real implementation this would come from API
+    return residences.reduce(total => {
+      const residentCount = Math.floor(Math.random() * 100) + 30; // 30-130 residents per residence
+      return total + residentCount;
+    }, 0);
+  });
+
+  totalVisibleResidences = computed(() => {
+    const residences = this.residenceService.residences();
+    return residences?.length || 0;
+  });
+
+  // Computed signal for residence filter options
+  residenceFilterOptions = computed(() => {
+    const residences = this.residenceService.residences();
+    if (!residences || residences.length <= 1) return [];
+
+    return [
+      { id: 'all', name: 'Todas las residencias' },
+      ...residences.map(residence => ({
+        id: residence.id,
+        name: residence.name
+      }))
+    ];
+  });
+
+  // Computed signal to check if residence filter should be shown
+  showResidenceFilter = computed(() => {
+    const residences = this.residenceService.residences();
+    return residences && residences.length > 1;
+  });
+
+  // Centralized residence data with consistent mock data
+  residenceDataWithStats = computed(() => {
+    const residences = this.residenceService.residences();
+    if (!residences || residences.length === 0) return [];
+
+    // Limit to maximum 10 residences
+    const limitedResidences = residences.slice(0, 10);
+
+    return limitedResidences.map((residence, index) => {
+      // Generate consistent mock data for each residence
+      const floorCount = Math.floor(Math.random() * 15) + 3; // 3-18 floors
+      const roomCount = Math.floor(Math.random() * 50) + 20; // 20-70 rooms
+      const residentCount = Math.floor(Math.random() * 100) + 30; // 30-130 residents
+
+      return {
+        id: residence.id,
+        name: residence.name,
+        icon: 'apartment',
+        floorCount: floorCount,
+        roomCount: roomCount,
+        residentCount: residentCount,
+        color: this.getResidenceColor(index),
+        percentage: Math.floor(Math.random() * 30) + 10 // 10-40% for demo
+      };
+    });
+  });
 
   ngOnInit() {
     this.isDarkTheme.set(false);
     this.applyTheme();
     this.initializeDashboard();
+    this.loadRecentActivity();
   }
 
   private initializeDashboard() {
@@ -78,24 +173,10 @@ export class Home implements OnInit {
 
     if (residences && residences.length > 0) {
       this.loadDashboardData();
+      this.loadTaskCategories();
     } else {
-      // Wait for residences to load
-      toObservable(this.residenceService.residences)
-        .pipe(take(1))
-        .subscribe({
-          next: residencesList => {
-            if (residencesList && residencesList.length > 0) {
-              this.loadDashboardData();
-            } else {
-              this.error.set('No residences available. Please contact administrator.');
-              this.loading.set(false);
-            }
-          },
-          error: () => {
-            this.error.set('Error loading residences');
-            this.loading.set(false);
-          }
-        });
+      // Wait for residences to load using effect instead of toObservable
+      this.waitForResidences();
     }
   }
 
@@ -104,15 +185,45 @@ export class Home implements OnInit {
     this.error.set(null);
 
     // The residence interceptor will automatically add the X-Residence-Id header
-    this.dashboardService.getDashboardDataDashboardGet$Response().subscribe({
+    this.dashboardService
+      .getDashboardDataDashboardGet$Response({
+        time_filter: this.timeFilter()
+      })
+      .subscribe({
+        next: response => {
+          this.dashboardData.set(response.body);
+          this.loading.set(false);
+        },
+        error: err => {
+          console.error('Error loading dashboard data:', err);
+          this.error.set('Error loading dashboard data');
+          this.loading.set(false);
+        }
+      });
+  }
+
+  private loadTaskCategories() {
+    this.isLoadingTaskCategories.set(true);
+    this.taskCategoriesError.set(null);
+
+    // Load task categories with optional residence filter
+    const selectedResidence = this.selectedResidenceFilter();
+    const params: Record<string, string> = {};
+
+    if (selectedResidence && selectedResidence !== 'all') {
+      params['X-Residence-Id'] = selectedResidence;
+    }
+
+    this.dashboardService.getTaskCategoriesDashboardTaskCategoriesGet(params).subscribe({
       next: response => {
-        this.dashboardData.set(response.body);
-        this.loading.set(false);
+        this.taskCategories.set(response);
+        this.isLoadingTaskCategories.set(false);
       },
       error: err => {
-        console.error('Error loading dashboard data:', err);
-        this.error.set('Error loading dashboard data');
-        this.loading.set(false);
+        console.error('Error loading task categories:', err);
+        this.taskCategoriesError.set('Error loading task categories');
+        this.taskCategories.set([]);
+        this.isLoadingTaskCategories.set(false);
       }
     });
   }
@@ -331,47 +442,40 @@ export class Home implements OnInit {
     };
   }
 
-  private transformResidenceData() {
-    const residences = this.residenceService.residences();
-    const residentStats = this.dashboardData()?.resident_stats;
+  private transformTaskCategories() {
+    const categories = this.taskCategories();
 
-    if (!residences || residences.length === 0) {
-      return [];
+    // Transform backend categories to frontend format
+    const transformedCategories = categories.map(category => ({
+      id: category.id,
+      type: category.name,
+      company: category.residence_name,
+      amount: category.task_count.toString(),
+      status: category.active_tasks > 0 ? 'active' : 'inactive',
+      icon: category.icon || 'category',
+      color: this.getColorForCategory(category.name),
+      residenceId: category.residence_id,
+      activeTasks: category.active_tasks,
+      completedTasks: category.completed_tasks
+    }));
+
+    // Apply task filter
+    const taskFilter = this.taskFilter();
+    let filteredCategories = transformedCategories;
+
+    if (taskFilter === 'active') {
+      filteredCategories = transformedCategories.filter(category => category.activeTasks > 0);
+    } else if (taskFilter === 'completed') {
+      filteredCategories = transformedCategories.filter(category => category.completedTasks > 0);
     }
 
-    // Limit to maximum 10 residences
-    const limitedResidences = residences.slice(0, 10);
+    // Filter by selected residence if filter is active
+    const selectedResidence = this.selectedResidenceFilter();
+    if (selectedResidence && selectedResidence !== 'all') {
+      filteredCategories = filteredCategories.filter(category => category.residenceId === selectedResidence);
+    }
 
-    return limitedResidences.map((residence, index) => {
-      // Generate mock data for rooms and residents per residence
-      // In a real implementation, this would come from the API
-      const roomCount = Math.floor(Math.random() * 50) + 20; // 20-70 rooms
-      const residentCount = Math.floor(Math.random() * 100) + 30; // 30-130 residents
-
-      return {
-        id: residence.id,
-        name: residence.name,
-        icon: 'apartment',
-        roomCount: roomCount,
-        residentCount: residentCount,
-        color: this.getResidenceColor(index),
-        percentage: Math.floor(Math.random() * 30) + 10 // 10-40% for demo
-      };
-    });
-  }
-
-  private transformRecentActivity() {
-    const activities = this.dashboardData()?.recent_activity || [];
-
-    return activities.slice(0, 6).map((activity: any) => ({
-      id: activity.id,
-      type: activity.type,
-      company: this.getActivityDescription(activity),
-      amount: this.getActivityAmount(activity),
-      status: this.getActivityStatus(activity),
-      icon: this.getActivityIcon(activity.type),
-      color: this.getActivityColor(activity.type)
-    }));
+    return filteredCategories;
   }
 
   private transformActivityTrend() {
@@ -409,11 +513,11 @@ export class Home implements OnInit {
   }
 
   private transformResidenceDistribution() {
-    const residences = this.residenceService.residences();
+    const residenceData = this.residenceDataWithStats();
     const residentStats = this.dashboardData()?.resident_stats;
     const totalResidents = residentStats?.total || 0;
 
-    if (!residences || residences.length === 0) {
+    if (!residenceData || residenceData.length === 0) {
       return {
         series: [],
         chart: {
@@ -460,9 +564,9 @@ export class Home implements OnInit {
       };
     }
 
-    // Generate series data for each residence (mock data for now)
-    const series = residences.map(() => Math.floor(Math.random() * 50) + 10);
-    const labels = residences.map(r => r.name);
+    // Use resident count from the centralized data for consistency
+    const series = residenceData.map(residence => residence.residentCount);
+    const labels = residenceData.map(r => r.name);
 
     return {
       series: series,
@@ -533,11 +637,39 @@ export class Home implements OnInit {
   }
 
   private getResidenceColor(index: number): string {
-    const colors = ['btn_primary', 'btn_success', 'btn_info', 'btn_warning', 'btn_danger', 'btn_dark', 'btn_lightblue', 'btn_purple', 'btn_pink', 'btn_orange'];
+    const colors = [
+      'btn_primary',
+      'btn_success',
+      'btn_info',
+      'btn_warning',
+      'btn_danger',
+      'btn_dark',
+      'btn_lightblue',
+      'btn_purple',
+      'btn_pink',
+      'btn_orange'
+    ];
     return colors[index % colors.length];
   }
 
-  private getActivityDescription(activity: any): string {
+  private getColorForCategory(categoryName: string): string {
+    const categoryColors: Record<string, string> = {
+      Medicación: 'btn_red',
+      Higiene: 'btn_green',
+      Alimentación: 'btn_lightblue',
+      Ejercicio: 'btn_darkblue',
+      Social: 'btn_gray',
+      Entrenamiento: 'btn_purple',
+      Terapia: 'btn_pink',
+      Recreación: 'btn_orange',
+      Cuidado: 'btn_primary',
+      Salud: 'btn_danger'
+    };
+
+    return categoryColors[categoryName] || 'btn_primary';
+  }
+
+  private getActivityDescription(activity: Activity): string {
     switch (activity.type) {
       case 'resident':
         return 'Residencia';
@@ -550,14 +682,14 @@ export class Home implements OnInit {
     }
   }
 
-  private getActivityAmount(activity: any): string {
+  private getActivityAmount(activity: Activity): string {
     if (activity.type === 'measurement') {
       return `+${activity.measurement_type}`;
     }
     return '+1';
   }
 
-  private getActivityStatus(activity: any): 'positive' | 'negative' {
+  private getActivityStatus(activity: Activity): 'positive' | 'negative' {
     return activity.status === 'active' ? 'positive' : 'negative';
   }
 
@@ -602,6 +734,93 @@ export class Home implements OnInit {
     const sidebar = document.querySelector('.layout__sidebar');
     if (sidebar) {
       sidebar.classList.remove('layout__sidebar--open');
+    }
+  }
+
+  setTimeFilter(filter: 'week' | 'month' | 'year') {
+    this.timeFilter.set(filter);
+    this.loadDashboardData();
+  }
+
+  setResidenceFilter(residenceId: string | null) {
+    this.selectedResidenceFilter.set(residenceId);
+    this.loadTaskCategories();
+  }
+
+  setTaskFilter(filter: 'all' | 'active' | 'completed') {
+    this.taskFilter.set(filter);
+  }
+
+  private waitForResidences(): void {
+    // Use a simple timeout to check for residences periodically
+    const checkResidences = () => {
+      const residences = this.residenceService.residences();
+      if (residences && residences.length > 0) {
+        this.loadDashboardData();
+        this.loadTaskCategories();
+      } else if (this.loading()) {
+        // Check again after a delay
+        setTimeout(checkResidences, 100);
+      } else {
+        this.error.set('No residences available. Please contact administrator.');
+      }
+    };
+
+    checkResidences();
+  }
+
+  // Load recent activity data
+  private loadRecentActivity() {
+    this.isLoadingRecentActivity.set(true);
+    this.recentActivityError.set(null);
+
+    // Mock recent activity data for now
+    const mockActivities = [
+      {
+        id: '1',
+        type: 'resident',
+        title: 'Nuevo residente registrado',
+        description: 'Residencia Test',
+        created_at: new Date().toISOString()
+      },
+      {
+        id: '2',
+        type: 'measurement',
+        title: 'Medición completada',
+        description: 'Presión arterial - Residencia Test',
+        created_at: new Date(Date.now() - 3600000).toISOString()
+      },
+      {
+        id: '3',
+        type: 'task',
+        title: 'Tarea completada',
+        description: 'Medicación - Residencia Test',
+        created_at: new Date(Date.now() - 7200000).toISOString()
+      }
+    ];
+
+    setTimeout(() => {
+      this.recentActivities.set(mockActivities);
+      this.isLoadingRecentActivity.set(false);
+    }, 1000);
+  }
+
+  // Format date for display
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+
+    if (diffInHours < 1) {
+      return 'Hace menos de 1 hora';
+    } else if (diffInHours < 24) {
+      return `Hace ${diffInHours} horas`;
+    } else {
+      return date.toLocaleDateString('es-ES', {
+        day: 'numeric',
+        month: 'short',
+        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+      });
     }
   }
 }

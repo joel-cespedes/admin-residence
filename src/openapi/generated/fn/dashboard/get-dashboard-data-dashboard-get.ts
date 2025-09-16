@@ -11,12 +11,16 @@ import { DashboardData } from '../../models/dashboard-data';
 
 export interface GetDashboardDataDashboardGet$Params {
   'X-Residence-Id'?: (string | null);
+  'time_filter'?: ('week' | 'month' | 'year' | null);
 }
 
 export function getDashboardDataDashboardGet(http: HttpClient, rootUrl: string, params?: GetDashboardDataDashboardGet$Params, context?: HttpContext): Observable<StrictHttpResponse<DashboardData>> {
   const rb = new RequestBuilder(rootUrl, getDashboardDataDashboardGet.PATH, 'get');
   if (params) {
     rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    if (params['time_filter'] !== undefined) {
+      rb.query('time_filter', params['time_filter'], {});
+    }
   }
 
   return http.request(

@@ -151,22 +151,15 @@
       <div class="content_header_between">
         <div>
           <div class="title">Residencias</div>
-          <div class="sub-title">35 residencias</div>
+          <div class="sub-title">{{ totalVisibleResidences() }} residencias</div>
         </div>
-        <button type="button" mat-icon-button [matMenuTriggerFor]="ordersMenu">
-          <span class="mat-icon">more_vert</span>
-        </button>
-        <mat-menu #ordersMenu="matMenu">
-          <button type="button" mat-menu-item>View All</button>
-          <button type="button" mat-menu-item>Export</button>
-        </mat-menu>
       </div>
     </mat-card-header>
     <mat-card-content>
       <div class="orders-card__summary">
         <div class="orders-card__total">
-          <div class="orders-card__number">{{ dashboardData()?.resident_stats?.total || 0 }}</div>
-          <div class="orders-card__label">Total Residentes</div>
+          <div class="orders-card__number">{{ totalResidentsFromResidences() }}</div>
+          <div class="orders-card__label">Total residencias.</div>
         </div>
         <div class="orders-card__weekly">
           <apx-chart
@@ -179,19 +172,19 @@
       </div>
 
       <div class="orders-card__categories">
-        @for (residence of orderCategories(); track residence.id) {
+        @for (category of orderCategories(); track category.name) {
           <div class="category">
             <div class="category__info">
-              <div class="btn_color" [class]="residence.color">
-                <span class="mat-icon">{{ residence.icon }}</span>
+              <div class="btn_color btn_gray" [class]="category.color">
+                <span class="mat-icon">{{ category.icon }}</span>
               </div>
               <div class="category__details">
-                <div class="category__name">{{ residence.name }}</div>
-                <div class="category__subtitle">{{ residence.roomCount }} habitaciones, {{ residence.residentCount }} residentes</div>
+                <div class="category__name">{{ category.name }}</div>
+                <div class="category__subtitle">{{ category.floorCount }} pisos, {{ category.roomCount }} habitaciones</div>
               </div>
             </div>
             <div class="category__stats">
-              <div class="category__percentage">{{ residence.percentage }}%</div>
+              <div class="category__percentage">{{ category.residentCount }}</div>
             </div>
           </div>
         }
@@ -203,16 +196,31 @@
       <div class="content_header_between">
         <div>
           <div class="title">Medidas tomadas</div>
-          <div class="sub-title">En los últimos 6 días</div>
+          <div class="sub-title">
+            @if (timeFilter() === 'week') {
+              En los últimos 7 días
+            } @else if (timeFilter() === 'month') {
+              En los últimos 30 días
+            } @else {
+              En los últimos 12 meses
+            }
+          </div>
         </div>
+        <button type="button" mat-icon-button [matMenuTriggerFor]="ordersMenu">
+          <span class="mat-icon">more_vert</span>
+        </button>
+        <mat-menu #ordersMenu="matMenu">
+          <button type="button" mat-menu-item (click)="setTimeFilter('week')">Ultima semana</button>
+          <button type="button" mat-menu-item (click)="setTimeFilter('month')">Ultimo Mes</button>
+          <button type="button" mat-menu-item (click)="setTimeFilter('year')">Ultimo Año</button>
+        </mat-menu>
       </div>
     </mat-card-header>
     <mat-card-content>
       <div class="orders-card__profit">
         <div class="orders-card__profit-info">
-          <span class="orders-card__profit-label">Total Profit</span>
-          <span class="orders-card__profit-amount">$459.1k</span>
-          <span class="orders-card__profit-change">+65%</span>
+          <span class="orders-card__profit-label">Promedio de mediciones diarias</span>
+          <span class="orders-card__profit-amount">{{ dailyMeasurementsAverage() }}</span>
         </div>
       </div>
 
@@ -233,18 +241,27 @@
   <mat-card class="transactions-card dashboard__section">
     <mat-card-header>
       <div class="content_header_between">
-        <div class="title">Gestores</div>
-        <button type="button" mat-icon-button [matMenuTriggerFor]="transactionsMenu">
-          <span class="mat-icon">more_vert</span>
-        </button>
-        <mat-menu #transactionsMenu="matMenu">
-          <button type="button" mat-menu-item>View All</button>
-          <button type="button" mat-menu-item>Export</button>
-        </mat-menu>
+        <div class="title">Tareas</div>
+        <div class="filters">
+          <button type="button" mat-icon-button [matMenuTriggerFor]="filterMenu">
+            <span class="mat-icon">more_vert</span>
+          </button>
+          <mat-menu #filterMenu="matMenu">
+            <button type="button" mat-menu-item (click)="setTaskFilter('all')">Todas las tareas</button>
+            <button type="button" mat-menu-item (click)="setTaskFilter('active')">Tareas activas</button>
+            <button type="button" mat-menu-item (click)="setTaskFilter('completed')">Tareas completadas</button>
+            <div class="mat-divider"></div>
+            @for (residence of residenceFilterOptions(); track residence.id) {
+              <button type="button" mat-menu-item (click)="setResidenceFilter(residence.id === 'all' ? null : residence.id)">
+                {{ residence.name }}
+              </button>
+            }
+          </mat-menu>
+        </div>
       </div>
     </mat-card-header>
     <mat-card-content>
-      @for (transaction of transactions(); track transaction.id) {
+      @for (transaction of categories(); track transaction.id) {
         <div class="transaction">
           <div class="transaction__info">
             <div class="btn_color" [class]="transaction.color">
@@ -257,7 +274,6 @@
           </div>
           <div class="transaction__amount transaction__amount--{{ transaction.status }}">
             {{ transaction.amount }}
-            <span class="transaction__currency">USD</span>
           </div>
         </div>
       }

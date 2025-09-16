@@ -4,6 +4,7 @@ import { catchError, tap, of, Observable } from 'rxjs';
 import { AuthService as ApiAuthService } from '../../../../../src/openapi/generated/services/auth.service';
 import { ApiService } from '../../../../../src/openapi/generated/services/api.service';
 import { LoginRequest, TokenResponse } from '../../../../../src/openapi/generated/models';
+import { StorageService } from './storage.service';
 
 export interface Me {
   id: string;
@@ -12,7 +13,6 @@ export interface Me {
 
 export interface AuthState {
   user: Me | null;
-  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -25,11 +25,11 @@ export class AuthService {
   private readonly apiAuth = inject(ApiAuthService);
   private readonly apiService = inject(ApiService);
   private readonly router = inject(Router);
+  private readonly storageService = inject(StorageService);
 
   // Signals para el estado de autenticación
   private readonly _authState = signal<AuthState>({
     user: null,
-    token: this.getStoredToken(),
     isAuthenticated: false,
     isLoading: false,
     error: null
@@ -38,8 +38,21 @@ export class AuthService {
   // Computed signals
   readonly authState = this._authState.asReadonly();
   readonly user = computed(() => this._authState().user);
-  readonly token = computed(() => this._authState().token);
-  readonly isAuthenticated = computed(() => this._authState().isAuthenticated);
+  readonly token = computed(() => this.storageService.token());
+  readonly isAuthenticated = computed(() => {
+    // Si el StorageService dice que está autenticado, pero nuestro estado interno no lo está,
+    // devolvemos true del StorageService para persistencia entre recargas
+    const storageAuth = this.storageService.isAuthenticated();
+    const internalAuth = this._authState().isAuthenticated;
+
+    if (storageAuth && !internalAuth) {
+      // El StorageService tiene autenticación pero nuestro estado interno no,
+      // forzamos la recarga del perfil
+      this.loadUserProfile();
+    }
+
+    return storageAuth || internalAuth;
+  });
   readonly isLoading = computed(() => this._authState().isLoading);
   readonly error = computed(() => this._authState().error);
   readonly userRole = computed(() => this._authState().user?.role);
@@ -49,7 +62,7 @@ export class AuthService {
 
   constructor() {
     // Verificar token al inicializar
-    const token = this.getStoredToken();
+    const token = this.storageService.token();
     if (token) {
       this.validateToken();
     }
@@ -61,7 +74,7 @@ export class AuthService {
 
     return this.apiAuth.loginAuthLoginPost({ body: credentials }).pipe(
       tap((response) => {
-        this.setToken(response.access_token);
+        this.storageService.setToken(response.access_token);
         this.loadUserProfile();
       }),
       catchError(() => {
@@ -73,28 +86,48 @@ export class AuthService {
   }
 
   logout(): void {
+    this.storageService.clearAll();
     this.clearAuth();
     this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
-    return this._authState().token;
+    return this.storageService.token();
   }
 
   private loadUserProfile(): void {
+    console.log('Loading user profile...');
     this.apiService
       .meAuthMeGet()
       .pipe(
         tap((user: unknown) => {
+          console.log('User profile loaded:', user);
           this._authState.update((state) => ({
             ...state,
             user: user as Me,
             isAuthenticated: true,
             isLoading: false
           }));
+          this.storageService.setAuthenticated(true);
         }),
-        catchError(() => {
-          this.clearAuth();
+        catchError((error) => {
+          console.log('Error loading user profile:', error);
+
+          // Only clear auth if token is expired or invalid
+          if (this.isTokenExpired()) {
+            console.log('Token expired, clearing auth');
+            this.clearAuth();
+            this.storageService.setAuthenticated(false);
+          } else {
+            // If token is not expired but API call failed, keep the user logged in
+            console.log('API call failed but token is still valid, keeping session');
+            this._authState.update((state) => ({
+              ...state,
+              isAuthenticated: true,
+              isLoading: false
+            }));
+            this.storageService.setAuthenticated(true);
+          }
           return of();
         })
       )
@@ -102,27 +135,14 @@ export class AuthService {
   }
 
   private validateToken(): void {
+    console.log('Validating token...');
     this.setLoading(true);
     this.loadUserProfile();
   }
 
-  private setToken(token: string): void {
-    localStorage.setItem('auth_token', token);
-    this._authState.update((state) => ({
-      ...state,
-      token
-    }));
-  }
-
-  private getStoredToken(): string | null {
-    return localStorage.getItem('auth_token');
-  }
-
   private clearAuth(): void {
-    localStorage.removeItem('auth_token');
     this._authState.set({
       user: null,
-      token: null,
       isAuthenticated: false,
       isLoading: false,
       error: null
