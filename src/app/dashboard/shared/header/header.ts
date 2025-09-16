@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'movsa-header',
+  standalone: true,
   imports: [MatCardModule, MatIconModule, MatButtonModule, MatBadgeModule],
   templateUrl: './header.html',
   styleUrl: './header.scss'

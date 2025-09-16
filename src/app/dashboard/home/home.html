@@ -150,8 +150,8 @@
     <mat-card-header>
       <div class="content_header_between">
         <div>
-          <div class="title">Order Cart</div>
-          <div class="sub-title">42.82k Total Sales</div>
+          <div class="title">Residencias</div>
+          <div class="sub-title">35 residencias</div>
         </div>
         <button type="button" mat-icon-button [matMenuTriggerFor]="ordersMenu">
           <span class="mat-icon">more_vert</span>
@@ -165,8 +165,8 @@
     <mat-card-content>
       <div class="orders-card__summary">
         <div class="orders-card__total">
-          <div class="orders-card__number">8,258</div>
-          <div class="orders-card__label">Total Orders</div>
+          <div class="orders-card__number">{{ dashboardData()?.resident_stats?.total || 0 }}</div>
+          <div class="orders-card__label">Total Residentes</div>
         </div>
         <div class="orders-card__weekly">
           <apx-chart
@@ -179,19 +179,19 @@
       </div>
 
       <div class="orders-card__categories">
-        @for (category of orderCategories(); track category.name) {
+        @for (residence of orderCategories(); track residence.id) {
           <div class="category">
             <div class="category__info">
-              <div class="btn_color" [class]="category.color">
-                <span class="mat-icon">{{ category.icon }}</span>
+              <div class="btn_color" [class]="residence.color">
+                <span class="mat-icon">{{ residence.icon }}</span>
               </div>
               <div class="category__details">
-                <div class="category__name">{{ category.name }}</div>
-                <div class="category__subtitle">Mobile, Earbuds, TV</div>
+                <div class="category__name">{{ residence.name }}</div>
+                <div class="category__subtitle">{{ residence.roomCount }} habitaciones, {{ residence.residentCount }} residentes</div>
               </div>
             </div>
             <div class="category__stats">
-              <div class="category__percentage">{{ category.percentage }}%</div>
+              <div class="category__percentage">{{ residence.percentage }}%</div>
             </div>
           </div>
         }
@@ -202,8 +202,8 @@
     <mat-card-header>
       <div class="content_header_between">
         <div>
-          <div class="title">Residentes</div>
-          <div class="sub-title">últimos 30 días</div>
+          <div class="title">Medidas tomadas</div>
+          <div class="sub-title">En los últimos 6 días</div>
         </div>
       </div>
     </mat-card-header>
@@ -232,14 +232,16 @@
 
   <mat-card class="transactions-card dashboard__section">
     <mat-card-header>
-      <mat-card-title>Transactions</mat-card-title>
-      <button type="button" mat-icon-button [matMenuTriggerFor]="transactionsMenu">
-        <span class="mat-icon">more_vert</span>
-      </button>
-      <mat-menu #transactionsMenu="matMenu">
-        <button type="button" mat-menu-item>View All</button>
-        <button type="button" mat-menu-item>Export</button>
-      </mat-menu>
+      <div class="content_header_between">
+        <div class="title">Gestores</div>
+        <button type="button" mat-icon-button [matMenuTriggerFor]="transactionsMenu">
+          <span class="mat-icon">more_vert</span>
+        </button>
+        <mat-menu #transactionsMenu="matMenu">
+          <button type="button" mat-menu-item>View All</button>
+          <button type="button" mat-menu-item>Export</button>
+        </mat-menu>
+      </div>
     </mat-card-header>
     <mat-card-content>
       @for (transaction of transactions(); track transaction.id) {

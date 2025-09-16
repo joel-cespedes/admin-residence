@@ -5,16 +5,24 @@ import { Observable, switchMap, of, catchError, tap } from 'rxjs';
 import { ResidencesService } from '../../../../../src/openapi/generated/services/residences.service';
 import { AuthService } from './auth.service';
 
+export interface Residence {
+  id: string;
+  name: string;
+  address: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ResidenceState {
-  residences: any[];
+  residences: Residence[];
   selectedResidenceId: string | null;
-  selectedResidence: any | null;
+  selectedResidence: Residence | null;
   isLoading: boolean;
   error: string | null;
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ResidenceService {
   private readonly apiResidences = inject(ResidencesService);
@@ -26,7 +34,7 @@ export class ResidenceService {
     selectedResidenceId: this.getStoredResidenceId(),
     selectedResidence: null,
     isLoading: false,
-    error: null,
+    error: null
   });
 
   // Computed signals
@@ -38,10 +46,7 @@ export class ResidenceService {
   readonly error = computed(() => this._state().error);
   readonly hasMultipleResidences = computed(() => this.residences().length > 1);
   readonly needsResidenceSelection = computed(
-    () =>
-      !this.authService.isSuperAdmin() &&
-      this.hasMultipleResidences() &&
-      !this.selectedResidenceId(),
+    () => !this.authService.isSuperAdmin() && this.hasMultipleResidences() && !this.selectedResidenceId()
   );
 
   // LinkedSignal para la residencia seleccionada
@@ -51,7 +56,7 @@ export class ResidenceService {
 
     if (!residenceId || !residences.length) return null;
 
-    return residences.find((r) => r['id'] === residenceId) || null;
+    return (residences as Residence[]).find(r => r.id === residenceId) || null;
   });
 
   readonly selectedResidenceDetails = this._selectedResidenceDetails.asReadonly();
@@ -59,42 +64,42 @@ export class ResidenceService {
   constructor() {
     // Auto-cargar residencias cuando el usuario se autentica
     toObservable(this.authService.isAuthenticated)
-      .pipe(switchMap((isAuth) => (isAuth ? this.loadUserResidences() : of(null))))
+      .pipe(switchMap(isAuth => (isAuth ? this.loadUserResidences() : of(null))))
       .subscribe();
   }
 
-  loadUserResidences(): Observable<any[]> {
+  loadUserResidences(): Observable<Residence[]> {
     this.setLoading(true);
     this.clearError();
 
     return this.apiResidences.myResidencesResidencesMineGet().pipe(
-      tap((residences) => {
-        this._state.update((state) => ({
+      tap((residences: any) => {
+        this._state.update(state => ({
           ...state,
-          residences,
-          isLoading: false,
+          residences: residences as Residence[],
+          isLoading: false
         }));
 
         // Auto-seleccionar si solo hay una residencia
-        if (residences.length === 1 && !this.selectedResidenceId()) {
-          this.selectResidence(residences[0]['id']);
+        if ((residences as Residence[]).length === 1 && !this.selectedResidenceId()) {
+          this.selectResidence((residences as Residence[])[0].id);
         }
       }),
-      catchError((error) => {
+      catchError(() => {
         this.setError('Error cargando residencias');
         return of([]);
-      }),
+      })
     );
   }
 
   selectResidence(residenceId: string): void {
-    const residence = this.residences().find((r) => r.id === residenceId);
+    const residence = (this.residences() as Residence[]).find(r => r.id === residenceId);
 
     if (residence) {
-      this._state.update((state) => ({
+      this._state.update(state => ({
         ...state,
         selectedResidenceId: residenceId,
-        selectedResidence: residence,
+        selectedResidence: residence
       }));
 
       this.storeSelectedResidenceId(residenceId);
@@ -102,29 +107,29 @@ export class ResidenceService {
   }
 
   clearSelection(): void {
-    this._state.update((state) => ({
+    this._state.update(state => ({
       ...state,
       selectedResidenceId: null,
-      selectedResidence: null,
+      selectedResidence: null
     }));
 
     this.clearStoredResidenceId();
   }
 
-  getResidenceById(id: string): Observable<any> {
-    return this.apiResidences.getResidenceResidencesIdGet({ id });
+  getResidenceById(id: string): Observable<Residence> {
+    return this.apiResidences.getResidenceResidencesIdGet({ id }) as Observable<Residence>;
   }
 
   private setLoading(isLoading: boolean): void {
-    this._state.update((state) => ({ ...state, isLoading }));
+    this._state.update(state => ({ ...state, isLoading }));
   }
 
   private setError(error: string): void {
-    this._state.update((state) => ({ ...state, error, isLoading: false }));
+    this._state.update(state => ({ ...state, error, isLoading: false }));
   }
 
   private clearError(): void {
-    this._state.update((state) => ({ ...state, error: null }));
+    this._state.update(state => ({ ...state, error: null }));
   }
 
   private getStoredResidenceId(): string | null {

@@ -61,10 +61,10 @@ export class Home implements OnInit {
   revenueChartData = computed(() => this.transformYearlyData());
   chartRadial = computed(() => this.transformTaskCompletionRadial());
   profitChartData = computed(() => this.transformMeasurementsTrend());
-  orderCategories = computed(() => this.transformTaskCategories());
+  orderCategories = computed(() => this.transformResidenceData());
   transactions = computed(() => this.transformRecentActivity());
   lineChart = computed(() => this.transformActivityTrend());
-  circleChart = computed(() => this.transformDeviceDistribution());
+  circleChart = computed(() => this.transformResidenceDistribution());
 
   ngOnInit() {
     this.isDarkTheme.set(false);
@@ -83,7 +83,7 @@ export class Home implements OnInit {
       toObservable(this.residenceService.residences)
         .pipe(take(1))
         .subscribe({
-          next: (residencesList) => {
+          next: residencesList => {
             if (residencesList && residencesList.length > 0) {
               this.loadDashboardData();
             } else {
@@ -105,11 +105,11 @@ export class Home implements OnInit {
 
     // The residence interceptor will automatically add the X-Residence-Id header
     this.dashboardService.getDashboardDataDashboardGet$Response().subscribe({
-      next: (response) => {
+      next: response => {
         this.dashboardData.set(response.body);
         this.loading.set(false);
       },
-      error: (err) => {
+      error: err => {
         console.error('Error loading dashboard data:', err);
         this.error.set('Error loading dashboard data');
         this.loading.set(false);
@@ -257,7 +257,16 @@ export class Home implements OnInit {
   private transformMeasurementsTrend() {
     // Mock trend data based on recent measurements
     const last30Days = this.dashboardData()?.measurement_stats?.last_30_days || 0;
-    const trendData = [last30Days * 0.7, last30Days * 0.8, last30Days * 0.9, last30Days * 0.85, last30Days, last30Days * 1.1, last30Days * 1.05, last30Days];
+    const trendData = [
+      last30Days * 0.7,
+      last30Days * 0.8,
+      last30Days * 0.9,
+      last30Days * 0.85,
+      last30Days,
+      last30Days * 1.1,
+      last30Days * 1.05,
+      last30Days
+    ];
 
     return {
       series: [{ data: trendData }] as ApexAxisChartSeries,
@@ -289,15 +298,18 @@ export class Home implements OnInit {
           stops: [0, 95, 100],
           shadeIntensity: 0.6,
           colorStops: [
-            [{
-              offset: 0,
-              opacity: 0.4,
-              color: '#696cff'
-            }, {
-              offset: 100,
-              opacity: 0.2,
-              color: '#03c3ec'
-            }]
+            [
+              {
+                offset: 0,
+                opacity: 0.4,
+                color: '#696cff'
+              },
+              {
+                offset: 100,
+                opacity: 0.2,
+                color: '#03c3ec'
+              }
+            ]
           ]
         }
       },
@@ -319,16 +331,33 @@ export class Home implements OnInit {
     };
   }
 
-  private transformTaskCategories() {
-    const taskStats = this.dashboardData()?.task_stats?.by_category || {};
-    const total = Object.values(taskStats).reduce((sum, cat: any) => sum + cat.total, 0);
+  private transformResidenceData() {
+    const residences = this.residenceService.residences();
+    const residentStats = this.dashboardData()?.resident_stats;
 
-    return Object.entries(taskStats).map(([name, data]: [string, any]) => ({
-      name,
-      icon: this.getCategoryIcon(name),
-      percentage: total > 0 ? (data.completed / total) * 100 : 0,
-      color: this.getCategoryColor(name)
-    }));
+    if (!residences || residences.length === 0) {
+      return [];
+    }
+
+    // Limit to maximum 10 residences
+    const limitedResidences = residences.slice(0, 10);
+
+    return limitedResidences.map((residence, index) => {
+      // Generate mock data for rooms and residents per residence
+      // In a real implementation, this would come from the API
+      const roomCount = Math.floor(Math.random() * 50) + 20; // 20-70 rooms
+      const residentCount = Math.floor(Math.random() * 100) + 30; // 30-130 residents
+
+      return {
+        id: residence.id,
+        name: residence.name,
+        icon: 'apartment',
+        roomCount: roomCount,
+        residentCount: residentCount,
+        color: this.getResidenceColor(index),
+        percentage: Math.floor(Math.random() * 30) + 10 // 10-40% for demo
+      };
+    });
   }
 
   private transformRecentActivity() {
@@ -379,12 +408,64 @@ export class Home implements OnInit {
     };
   }
 
-  private transformDeviceDistribution() {
-    const deviceStats = this.dashboardData()?.device_stats?.by_type || {};
-    const total = Object.values(deviceStats).reduce((sum, count) => sum + count, 0);
+  private transformResidenceDistribution() {
+    const residences = this.residenceService.residences();
+    const residentStats = this.dashboardData()?.resident_stats;
+    const totalResidents = residentStats?.total || 0;
+
+    if (!residences || residences.length === 0) {
+      return {
+        series: [],
+        chart: {
+          sparkline: { enabled: true },
+          animations: { enabled: false },
+          width: 140,
+          height: 120,
+          type: 'donut',
+          fontFamily: 'Inter'
+        } satisfies ApexChart,
+        states: {
+          hover: { filter: { type: 'none' } },
+          active: { filter: { type: 'none' } }
+        },
+        stroke: { width: 6, colors: ['rgb(105, 108, 255)'] },
+        legend: { show: false },
+        tooltip: { enabled: false },
+        dataLabels: { enabled: false },
+        labels: [],
+        grid: { padding: { top: -7, bottom: 5 } } as ApexGrid,
+        plotOptions: {
+          pie: {
+            expandOnClick: false,
+            donut: {
+              size: '85%',
+              fontFamily: 'Inter',
+              labels: {
+                show: true,
+                name: { offsetY: 17, fontSize: '22px', color: 'rgb(3, 195, 236)', fontFamily: 'Inter' },
+                value: { offsetY: -17, fontSize: '18px', color: 'rgb(105, 108, 255)', fontFamily: 'Inter', fontWeight: 500 },
+                total: {
+                  show: true,
+                  label: 'Residentes',
+                  fontSize: '13px',
+                  lineHeight: '18px',
+                  formatter: () => `${totalResidents}`,
+                  color: 'rgb(3, 195, 236)',
+                  fontFamily: 'Inter'
+                }
+              }
+            }
+          }
+        }
+      };
+    }
+
+    // Generate series data for each residence (mock data for now)
+    const series = residences.map(() => Math.floor(Math.random() * 50) + 10);
+    const labels = residences.map(r => r.name);
 
     return {
-      series: Object.values(deviceStats),
+      series: series,
       chart: {
         sparkline: { enabled: true },
         animations: { enabled: false },
@@ -401,7 +482,7 @@ export class Home implements OnInit {
       legend: { show: false },
       tooltip: { enabled: false },
       dataLabels: { enabled: false },
-      labels: Object.keys(deviceStats),
+      labels: labels,
       grid: { padding: { top: -7, bottom: 5 } } as ApexGrid,
       plotOptions: {
         pie: {
@@ -415,10 +496,10 @@ export class Home implements OnInit {
               value: { offsetY: -17, fontSize: '18px', color: 'rgb(105, 108, 255)', fontFamily: 'Inter', fontWeight: 500 },
               total: {
                 show: true,
-                label: 'Devices',
+                label: 'Residentes',
                 fontSize: '13px',
                 lineHeight: '18px',
-                formatter: () => `${total}`,
+                formatter: () => `${totalResidents}`,
                 color: 'rgb(3, 195, 236)',
                 fontFamily: 'Inter'
               }
@@ -431,32 +512,41 @@ export class Home implements OnInit {
 
   private getCategoryIcon(name: string): string {
     const iconMap: Record<string, string> = {
-      'Medicación': 'medication',
-      'Higiene': 'sanitizer',
-      'Alimentación': 'restaurant',
-      'Ejercicio': 'fitness_center',
-      'Social': 'groups'
+      Medicación: 'medication',
+      Higiene: 'sanitizer',
+      Alimentación: 'restaurant',
+      Ejercicio: 'fitness_center',
+      Social: 'groups'
     };
     return iconMap[name] || 'category';
   }
 
   private getCategoryColor(name: string): string {
     const colorMap: Record<string, string> = {
-      'Medicación': 'btn_red',
-      'Higiene': 'btn_green',
-      'Alimentación': 'btn_lightblue',
-      'Ejercicio': 'btn_darkblue',
-      'Social': 'btn_gray'
+      Medicación: 'btn_red',
+      Higiene: 'btn_green',
+      Alimentación: 'btn_lightblue',
+      Ejercicio: 'btn_darkblue',
+      Social: 'btn_gray'
     };
     return colorMap[name] || 'btn_gray';
   }
 
+  private getResidenceColor(index: number): string {
+    const colors = ['btn_primary', 'btn_success', 'btn_info', 'btn_warning', 'btn_danger', 'btn_dark', 'btn_lightblue', 'btn_purple', 'btn_pink', 'btn_orange'];
+    return colors[index % colors.length];
+  }
+
   private getActivityDescription(activity: any): string {
     switch (activity.type) {
-      case 'resident': return 'Residencia';
-      case 'measurement': return 'Medición';
-      case 'task': return 'Tarea';
-      default: return 'Actividad';
+      case 'resident':
+        return 'Residencia';
+      case 'measurement':
+        return 'Medición';
+      case 'task':
+        return 'Tarea';
+      default:
+        return 'Actividad';
     }
   }
 
@@ -473,18 +563,18 @@ export class Home implements OnInit {
 
   private getActivityIcon(type: string): string {
     const iconMap: Record<string, string> = {
-      'resident': 'people',
-      'measurement': 'monitoring',
-      'task': 'task_alt'
+      resident: 'people',
+      measurement: 'monitoring',
+      task: 'task_alt'
     };
     return iconMap[type] || 'info';
   }
 
   private getActivityColor(type: string): string {
     const colorMap: Record<string, string> = {
-      'resident': 'btn_green',
-      'measurement': 'btn_lightblue',
-      'task': 'btn_darkblue'
+      resident: 'btn_green',
+      measurement: 'btn_lightblue',
+      task: 'btn_darkblue'
     };
     return colorMap[type] || 'btn_gray';
   }

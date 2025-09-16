@@ -9,7 +9,8 @@ import { Header } from '../shared/header/header';
 
 @Component({
   selector: 'app-residence',
-  imports: [MatFormFieldModule, Header, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule],
+  standalone: true,
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, Header],
   templateUrl: './residence.html',
   styleUrl: './residence.scss'
 })

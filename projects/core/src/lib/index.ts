@@ -4,6 +4,4 @@ export * from './guards/role.guard';
 export * from './interceptors/auth.interceptor';
 export * from './interceptors/residence.interceptor';
 export * from './services/auth.service';
-export * from './services/base-crud.service';
 export * from './services/residence.service';
-export * from './services/residents-data.service';

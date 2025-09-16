@@ -1,5 +1,3 @@
-@import '../../theme/variables';
-
 .login-container {
   position: relative;
   min-height: 100vh;
@@ -49,23 +47,10 @@
   max-width: 460px;
 }
 
-.login-card {
-  @include card-style;
-  padding: var(--sneat-spacing-xxl) var(--sneat-spacing-xl);
-  box-shadow: var(--sneat-shadow-xl);
-  border-radius: var(--sneat-border-radius-lg);
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.95);
-
-  @media (max-width: 768px) {
-    padding: var(--sneat-spacing-xl) var(--sneat-spacing-lg);
-    margin: var(--sneat-spacing-md);
-  }
-}
-
 .login-header {
   text-align: center;
   margin-bottom: var(--sneat-spacing-xl);
+  margin-top: var(--sneat-spacing-xl);
 
   .logo-container {
     margin-bottom: var(--sneat-spacing-lg);

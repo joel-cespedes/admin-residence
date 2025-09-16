@@ -64,7 +64,7 @@ export class AuthService {
         this.setToken(response.access_token);
         this.loadUserProfile();
       }),
-      catchError((error) => {
+      catchError(() => {
         this.setError('Credenciales inválidas');
         this.setLoading(false);
         return of();
@@ -85,7 +85,7 @@ export class AuthService {
     this.apiService
       .meAuthMeGet()
       .pipe(
-        tap((user: any) => {
+        tap((user: unknown) => {
           this._authState.update((state) => ({
             ...state,
             user: user as Me,
@@ -93,7 +93,7 @@ export class AuthService {
             isLoading: false
           }));
         }),
-        catchError((error) => {
+        catchError(() => {
           this.clearAuth();
           return of();
         })
