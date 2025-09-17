@@ -36,56 +36,43 @@ export class Dashboard implements OnInit {
   }
 
   private loadMenuCounts() {
-    console.log('Loading menu counts...');
-
-    // Cargar datos del dashboard para los contadores
-    this.dashboardService.getDashboardDataDashboardGet$Response({
-      time_filter: 'year'
-    }).subscribe({
+    // Usar el nuevo endpoint de navigation-counts
+    this.dashboardService.getNavigationCountsDashboardNavigationCountsGet$Response().subscribe({
       next: (response: any) => {
-        console.log('Dashboard data received:', response);
         const data = response.body;
 
-        // Actualizar contadores basados en los datos del dashboard
-        this.residentsCount.set(data.resident_stats?.total_residents || 0);
-        this.tasksCount.set(data.task_stats?.total_tasks || 0);
-        this.devicesCount.set(data.device_stats?.total_devices || 0);
+        // Actualizar todos los contadores con los datos reales del nuevo endpoint
+        this.residencesCount.set(data?.residences || 0);
+        this.residentsCount.set(data?.residents || 0);
+        this.roomsCount.set(data?.rooms || 0);
+        this.bedsCount.set(data?.beds || 0);
+        this.managersCount.set(data?.managers || 0);
+        this.professionalsCount.set(data?.professionals || 0);
+        this.categoriesCount.set(data?.categories || 0);
+        this.tasksCount.set(data?.tasks || 0);
+        this.devicesCount.set(data?.devices || 0);
 
-        console.log('Updated counters - Residents:', this.residentsCount(), 'Tasks:', this.tasksCount(), 'Devices:', this.devicesCount());
+        // Mantener los contadores existentes para comportamiento y movimientos
+        // (Estos podrían necesitar endpoints específicos en el futuro)
+        this.behaviorCount.set(0);
+        this.movementsCount.set(0);
+
       },
       error: (error) => {
-        console.error('Error loading dashboard data:', error);
         // Set default values on error
+        this.residencesCount.set(0);
         this.residentsCount.set(0);
+        this.roomsCount.set(0);
+        this.bedsCount.set(0);
+        this.managersCount.set(0);
+        this.professionalsCount.set(0);
+        this.categoriesCount.set(0);
         this.tasksCount.set(0);
         this.devicesCount.set(0);
+        this.behaviorCount.set(0);
+        this.movementsCount.set(0);
       }
     });
-
-    // Suscribirse a cambios en las residencias
-    this.residenceService.residences().subscribe(residences => {
-      console.log('Residences updated:', residences);
-      this.residencesCount.set(residences?.length || 0);
-    });
-
-    // Load other counters with more realistic default values
-    this.roomsCount.set(0);
-    this.bedsCount.set(0);
-    this.managersCount.set(0);
-    this.professionalsCount.set(0);
-    this.categoriesCount.set(0);
-    this.behaviorCount.set(0);
-    this.movementsCount.set(0);
-
-    // TODO: Implementar cargas reales para estos contadores
-    // Por ahora, valores más conservadores
-    // this.roomsCount.set(45);
-    // this.bedsCount.set(89);
-    // this.managersCount.set(12);
-    // this.professionalsCount.set(28);
-    // this.categoriesCount.set(8);
-    // this.behaviorCount.set(156);
-    // this.movementsCount.set(89);
   }
 
   toggleSidebar() {

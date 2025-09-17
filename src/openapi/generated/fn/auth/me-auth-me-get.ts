@@ -8,11 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { Me } from '../../models/me';
 
 export interface MeAuthMeGet$Params {
 }
 
-export function meAuthMeGet(http: HttpClient, rootUrl: string, params?: MeAuthMeGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function meAuthMeGet(http: HttpClient, rootUrl: string, params?: MeAuthMeGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Me>> {
   const rb = new RequestBuilder(rootUrl, meAuthMeGet.PATH, 'get');
   if (params) {
   }
@@ -22,7 +23,7 @@ export function meAuthMeGet(http: HttpClient, rootUrl: string, params?: MeAuthMe
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<Me>;
     })
   );
 }

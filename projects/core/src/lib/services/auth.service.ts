@@ -96,7 +96,7 @@ export class AuthService {
   }
 
   private loadUserProfile(): void {
-        this.apiService
+        this.apiAuth
       .meAuthMeGet()
       .pipe(
         tap((user: unknown) => {

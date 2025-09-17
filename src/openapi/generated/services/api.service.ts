@@ -11,8 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { meAuthMeGet } from '../fn/operations/me-auth-me-get';
-import { MeAuthMeGet$Params } from '../fn/operations/me-auth-me-get';
 import { rootGet } from '../fn/operations/root-get';
 import { RootGet$Params } from '../fn/operations/root-get';
 
@@ -20,39 +18,6 @@ import { RootGet$Params } from '../fn/operations/root-get';
 export class ApiService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
-  }
-
-  /** Path part for operation `meAuthMeGet()` */
-  static readonly MeAuthMeGetPath = '/auth/me';
-
-  /**
-   * Me.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `meAuthMeGet()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  meAuthMeGet$Response(params?: MeAuthMeGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return meAuthMeGet(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Me.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `meAuthMeGet$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  meAuthMeGet(params?: MeAuthMeGet$Params, context?: HttpContext): Observable<any> {
-    return this.meAuthMeGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
-    );
   }
 
   /** Path part for operation `rootGet()` */

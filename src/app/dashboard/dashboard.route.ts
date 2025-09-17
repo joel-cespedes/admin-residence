@@ -34,6 +34,10 @@ export const dashboardRoutes: Routes = [
     loadComponent: () => import('./residents/residents').then(m => m.Residents)
   },
   {
+    path: 'beds',
+    loadComponent: () => import('./room/room').then(m => m.Room)  // Temporalmente usar el componente de habitaciones
+  },
+  {
     path: 'categories',
     loadComponent: () => import('./category/category').then(m => m.Category)
   },

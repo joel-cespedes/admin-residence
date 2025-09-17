@@ -21,6 +21,8 @@ import { getDevicesStatsDashboardDevicesStatsGet } from '../fn/dashboard/get-dev
 import { GetDevicesStatsDashboardDevicesStatsGet$Params } from '../fn/dashboard/get-devices-stats-dashboard-devices-stats-get';
 import { getMeasurementsStatsDashboardMeasurementsStatsGet } from '../fn/dashboard/get-measurements-stats-dashboard-measurements-stats-get';
 import { GetMeasurementsStatsDashboardMeasurementsStatsGet$Params } from '../fn/dashboard/get-measurements-stats-dashboard-measurements-stats-get';
+import { getNavigationCountsDashboardNavigationCountsGet } from '../fn/dashboard/get-navigation-counts-dashboard-navigation-counts-get';
+import { GetNavigationCountsDashboardNavigationCountsGet$Params } from '../fn/dashboard/get-navigation-counts-dashboard-navigation-counts-get';
 import { getNewResidentsStatsDashboardNewResidentsStatsGet } from '../fn/dashboard/get-new-residents-stats-dashboard-new-residents-stats-get';
 import { GetNewResidentsStatsDashboardNewResidentsStatsGet$Params } from '../fn/dashboard/get-new-residents-stats-dashboard-new-residents-stats-get';
 import { getResidentsStatsDashboardResidentsStatsGet } from '../fn/dashboard/get-residents-stats-dashboard-residents-stats-get';
@@ -30,6 +32,7 @@ import { GetTaskCategoriesWithCountsDashboardTaskCategoriesGet$Params } from '..
 import { getTasksStatsDashboardTasksStatsGet } from '../fn/dashboard/get-tasks-stats-dashboard-tasks-stats-get';
 import { GetTasksStatsDashboardTasksStatsGet$Params } from '../fn/dashboard/get-tasks-stats-dashboard-tasks-stats-get';
 import { MeasurementStats } from '../models/measurement-stats';
+import { NavigationCounts } from '../models/navigation-counts';
 import { NewResidentStats } from '../models/new-resident-stats';
 import { ResidentStats } from '../models/resident-stats';
 import { TaskCategoryWithCount } from '../models/task-category-with-count';
@@ -71,6 +74,39 @@ export class DashboardService extends BaseService {
   getDashboardDataDashboardGet(params?: GetDashboardDataDashboardGet$Params, context?: HttpContext): Observable<DashboardData> {
     return this.getDashboardDataDashboardGet$Response(params, context).pipe(
       map((r: StrictHttpResponse<DashboardData>): DashboardData => r.body)
+    );
+  }
+
+  /** Path part for operation `getNavigationCountsDashboardNavigationCountsGet()` */
+  static readonly GetNavigationCountsDashboardNavigationCountsGetPath = '/dashboard/navigation-counts';
+
+  /**
+   * Get Navigation Counts.
+   *
+   * Get counts for navigation menu - returns all data the user can see based on their role
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getNavigationCountsDashboardNavigationCountsGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNavigationCountsDashboardNavigationCountsGet$Response(params?: GetNavigationCountsDashboardNavigationCountsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<NavigationCounts>> {
+    return getNavigationCountsDashboardNavigationCountsGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Navigation Counts.
+   *
+   * Get counts for navigation menu - returns all data the user can see based on their role
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getNavigationCountsDashboardNavigationCountsGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNavigationCountsDashboardNavigationCountsGet(params?: GetNavigationCountsDashboardNavigationCountsGet$Params, context?: HttpContext): Observable<NavigationCounts> {
+    return this.getNavigationCountsDashboardNavigationCountsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<NavigationCounts>): NavigationCounts => r.body)
     );
   }
 

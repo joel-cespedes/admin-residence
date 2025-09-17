@@ -12,14 +12,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
-import { ResidenceService, AuthService } from '@core';
+import { AuthService, ResidenceService } from '@core';
 import type {
   ApexAxisChartSeries,
   ApexChart,
   ApexDataLabels,
   ApexGrid,
   ApexLegend,
-  ApexOptions,
   ApexPlotOptions,
   ApexStroke,
   ApexXAxis
@@ -27,14 +26,9 @@ import type {
 import { DashboardData } from '../../../openapi/generated/models/dashboard-data';
 import { NewResidentStats } from '../../../openapi/generated/models/new-resident-stats';
 import { TaskCategoryWithCount } from '../../../openapi/generated/models/task-category-with-count';
-import { DashboardService } from '../../../openapi/generated/services/dashboard.service';
 import { ApiService } from '../../../openapi/generated/services/api.service';
-
-interface Activity {
-  type: string;
-  status?: string;
-  measurement_type?: string;
-}
+import { DashboardService } from '../../../openapi/generated/services/dashboard.service';
+import { AuthService as ApiAuthService } from '../../../openapi/generated/services/auth.service';
 
 @Component({
   selector: 'movsa-home',
@@ -60,6 +54,7 @@ export class Home implements OnInit {
   private residenceService = inject(ResidenceService);
   private apiService = inject(ApiService);
   private authService = inject(AuthService);
+  private apiAuthService = inject(ApiAuthService);
   userName = signal<string>('');
 
   isDarkTheme = signal(false);
@@ -146,40 +141,105 @@ export class Home implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.dashboardService
-      .getDashboardDataDashboardGet$Response({
-        time_filter: this.timeFilter()
-      })
-      .subscribe({
-        next: response => {
-          console.log(response.body.metrics);
-          this.dashboardData.set(response.body);
+    // Usar el nuevo endpoint de navigation-counts para obtener todos los datos sin filtro
+    this.dashboardService.getNavigationCountsDashboardNavigationCountsGet$Response().subscribe({
+      next: response => {
 
-          // Inicializar los valores individuales
-          response.body.metrics.forEach((metric: any) => {
-            switch (metric.title) {
-              case 'Residentes':
-                this.residentesValue.set(metric.value);
-                break;
-              case 'Dispositivos':
-                this.dispositivosValue.set(metric.value);
-                break;
-              case 'Mediciones':
-                this.medicionesValue.set(metric.value);
-                break;
-              case 'Tareas':
-                this.tareasValue.set(metric.value);
-                break;
+        // Transformar los datos de navigation counts al formato esperado por el dashboard
+        const navigationData = response.body;
+
+        // Crear un objeto de dashboard compatible con el formato existente
+        const mockDashboardData = {
+          metrics: [
+            {
+              title: 'Residentes',
+              value: navigationData.residents.toString(),
+              change: '+0%',
+              changeType: 'positive' as 'positive' | 'negative',
+              icon: 'people',
+              color: 'primary',
+              colorIcon: 'btn_lightblue'
+            },
+            {
+              title: 'Dispositivos',
+              value: navigationData.devices.toString(),
+              change: '+0%',
+              changeType: 'positive' as 'positive' | 'negative',
+              icon: 'devices',
+              color: 'success',
+              colorIcon: 'btn_green'
+            },
+            {
+              title: 'Mediciones',
+              value: navigationData.measurements.toString(),
+              change: '+0%',
+              changeType: 'positive' as 'positive' | 'negative',
+              icon: 'monitoring',
+              color: 'warning',
+              colorIcon: 'btn_orange'
+            },
+            {
+              title: 'Tareas',
+              value: navigationData.tasks.toString(),
+              change: '+0%',
+              changeType: 'positive' as 'positive' | 'negative',
+              icon: 'task_alt',
+              color: 'info',
+              colorIcon: 'btn_purple'
             }
-          });
+          ],
+          resident_stats: {
+            total: navigationData.residents,
+            active: navigationData.residents,
+            discharged: 0,
+            deceased: 0,
+            with_bed: Math.floor(navigationData.residents * 0.8),
+            without_bed: Math.floor(navigationData.residents * 0.2),
+            new_residents: 0,
+            change_percentage: 0
+          },
+          measurement_stats: {
+            total_measurements: navigationData.measurements,
+            by_type: { bp: 0, spo2: 0, weight: 0, temperature: 0 },
+            by_source: { device: 0, voice: 0, manual: 0 },
+            last_30_days: navigationData.measurements,
+            trend: 'stable' as 'increasing' | 'decreasing' | 'stable',
+            change_percentage: 0
+          },
+          task_stats: {
+            total_applications: navigationData.tasks,
+            completion_rate: 0,
+            by_category: {},
+            last_30_days: navigationData.tasks,
+            change_percentage: 0
+          },
+          device_stats: {
+            total_devices: navigationData.devices,
+            by_type: { blood_pressure: 0, pulse_oximeter: 0, scale: 0, thermometer: 0 },
+            low_battery: 0,
+            average_battery: 0,
+            new_devices: 0,
+            change_percentage: 0
+          },
+          yearly_comparison: [],
+          recent_activity: []
+        };
 
-          this.loading.set(false);
-        },
-        error: () => {
-          this.error.set('Error loading dashboard data');
-          this.loading.set(false);
-        }
-      });
+        this.dashboardData.set(mockDashboardData);
+
+        // Inicializar los valores individuales con los datos reales
+        this.residentesValue.set(navigationData.residents.toString());
+        this.dispositivosValue.set(navigationData.devices.toString());
+        this.medicionesValue.set(navigationData.measurements.toString());
+        this.tareasValue.set(navigationData.tasks.toString());
+
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Error loading dashboard data');
+        this.loading.set(false);
+      }
+    });
   }
 
   private loadTaskCategories() {
@@ -487,8 +547,18 @@ export class Home implements OnInit {
     // Simular datos más realistas de tareas completadas
     // En una implementación real, esto vendría del API
     const baseData = {
-      1: 245, 2: 312, 3: 298, 4: 355, 5: 412, 6: 389,
-      7: 445, 8: 478, 9: 423, 10: 467, 11: 398, 12: 512
+      1: 245,
+      2: 312,
+      3: 298,
+      4: 355,
+      5: 412,
+      6: 389,
+      7: 445,
+      8: 478,
+      9: 423,
+      10: 467,
+      11: 398,
+      12: 512
     };
 
     return baseData[month as keyof typeof baseData] || 350;
@@ -853,8 +923,18 @@ export class Home implements OnInit {
     const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
 
     const monthNames = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'
     ];
 
     if (this.monthFilter() === 'current') {
@@ -866,43 +946,32 @@ export class Home implements OnInit {
 
   // Método para filtrar métricas individuales sin recargar todo el dashboard
   setMetricFilter(metricTitle: string, filter: 'week' | 'month' | 'year') {
-    console.log(`🔄 Filtrando ${metricTitle} con filtro: ${filter}`);
+    // Nota: El nuevo endpoint de navigation-counts no usa filtros de tiempo
+    // Mostramos todos los datos disponibles sin filtrar
+    this.dashboardService.getNavigationCountsDashboardNavigationCountsGet$Response().subscribe({
+      next: (response: any) => {
+        const navigationData = response.body;
 
-    // Usar el dashboard principal con el filtro específico
-    this.dashboardService
-      .getDashboardDataDashboardGet$Response({
-        time_filter: filter
-      })
-      .subscribe({
-        next: (response: any) => {
-          console.log(`📊 Datos recibidos para ${metricTitle} con filtro ${filter}:`, response.body.metrics);
-
-          // Actualizar solo la señal individual correspondiente
-          const metric = response.body.metrics.find((m: any) => m.title === metricTitle);
-          if (metric) {
-            console.log(`✅ Actualizando ${metricTitle}: ${metric.value}`);
-            switch (metricTitle) {
-              case 'Residentes':
-                this.residentesValue.set(metric.value);
-                break;
-              case 'Dispositivos':
-                this.dispositivosValue.set(metric.value);
-                break;
-              case 'Mediciones':
-                this.medicionesValue.set(metric.value);
-                break;
-              case 'Tareas':
-                this.tareasValue.set(metric.value);
-                break;
-            }
-          } else {
-            console.error(`❌ No se encontró la métrica ${metricTitle} en la respuesta`);
-          }
-        },
-        error: error => {
-          console.error(`❌ Error updating ${metricTitle} data:`, error);
+        // Actualizar solo la señal individual correspondiente con datos completos
+        switch (metricTitle) {
+          case 'Residentes':
+            this.residentesValue.set(navigationData.residents.toString());
+            break;
+          case 'Dispositivos':
+            this.dispositivosValue.set(navigationData.devices.toString());
+            break;
+          case 'Mediciones':
+            this.medicionesValue.set(navigationData.measurements.toString());
+            break;
+          case 'Tareas':
+            this.tareasValue.set(navigationData.tasks.toString());
+            break;
+          default:
         }
-      });
+      },
+      error: error => {
+      }
+    });
   }
 
   private waitForResidences(): void {
@@ -923,7 +992,7 @@ export class Home implements OnInit {
   }
 
   private loadUserInfo() {
-    this.apiService.meAuthMeGet().subscribe({
+    this.apiAuthService.meAuthMeGet().subscribe({
       next: (response: any) => {
         this.userName.set(response.alias || 'Usuario');
       },
