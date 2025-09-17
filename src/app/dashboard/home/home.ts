@@ -1,11 +1,11 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -25,8 +25,8 @@ import type {
   ApexXAxis
 } from 'ng-apexcharts';
 import { DashboardData } from '../../../openapi/generated/models/dashboard-data';
-import { TaskCategoryWithCount } from '../../../openapi/generated/models/task-category-with-count';
 import { NewResidentStats } from '../../../openapi/generated/models/new-resident-stats';
+import { TaskCategoryWithCount } from '../../../openapi/generated/models/task-category-with-count';
 import { DashboardService } from '../../../openapi/generated/services/dashboard.service';
 
 interface Activity {
@@ -62,16 +62,20 @@ export class Home implements OnInit {
   sidebarCollapsed = signal(false);
   loading = signal(true);
   error = signal<string | null>(null);
-  timeFilter = signal<'week' | 'month' | 'year'>('month');
-  // Removed problematic residence filter - now handled by interceptor and residence service
+  // Filtro global para compatibilidad
+  timeFilter = signal<'week' | 'month' | 'year'>('year');
   taskFilter = signal<'all' | 'active' | 'completed'>('all');
 
-  // Dashboard data signals
   dashboardData = signal<DashboardData | null>(null);
   taskCategories = signal<TaskCategoryWithCount[]>([]);
   residentStats = signal<NewResidentStats | null>(null);
 
-  // Loading and error states
+  // Datos individuales para cada métrica - independientes del dashboardData
+  residentesValue = signal('0');
+  dispositivosValue = signal('0');
+  medicionesValue = signal('0');
+  tareasValue = signal('0');
+
   isLoadingTaskCategories = signal(false);
   taskCategoriesError = signal<string | null>(null);
   isLoadingRecentActivity = signal(false);
@@ -80,8 +84,33 @@ export class Home implements OnInit {
   residentStatsError = signal<string | null>(null);
   recentActivities = signal<any[]>([]);
 
-  // Computed signals for charts
-  metrics = computed(() => this.dashboardData()?.metrics || []);
+  metrics = computed(() => {
+    const originalMetrics = this.dashboardData()?.metrics || [];
+
+    return originalMetrics.map((metric: any) => {
+      // Reemplazar el valor con el valor individual correspondiente
+      let value = metric.value;
+      switch(metric.title) {
+        case 'Residentes':
+          value = this.residentesValue();
+          break;
+        case 'Dispositivos':
+          value = this.dispositivosValue();
+          break;
+        case 'Mediciones':
+          value = this.medicionesValue();
+          break;
+        case 'Tareas':
+          value = this.tareasValue();
+          break;
+      }
+
+      return {
+        ...metric,
+        value: value
+      };
+    });
+  });
   revenueChartData = computed(() => this.transformYearlyData());
   chartRadial = computed(() => this.transformTaskCompletionRadial());
   profitChartData = computed(() => this.transformMeasurementsTrend());
@@ -90,16 +119,14 @@ export class Home implements OnInit {
   lineChart = computed(() => this.transformResidentStatsLine());
   circleChart = computed(() => this.transformResidenceDistribution());
 
-  // Computed signal for daily measurements average
   dailyMeasurementsAverage = computed(() => {
     const measurementStats = this.dashboardData()?.measurement_stats;
     if (!measurementStats) return 0;
 
     const last30Days = measurementStats.last_30_days || 0;
-    return Math.round(last30Days / 30); // Daily average
+    return Math.round(last30Days / 30);
   });
 
-  // Computed signals for resident statistics
   currentYear = computed(() => {
     const stats = this.residentStats();
     return stats?.current_year || new Date().getFullYear();
@@ -115,41 +142,31 @@ export class Home implements OnInit {
     return stats?.total_residents || 0;
   });
 
-  // Computed signals for totals
-  totalResidentsFromResidences = computed(() => {
-    const residences = this.residenceService.residences();
-    if (!residences || residences.length === 0) return 0;
-
-    // Calculate total residents from all assigned residences
-    // For now, use mock data - in real implementation this would come from API
-    return residences.reduce(total => {
-      const residentCount = Math.floor(Math.random() * 100) + 30; // 30-130 residents per residence
-      return total + residentCount;
-    }, 0);
-  });
-
   totalVisibleResidences = computed(() => {
     const residences = this.residenceService.residences();
     return residences?.length || 0;
   });
 
-  // Removed problematic residence filter options - now handled by interceptor and residence service
+  totalResidentsFromResidences = computed(() => {
+    const residences = this.residenceService.residences();
+    if (!residences || residences.length === 0) return 0;
 
-  // Removed problematic residence filter show logic - now handled by interceptor and residence service
+    return residences.reduce(total => {
+      const residentCount = Math.floor(Math.random() * 100) + 30;
+      return total + residentCount;
+    }, 0);
+  });
 
-  // Centralized residence data with consistent mock data
   residenceDataWithStats = computed(() => {
     const residences = this.residenceService.residences();
     if (!residences || residences.length === 0) return [];
 
-    // Limit to maximum 10 residences
     const limitedResidences = residences.slice(0, 10);
 
     return limitedResidences.map((residence, index) => {
-      // Generate consistent mock data for each residence
-      const floorCount = Math.floor(Math.random() * 15) + 3; // 3-18 floors
-      const roomCount = Math.floor(Math.random() * 50) + 20; // 20-70 rooms
-      const residentCount = Math.floor(Math.random() * 100) + 30; // 30-130 residents
+      const floorCount = Math.floor(Math.random() * 15) + 3;
+      const roomCount = Math.floor(Math.random() * 50) + 20;
+      const residentCount = Math.floor(Math.random() * 100) + 30;
 
       return {
         id: residence.id,
@@ -159,7 +176,7 @@ export class Home implements OnInit {
         roomCount: roomCount,
         residentCount: residentCount,
         color: this.getResidenceColor(index),
-        percentage: Math.floor(Math.random() * 30) + 10 // 10-40% for demo
+        percentage: Math.floor(Math.random() * 30) + 10
       };
     });
   });
@@ -172,7 +189,6 @@ export class Home implements OnInit {
   }
 
   private initializeDashboard() {
-    // Ensure residences are loaded before getting dashboard data
     const residences = this.residenceService.residences();
 
     if (residences && residences.length > 0) {
@@ -180,7 +196,6 @@ export class Home implements OnInit {
       this.loadTaskCategories();
       this.loadResidentStats();
     } else {
-      // Wait for residences to load using effect instead of toObservable
       this.waitForResidences();
     }
   }
@@ -189,18 +204,36 @@ export class Home implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    // The residence interceptor will automatically add the X-Residence-Id header
     this.dashboardService
       .getDashboardDataDashboardGet$Response({
         time_filter: this.timeFilter()
       })
       .subscribe({
         next: response => {
+          console.log(response.body.metrics);
           this.dashboardData.set(response.body);
+
+          // Inicializar los valores individuales
+          response.body.metrics.forEach((metric: any) => {
+            switch(metric.title) {
+              case 'Residentes':
+                this.residentesValue.set(metric.value);
+                break;
+              case 'Dispositivos':
+                this.dispositivosValue.set(metric.value);
+                break;
+              case 'Mediciones':
+                this.medicionesValue.set(metric.value);
+                break;
+              case 'Tareas':
+                this.tareasValue.set(metric.value);
+                break;
+            }
+          });
+
           this.loading.set(false);
         },
-        error: err => {
-          console.error('Error loading dashboard data:', err);
+        error: () => {
           this.error.set('Error loading dashboard data');
           this.loading.set(false);
         }
@@ -211,14 +244,12 @@ export class Home implements OnInit {
     this.isLoadingTaskCategories.set(true);
     this.taskCategoriesError.set(null);
 
-    // The residence interceptor will automatically add the X-Residence-Id header
     this.dashboardService.getTaskCategoriesWithCountsDashboardTaskCategoriesGet().subscribe({
       next: (response: any) => {
         this.taskCategories.set(response);
         this.isLoadingTaskCategories.set(false);
       },
-      error: (err: any) => {
-        console.error('Error loading task categories:', err);
+      error: () => {
         this.taskCategoriesError.set('Error loading task categories');
         this.taskCategories.set([]);
         this.isLoadingTaskCategories.set(false);
@@ -235,8 +266,7 @@ export class Home implements OnInit {
         this.residentStats.set(response.body);
         this.isLoadingResidentStats.set(false);
       },
-      error: (err: any) => {
-        console.error('Error loading resident statistics:', err);
+      error: () => {
         this.residentStatsError.set('Error loading resident statistics');
         this.isLoadingResidentStats.set(false);
       }
@@ -381,7 +411,6 @@ export class Home implements OnInit {
   }
 
   private transformMeasurementsTrend() {
-    // Mock trend data based on recent measurements
     const last30Days = this.dashboardData()?.measurement_stats?.last_30_days || 0;
     const trendData = [
       last30Days * 0.7,
@@ -460,7 +489,6 @@ export class Home implements OnInit {
   private transformTaskCategories() {
     const categories = this.taskCategories();
 
-    // Transform backend categories to frontend format
     const transformedCategories = categories.map(category => ({
       id: category.id,
       type: category.name,
@@ -474,7 +502,6 @@ export class Home implements OnInit {
       completedTasks: category.completed_tasks
     }));
 
-    // Apply task filter
     const taskFilter = this.taskFilter();
     let filteredCategories = transformedCategories;
 
@@ -484,16 +511,12 @@ export class Home implements OnInit {
       filteredCategories = transformedCategories.filter(category => category.completedTasks > 0);
     }
 
-    // Removed problematic residence filter - now handled by interceptor and residence service
-    // All data is automatically filtered by the selected residence in the backend
-
     return filteredCategories;
   }
 
   private transformResidentStatsLine() {
     const stats = this.residentStats();
     if (!stats) {
-      // Fallback to mock data if no stats available
       return {
         series: [{ data: [30, 58, 35, 53, 50, 68] }],
         tooltip: { enabled: false },
@@ -527,7 +550,6 @@ export class Home implements OnInit {
       };
     }
 
-    // Transform monthly data to line chart format
     const monthlyData = stats.monthly_data || [];
     const chartData = monthlyData.map(month => month.value);
 
@@ -616,7 +638,6 @@ export class Home implements OnInit {
       };
     }
 
-    // Use resident count from the centralized data for consistency
     const series = residenceData.map(residence => residence.residentCount);
     const labels = residenceData.map(r => r.name);
 
@@ -794,15 +815,50 @@ export class Home implements OnInit {
     this.loadDashboardData();
   }
 
-  // Removed problematic setResidenceFilter - now handled by residence service and interceptor
-  // Residence selection is managed globally through the residence service
-
   setTaskFilter(filter: 'all' | 'active' | 'completed') {
     this.taskFilter.set(filter);
   }
 
+  // Método para filtrar métricas individuales sin recargar todo el dashboard
+  setMetricFilter(metricTitle: string, filter: 'week' | 'month' | 'year') {
+    console.log(`🔄 Filtrando ${metricTitle} con filtro: ${filter}`);
+
+    // Usar el dashboard principal con el filtro específico
+    this.dashboardService.getDashboardDataDashboardGet$Response({
+      time_filter: filter
+    }).subscribe({
+      next: (response: any) => {
+        console.log(`📊 Datos recibidos para ${metricTitle} con filtro ${filter}:`, response.body.metrics);
+
+        // Actualizar solo la señal individual correspondiente
+        const metric = response.body.metrics.find((m: any) => m.title === metricTitle);
+        if (metric) {
+          console.log(`✅ Actualizando ${metricTitle}: ${metric.value}`);
+          switch(metricTitle) {
+            case 'Residentes':
+              this.residentesValue.set(metric.value);
+              break;
+            case 'Dispositivos':
+              this.dispositivosValue.set(metric.value);
+              break;
+            case 'Mediciones':
+              this.medicionesValue.set(metric.value);
+              break;
+            case 'Tareas':
+              this.tareasValue.set(metric.value);
+              break;
+          }
+        } else {
+          console.error(`❌ No se encontró la métrica ${metricTitle} en la respuesta`);
+        }
+      },
+      error: (error) => {
+        console.error(`❌ Error updating ${metricTitle} data:`, error);
+      }
+    });
+  }
+
   private waitForResidences(): void {
-    // Use a simple timeout to check for residences periodically
     const checkResidences = () => {
       const residences = this.residenceService.residences();
       if (residences && residences.length > 0) {
@@ -810,7 +866,6 @@ export class Home implements OnInit {
         this.loadTaskCategories();
         this.loadResidentStats();
       } else if (this.loading()) {
-        // Check again after a delay
         setTimeout(checkResidences, 100);
       } else {
         this.error.set('No residences available. Please contact administrator.');
@@ -820,12 +875,10 @@ export class Home implements OnInit {
     checkResidences();
   }
 
-  // Load recent activity data
   private loadRecentActivity() {
     this.isLoadingRecentActivity.set(true);
     this.recentActivityError.set(null);
 
-    // Mock recent activity data for now
     const mockActivities = [
       {
         id: '1',
@@ -856,7 +909,6 @@ export class Home implements OnInit {
     }, 1000);
   }
 
-  // Format date for display
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     const now = new Date();

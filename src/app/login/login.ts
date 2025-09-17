@@ -77,10 +77,8 @@ export class Login {
           panelClass: ['success-snackbar']
         });
 
-        // const redirectUrl = this.authService.getRedirectUrl();
         // Forzar recarga completa para evitar problemas con el estado del router
         // swindow.location.href = redirectUrl || '/dashboard';
-        console.log('redirectUrl');
         this.router.navigate(['/dashboard']);
       },
       error: (error: { error?: { detail?: string }; message?: string }) => {

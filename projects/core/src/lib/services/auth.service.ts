@@ -96,12 +96,10 @@ export class AuthService {
   }
 
   private loadUserProfile(): void {
-    console.log('Loading user profile...');
-    this.apiService
+        this.apiService
       .meAuthMeGet()
       .pipe(
         tap((user: unknown) => {
-          console.log('User profile loaded:', user);
           this._authState.update((state) => ({
             ...state,
             user: user as Me,
@@ -111,16 +109,13 @@ export class AuthService {
           this.storageService.setAuthenticated(true);
         }),
         catchError((error) => {
-          console.log('Error loading user profile:', error);
 
           // Only clear auth if token is expired or invalid
           if (this.isTokenExpired()) {
-            console.log('Token expired, clearing auth');
             this.clearAuth();
             this.storageService.setAuthenticated(false);
           } else {
             // If token is not expired but API call failed, keep the user logged in
-            console.log('API call failed but token is still valid, keeping session');
             this._authState.update((state) => ({
               ...state,
               isAuthenticated: true,
@@ -135,7 +130,7 @@ export class AuthService {
   }
 
   private validateToken(): void {
-    console.log('Validating token...');
+    ('Validating token...');
     this.setLoading(true);
     this.loadUserProfile();
   }

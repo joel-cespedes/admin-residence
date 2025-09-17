@@ -49,8 +49,9 @@
           </button>
 
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>Item 1</button>
-            <button mat-menu-item>Item 2</button>
+            <button mat-menu-item (click)="setMetricFilter(metric.title, 'year')">Todos</button>
+            <button mat-menu-item (click)="setMetricFilter(metric.title, 'month')">Ultimo mes</button>
+            <button mat-menu-item (click)="setMetricFilter(metric.title, 'week')">Ultima semana</button>
           </mat-menu>
         </div>
 
@@ -213,7 +214,7 @@
         <mat-menu #ordersMenu="matMenu">
           <button type="button" mat-menu-item (click)="setTimeFilter('week')">Ultima semana</button>
           <button type="button" mat-menu-item (click)="setTimeFilter('month')">Ultimo Mes</button>
-          <button type="button" mat-menu-item (click)="setTimeFilter('year')">Ultimo Año</button>
+          <button type="button" mat-menu-item (click)="setTimeFilter('year')">Todos</button>
         </mat-menu>
       </div>
     </mat-card-header>
