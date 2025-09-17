@@ -4,7 +4,20 @@
 
 
 /**
- * Actualizar medición: todos los campos opcionales.
+ * Esquema para la actualización de una medición existente.
+ * Todos los campos son opcionales para permitir actualizaciones parciales.
+ *
+ * Attributes:
+ *     source (Optional[MeasurementSource]): Nueva fuente de la medición
+ *     type (Optional[MeasurementType]): Nuevo tipo de medición
+ *     taken_at (Optional[datetime]): Nueva fecha y hora
+ *     device_id (Optional[str]): Nuevo dispositivo utilizado
+ *     systolic (Optional[int]): Nueva presión sistólica
+ *     diastolic (Optional[int]): Nueva presión diastólica
+ *     pulse_bpm (Optional[int]): Nuevo pulso en BPM
+ *     spo2 (Optional[int]): Nueva saturación de oxígeno
+ *     weight_kg (Optional[float]): Nuevo peso en kg
+ *     temperature_c (Optional[int]): Nueva temperatura en °C
  */
 export interface MeasurementUpdate {
   device_id?: (string | null);

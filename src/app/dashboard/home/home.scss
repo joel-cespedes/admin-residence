@@ -272,7 +272,7 @@
   }
 
   &__change {
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 4px;
 
     &--positive {
@@ -304,7 +304,7 @@
   &__number {
     color: var(--sneat-text-primary);
     margin-bottom: 12px;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 500;
     @media (max-width: 768px) {
     }

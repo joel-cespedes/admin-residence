@@ -28,28 +28,28 @@
             <a href="#" class="nav__link" routerLink="/dashboard/residences" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">maps_home_work</span>
               <span class="nav__title">Residencias</span>
-              <span class="nav__badge-text">1</span>
+              <span class="nav__badge-text">{{ residencesCount() }}</span>
             </a>
           </li>
           <li class="nav__item">
             <a href="#" class="nav__link" routerLink="/dashboard/residents" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">diversity_1</span>
               <span class="nav__title">Residentes</span>
-              <span class="nav__badge-text">22</span>
+              <span class="nav__badge-text">{{ residentsCount() }}</span>
             </a>
           </li>
           <li class="nav__item">
             <a href="#" class="nav__link" routerLink="/dashboard/rooms" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">bedroom_child</span>
               <span class="nav__title">Habitaciones</span>
-              <span class="nav__badge-text">5</span>
+              <span class="nav__badge-text">{{ roomsCount() }}</span>
             </a>
           </li>
           <li class="nav__item">
             <a href="#" class="nav__link" routerLink="/dashboard/rooms" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">bed</span>
               <span class="nav__title">Camas</span>
-              <span class="nav__badge-text">5</span>
+              <span class="nav__badge-text">{{ bedsCount() }}</span>
             </a>
           </li>
 
@@ -59,7 +59,7 @@
             <a href="#" class="nav__link" routerLink="/dashboard/managers" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">groups_2</span>
               <span class="nav__title">Gestores</span>
-              <span class="nav__badge-text">31</span>
+              <span class="nav__badge-text">{{ managersCount() }}</span>
             </a>
           </li>
 
@@ -67,7 +67,7 @@
             <a href="#" class="nav__link" routerLink="/dashboard/professionals" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">diversity_3</span>
               <span class="nav__title">Profesionales</span>
-              <span class="nav__badge-text">1</span>
+              <span class="nav__badge-text">{{ professionalsCount() }}</span>
             </a>
           </li>
 
@@ -76,7 +76,7 @@
             <a href="#" class="nav__link" routerLink="/dashboard/categories" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">source</span>
               <span class="nav__title">Categorias</span>
-              <span class="nav__badge-text">5</span>
+              <span class="nav__badge-text">{{ categoriesCount() }}</span>
             </a>
           </li>
 
@@ -84,7 +84,7 @@
             <a href="#" class="nav__link" routerLink="/dashboard/tasks" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">fact_check</span>
               <span class="nav__title">Tareas</span>
-              <span class="nav__badge-text">8</span>
+              <span class="nav__badge-text">{{ tasksCount() }}</span>
             </a>
           </li>
 
@@ -93,7 +93,7 @@
             <a href="#" class="nav__link" routerLink="/dashboard/devices" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">devices_other</span>
               <span class="nav__title">Dispositivos</span>
-              <span class="nav__badge-text">4</span>
+              <span class="nav__badge-text">{{ devicesCount() }}</span>
             </a>
           </li>
 
@@ -102,14 +102,14 @@
             <a href="#" class="nav__link" routerLink="/dashboard/behavior" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">assessment</span>
               <span class="nav__title">Comportamiento de residentes</span>
-              <span class="nav__badge-text">4</span>
+              <span class="nav__badge-text">{{ behaviorCount() }}</span>
             </a>
           </li>
           <li class="nav__item">
             <a href="#" class="nav__link" routerLink="/dashboard/movements" routerLinkActive="nav__link--active">
               <span class="mat-icon nav__icon">area_chart</span>
               <span class="nav__title">Accesos y movimientos</span>
-              <span class="nav__badge-text">4</span>
+              <span class="nav__badge-text">{{ movementsCount() }}</span>
             </a>
           </li>
         </ul>

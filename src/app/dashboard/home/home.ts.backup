@@ -73,9 +73,6 @@ export class Home implements OnInit {
   // Filtro para la gráfica de mediciones
   chartTimeFilter = signal<'week' | 'month'>('week');
 
-  // Filtro para el gráfico de tareas completadas por mes
-  monthFilter = signal<'current' | 'previous'>('current');
-
   dashboardData = signal<DashboardData | null>(null);
   taskCategories = signal<TaskCategoryWithCount[]>([]);
   residentStats = signal<NewResidentStats | null>(null);
@@ -235,6 +232,7 @@ export class Home implements OnInit {
           stacked: true,
           parentHeightOffset: 6,
           height: 335,
+          width: 400,
           offsetX: -12,
           toolbar: { show: false }
         } satisfies ApexChart,
@@ -406,37 +404,17 @@ export class Home implements OnInit {
         }
       };
     }
-  }
 
   private transformTaskCompletionRadial() {
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-    const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
-
-    // Obtener datos según el filtro seleccionado
-    const selectedFilter = this.monthFilter();
-    let taskCount: number;
-    let labelText: string;
-
-    if (selectedFilter === 'current') {
-      taskCount = this.getMonthTaskData(currentMonth);
-      labelText = 'Mes actual';
-    } else {
-      taskCount = this.getMonthTaskData(previousMonth);
-      labelText = 'Mes anterior';
-    }
-
-    // Calcular el porcentaje de completitud (asumiendo un objetivo de 100 tareas)
-    const targetTasks = 100;
-    const completionPercentage = Math.min((taskCount / targetTasks) * 100, 100);
+    const completionRate = this.dashboardData()?.task_stats?.completion_rate || 0;
 
     return {
-      series: [completionPercentage],
+      series: [completionRate],
       chart: {
         height: 350,
-        type: 'radialBar' as const,
+        type: 'radialBar',
         offsetY: -10
-      } as ApexChart,
+      },
       plotOptions: {
         radialBar: {
           endAngle: 150,
@@ -455,9 +433,9 @@ export class Home implements OnInit {
               offsetY: -15,
               fontWeight: 500,
               fontSize: '24px',
-              color: '#696cff',
+              color: '#000',
               fontFamily: 'Inter',
-              formatter: () => `${taskCount}`
+              formatter: () => `${completionRate.toFixed(1)}%`
             }
           }
         }
@@ -479,19 +457,8 @@ export class Home implements OnInit {
         active: { filter: { type: 'none' } }
       },
       stroke: { dashArray: 5 },
-      labels: [labelText]
+      labels: ['Task Completion']
     };
-  }
-
-  private getMonthTaskData(month: number): number {
-    // Simular datos más realistas de tareas completadas
-    // En una implementación real, esto vendría del API
-    const baseData = {
-      1: 245, 2: 312, 3: 298, 4: 355, 5: 412, 6: 389,
-      7: 445, 8: 478, 9: 423, 10: 467, 11: 398, 12: 512
-    };
-
-    return baseData[month as keyof typeof baseData] || 350;
   }
 
   private transformMeasurementsTrend() {
@@ -671,10 +638,11 @@ export class Home implements OnInit {
   }
 
   private transformResidenceDistribution() {
-    const categories = this.taskCategories();
-    const taskStats = this.dashboardData()?.task_stats;
+    const residenceData = this.residenceDataWithStats();
+    const residentStats = this.dashboardData()?.resident_stats;
+    const totalResidents = residentStats?.total || 0;
 
-    if (!categories || categories.length === 0) {
+    if (!residenceData || residenceData.length === 0) {
       return {
         series: [],
         chart: {
@@ -707,10 +675,10 @@ export class Home implements OnInit {
                 value: { offsetY: -17, fontSize: '18px', color: 'rgb(105, 108, 255)', fontFamily: 'Inter', fontWeight: 500 },
                 total: {
                   show: true,
-                  label: 'Completadas',
+                  label: 'Residentes',
                   fontSize: '13px',
                   lineHeight: '18px',
-                  formatter: () => '0',
+                  formatter: () => `${totalResidents}`,
                   color: 'rgb(3, 195, 236)',
                   fontFamily: 'Inter'
                 }
@@ -721,9 +689,8 @@ export class Home implements OnInit {
       };
     }
 
-    const series = categories.map(category => category.completed_tasks || 0);
-    const totalCompleted = series.reduce((sum, count) => sum + count, 0);
-    const labels = categories.map(category => category.name);
+    const series = residenceData.map(residence => residence.residentCount);
+    const labels = residenceData.map(r => r.name);
 
     return {
       series: series,
@@ -757,10 +724,10 @@ export class Home implements OnInit {
               value: { offsetY: -17, fontSize: '18px', color: 'rgb(105, 108, 255)', fontFamily: 'Inter', fontWeight: 500 },
               total: {
                 show: true,
-                label: 'Completadas',
+                label: 'Residentes',
                 fontSize: '13px',
                 lineHeight: '18px',
-                formatter: () => `${totalCompleted}`,
+                formatter: () => `${totalResidents}`,
                 color: 'rgb(3, 195, 236)',
                 fontFamily: 'Inter'
               }
@@ -769,6 +736,28 @@ export class Home implements OnInit {
         }
       }
     };
+  }
+
+  private getCategoryIcon(name: string): string {
+    const iconMap: Record<string, string> = {
+      Medicación: 'medication',
+      Higiene: 'sanitizer',
+      Alimentación: 'restaurant',
+      Ejercicio: 'fitness_center',
+      Social: 'groups'
+    };
+    return iconMap[name] || 'category';
+  }
+
+  private getCategoryColor(name: string): string {
+    const colorMap: Record<string, string> = {
+      Medicación: 'btn_red',
+      Higiene: 'btn_green',
+      Alimentación: 'btn_lightblue',
+      Ejercicio: 'btn_darkblue',
+      Social: 'btn_gray'
+    };
+    return colorMap[name] || 'btn_gray';
   }
 
   private getResidenceColor(index: number): string {
@@ -802,6 +791,48 @@ export class Home implements OnInit {
     };
 
     return categoryColors[categoryName] || 'btn_primary';
+  }
+
+  private getActivityDescription(activity: Activity): string {
+    switch (activity.type) {
+      case 'resident':
+        return 'Residencia';
+      case 'measurement':
+        return 'Medición';
+      case 'task':
+        return 'Tarea';
+      default:
+        return 'Actividad';
+    }
+  }
+
+  private getActivityAmount(activity: Activity): string {
+    if (activity.type === 'measurement') {
+      return `+${activity.measurement_type}`;
+    }
+    return '+1';
+  }
+
+  private getActivityStatus(activity: Activity): 'positive' | 'negative' {
+    return activity.status === 'active' ? 'positive' : 'negative';
+  }
+
+  private getActivityIcon(type: string): string {
+    const iconMap: Record<string, string> = {
+      resident: 'people',
+      measurement: 'monitoring',
+      task: 'task_alt'
+    };
+    return iconMap[type] || 'info';
+  }
+
+  private getActivityColor(type: string): string {
+    const colorMap: Record<string, string> = {
+      resident: 'btn_green',
+      measurement: 'btn_lightblue',
+      task: 'btn_darkblue'
+    };
+    return colorMap[type] || 'btn_gray';
   }
 
   toggleTheme() {
@@ -841,27 +872,6 @@ export class Home implements OnInit {
 
   setChartTimeFilter(filter: 'week' | 'month') {
     this.chartTimeFilter.set(filter);
-  }
-
-  onMonthFilterChange(event: any) {
-    this.monthFilter.set(event.value);
-  }
-
-  getMonthComparisonText(): string {
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-    const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
-
-    const monthNames = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
-
-    if (this.monthFilter() === 'current') {
-      return monthNames[currentMonth - 1];
-    } else {
-      return monthNames[previousMonth - 1];
-    }
   }
 
   // Método para filtrar métricas individuales sin recargar todo el dashboard

@@ -4,11 +4,26 @@
 
 
 /**
- * Crear medición. El backend valida coherencia según 'type'.
- * - bp  : requiere systolic y diastolic; pulse_bpm opcional
+ * Esquema para la creación de una nueva medición médica.
+ *
+ * El backend valida la coherencia según el 'type':
+ * - bp: requiere systolic y diastolic; pulse_bpm opcional
  * - spo2: requiere spo2; pulse_bpm opcional
  * - weight: requiere weight_kg (float, 1 decimal permitido)
  * - temperature: requiere temperature_c (int)
+ *
+ * Attributes:
+ *     resident_id (str): ID del residente al que se le toma la medición
+ *     source (MeasurementSource): Fuente de la medición
+ *     type (MeasurementType): Tipo de medición
+ *     taken_at (datetime): Fecha y hora en que se tomó la medición
+ *     device_id (Optional[str]): ID del dispositivo utilizado
+ *     systolic (Optional[int]): Presión sistólica (para bp)
+ *     diastolic (Optional[int]): Presión diastólica (para bp)
+ *     pulse_bpm (Optional[int]): Pulso en BPM (para bp y spo2)
+ *     spo2 (Optional[int]): Saturación de oxígeno (para spo2)
+ *     weight_kg (Optional[float]): Peso en kg (para weight)
+ *     temperature_c (Optional[int]): Temperatura en °C (para temperature)
  */
 export interface MeasurementCreate {
   device_id?: (string | null);

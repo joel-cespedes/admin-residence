@@ -8,6 +8,19 @@ import { MeasurementStats } from '../models/measurement-stats';
 import { ResidentStats } from '../models/resident-stats';
 import { TaskStats } from '../models/task-stats';
 import { YearComparison } from '../models/year-comparison';
+
+/**
+ * Esquema principal para datos del dashboard.
+ *
+ * Attributes:
+ *     metrics (List[DashboardMetric]): Métricas principales
+ *     resident_stats (ResidentStats): Estadísticas de residentes
+ *     measurement_stats (MeasurementStats): Estadísticas de mediciones
+ *     task_stats (TaskStats): Estadísticas de tareas
+ *     device_stats (DeviceStats): Estadísticas de dispositivos
+ *     yearly_comparison (List[YearComparison]): Comparación anual
+ *     recent_activity (List[Dict]): Actividad reciente
+ */
 export interface DashboardData {
   device_stats: DeviceStats;
   measurement_stats: MeasurementStats;

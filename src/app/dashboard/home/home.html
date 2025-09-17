@@ -14,7 +14,7 @@
       <button type="button" mat-icon-button class="navbar__btn" [matBadge]="3" matBadgeColor="warn" matBadgeSize="small">
         <span class="mat-icon">notifications</span>
       </button>
-      <button type="button" mat-icon-button class="navbar__btn" [matBadge]="3" matBadgeColor="warn" matBadgeSize="small">
+      <button type="button" mat-icon-button class="navbar__btn" [matBadge]="3" matBadgeColor="warn" matBadgeSize="small" (click)="logout()">
         <span class="mat-icon">logout</span>
       </button>
     </div>
@@ -22,13 +22,13 @@
   <div class="welcome-card dashboard__section">
     <div class="welcome-card__content">
       <div class="welcome-card__text">
-        <h2 class="welcome-card__title">Congratulations John! 🎉</h2>
+        <h2 class="welcome-card__title">¡Hola {{ userName() }}! Bienvenido de nuevo 🎉</h2>
         <p class="welcome-card__subtitle">
-          You have done 72% more sales today.
+          Esperamos que tengas un excelente día.
           <br />
-          Check your new raising badge in your profile.
+          Revisa las últimas estadísticas y actividades.
         </p>
-        <button type="button" size="small" color="primary" class="welcome-card__btn">View Badges</button>
+        <button type="button" size="small" color="primary" class="welcome-card__btn">Ver Panel</button>
       </div>
       <div class="welcome-card__illustration">
         <img src="worker.png" alt="Congratulations" class="welcome-card__img" />
@@ -49,9 +49,9 @@
           </button>
 
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="setMetricFilter(metric.title, 'year')">Todos</button>
-            <button mat-menu-item (click)="setMetricFilter(metric.title, 'month')">Ultimo mes</button>
+            <button mat-menu-item (click)="setMetricFilter(metric.title, 'year')">Todo</button>
             <button mat-menu-item (click)="setMetricFilter(metric.title, 'week')">Ultima semana</button>
+            <button mat-menu-item (click)="setMetricFilter(metric.title, 'month')">Ultimo mes</button>
           </mat-menu>
         </div>
 
@@ -68,13 +68,13 @@
     <mat-card class="chart-card">
       <mat-card-header>
         <div class="content_header_between">
-          <div class="title">Total Revenue</div>
+          <div class="title">Mediciones por {{ chartTimeFilter() === 'week' ? 'Semana' : 'Mes' }}</div>
           <button type="button" mat-icon-button [matMenuTriggerFor]="revenueMenuRevenue">
             <span class="mat-icon">more_vert</span>
           </button>
           <mat-menu #revenueMenuRevenue="matMenu">
-            <button type="button" mat-menu-item>View Details</button>
-            <button type="button" mat-menu-item>Export</button>
+            <button type="button" mat-menu-item (click)="setChartTimeFilter('week')">Ver por semana</button>
+            <button type="button" mat-menu-item (click)="setChartTimeFilter('month')">Ver por mes</button>
           </mat-menu>
         </div>
       </mat-card-header>
@@ -82,11 +82,11 @@
         <div class="chart-card__legend">
           <div class="chart-card__legend-item">
             <div class="chart-card__legend-color chart-card__legend-color--primary"></div>
-            <span>2024</span>
+            <span>{{ chartTimeFilter() === 'week' ? 'Semana pasada' : 'Mes pasado' }}</span>
           </div>
           <div class="chart-card__legend-item">
             <div class="chart-card__legend-color chart-card__legend-color--info"></div>
-            <span>2023</span>
+            <span>{{ chartTimeFilter() === 'week' ? 'Esta semana' : 'Anterior mes' }}</span>
           </div>
         </div>
         <div class="chart-card__chart">
@@ -105,10 +105,9 @@
 
     <mat-card class="growth-card">
       <mat-card-header>
-        <mat-select class="growth-card__select" value="2023">
-          <mat-option value="2023">2023</mat-option>
-          <mat-option value="2024">2024</mat-option>
-          <mat-option value="2025">2025</mat-option>
+        <mat-select class="growth-card__select" [value]="monthFilter()" (selectionChange)="onMonthFilterChange($event)">
+          <mat-option value="current">Mes actual</mat-option>
+          <mat-option value="previous">Mes anterior</mat-option>
         </mat-select>
       </mat-card-header>
       <mat-card-content class="growth-card__content">
@@ -121,7 +120,7 @@
             [fill]="chartRadial().fill"
             [stroke]="chartRadial().stroke"></apx-chart>
         </div>
-        <div class="subtitle">62% Company Growth</div>
+        <div class="subtitle">{{ getMonthComparisonText() }} - Tareas completadas</div>
       </mat-card-content>
     </mat-card>
   </div>
@@ -214,7 +213,7 @@
         <mat-menu #ordersMenu="matMenu">
           <button type="button" mat-menu-item (click)="setTimeFilter('week')">Ultima semana</button>
           <button type="button" mat-menu-item (click)="setTimeFilter('month')">Ultimo Mes</button>
-          <button type="button" mat-menu-item (click)="setTimeFilter('year')">Todos</button>
+          <button type="button" mat-menu-item (click)="setTimeFilter('year')">Ultimo Año</button>
         </mat-menu>
       </div>
     </mat-card-header>
