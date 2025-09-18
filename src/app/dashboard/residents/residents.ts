@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Header } from '../shared/header/header';
 
 // Angular Material v20 imports
 import { MatButtonModule } from '@angular/material/button';

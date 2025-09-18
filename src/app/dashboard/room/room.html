@@ -1,1 +1,150 @@
-<movsa-header />
+<movsa-header title="Habitaciones" />
+
+<!-- Filter Section -->
+<div class="filter-section">
+  <div class="residence-selector">
+    <div class="selector-header">
+      <div class="selector-header-title">Filtrar por Residencia</div>
+      @if (isLoadingResidences()) {
+        <mat-spinner diameter="20"></mat-spinner>
+      }
+    </div>
+
+    <div class="select-container">
+      <mat-form-field class="style_select">
+        <mat-label>Residencia</mat-label>
+        <mat-select
+          [value]="selectedResidenceId()"
+          (selectionChange)="onResidenceChange($event.value)"
+          placeholder="Todas las residencias">
+          <mat-option value="">Todas las residencias</mat-option>
+          @for (residence of residences(); track residence.id) {
+            <mat-option [value]="residence.id">
+              {{ residence.name }}
+            </mat-option>
+          }
+          @if (residences().length === 0) {
+            <mat-option disabled>No hay residencias disponibles</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Floors Section - Only visible when residence is selected -->
+  @if (selectedResidenceId()) {
+    <div class="floors-section">
+      <div class="selector-header">
+        <h3>Filtrar por Piso</h3>
+        @if (isLoadingFloors()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        }
+      </div>
+
+      @if (floors().length === 0 && !isLoadingFloors()) {
+        <div class="no-floors">
+          <p>No hay pisos disponibles en esta residencia.</p>
+        </div>
+      } @else {
+        <mat-button-toggle-group [value]="selectedFloorId()" (change)="onFloorChange($event.value)" class="residence-toggles">
+          <mat-button-toggle value="">Todos los pisos</mat-button-toggle>
+          @for (floor of floors(); track floor.id) {
+            <mat-button-toggle [value]="floor.id">
+              {{ floor.name }}
+            </mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      }
+    </div>
+  }
+</div>
+
+<!-- Rooms Table - Always visible -->
+<div class="rooms-section">
+  <div class="table-header">
+    <div class="add-table-button">
+      <button class="btn_style btn_rounded" matTooltip="Agregar habitación" (click)="addRoom()">
+        <span class="mat-icon">add</span>
+      </button>
+    </div>
+    <div class="filter-field">
+      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar habitación..." #input />
+    </div>
+  </div>
+
+  <div class="table-container">
+    @if (isLoadingRooms()) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando habitaciones...</p>
+      </div>
+    }
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let room">{{ room.name }}</td>
+        </ng-container>
+
+        <!-- Floor Name Column -->
+        <ng-container matColumnDef="floor_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Piso</th>
+          <td mat-cell *matCellDef="let room">{{ room.floor_name }}</td>
+        </ng-container>
+
+        <!-- Residence Name Column -->
+        <ng-container matColumnDef="residence_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Residencia</th>
+          <td mat-cell *matCellDef="let room">{{ room.residence_name }}</td>
+        </ng-container>
+
+        <!-- Created At Column -->
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creación</th>
+          <td mat-cell *matCellDef="let room">{{ room.created_at | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let room">
+            <div class="action-buttons">
+              <button class="btn_color btn_lightblue btn_small" color="primary" (click)="viewRoom(room)" matTooltip="Ver">
+                <span class="mat-icon">visibility</span>
+              </button>
+
+              <button class="btn_color btn_darkblue btn_small" color="accent" (click)="editRoom(room)" matTooltip="Editar">
+                <span class="mat-icon">edit</span>
+              </button>
+
+              <button class="btn_color btn_red btn_small" color="warn" (click)="deleteRoom(room)" matTooltip="Eliminar">
+                <span class="mat-icon">delete</span>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        @if (dataSource.filteredData.length === 0) {
+          <tr class="mat-row">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No se encontraron habitaciones que coincidan con "{{ input.value }}"
+            </td>
+          </tr>
+        }
+      </table>
+
+      <mat-paginator
+        [length]="totalItems()"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        aria-label="Seleccionar página de habitaciones"></mat-paginator>
+    </div>
+  </div>
+</div>

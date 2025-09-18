@@ -1,0 +1,78 @@
+<div class="title_modal">
+  {{ isEditing() ? 'Editar Habitación' : 'Agregar Habitación' }}
+</div>
+
+<div mat-dialog-content>
+  <form [formGroup]="roomForm" (ngSubmit)="onSubmit()" class="form_modal">
+    <div class="form-field full-width">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre de la Habitación</mat-label>
+        <input matInput formControlName="name" placeholder="Ej: Habitación 101" required />
+        <mat-error *ngIf="roomForm.get('name')?.hasError('required')">El nombre es requerido</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Residence Field -->
+    <div class="form-field full-width">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Residencia</mat-label>
+        <mat-select
+          formControlName="residence_id"
+          (selectionChange)="onResidenceChange($event.value)"
+          placeholder="Selecciona una residencia"
+          required>
+          @for (residence of residences(); track residence.id) {
+            <mat-option [value]="residence.id">
+              {{ residence.name }}
+            </mat-option>
+          }
+        </mat-select>
+        <mat-error *ngIf="roomForm.get('residence_id')?.hasError('required')">La residencia es requerida</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Floor Field -->
+    <div class="form-field full-width">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Piso</mat-label>
+        <mat-select
+          formControlName="floor_id"
+          placeholder="Selecciona un piso"
+          [disabled]="!roomForm.get('residence_id')?.value"
+          required>
+          @if (isLoading()) {
+            <mat-option disabled>
+              <div class="loading-option">
+                <mat-spinner diameter="16"></mat-spinner>
+                <span>Cargando pisos...</span>
+              </div>
+            </mat-option>
+          } @else if (floors().length === 0) {
+            <mat-option disabled>
+              @if (roomForm.get('residence_id')?.value) {
+                No hay pisos disponibles
+              } @else {
+                Selecciona una residencia primero
+              }
+            </mat-option>
+          } @else {
+            @for (floor of floors(); track floor.id) {
+              <mat-option [value]="floor.id">
+                {{ floor.name }}
+              </mat-option>
+            }
+          }
+        </mat-select>
+        <mat-error *ngIf="roomForm.get('floor_id')?.hasError('required')">El piso es requerido</mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()" [disabled]="isLoading()">Cancelar</button>
+
+  <button class="btn_color_free btn_darkblue" (click)="onSubmit()" [disabled]="!roomForm.valid">
+    {{ isEditing() ? 'Actualizar' : 'Guardar' }}
+  </button>
+</div>

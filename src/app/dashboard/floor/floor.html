@@ -25,7 +25,6 @@
 </div>
 
 <!-- Floors Table -->
-@if (selectedResidenceId()) {
   <div class="floors-section">
     <div class="table-header">
       <div class="add-table-button">
@@ -38,12 +37,14 @@
       </div>
     </div>
 
-    @if (isLoadingFloors()) {
-      <div class="loading-container">
-        <mat-spinner diameter="40"></mat-spinner>
-        <p>Cargando pisos...</p>
-      </div>
-    } @else {
+    <div class="table-container">
+      @if (isLoadingFloors()) {
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Cargando pisos...</p>
+        </div>
+      }
+
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" matSort>
           <!-- Name Column -->
@@ -97,17 +98,10 @@
           }
         </table>
 
-        @if (dataSource.filteredData.length > 34) {
-          <mat-paginator
-            [pageSize]="20"
-            [pageSizeOptions]="[35, 50, 100]"
-            aria-label="Seleccionar página de pisos"></mat-paginator>
-        }
+        <mat-paginator
+          [length]="totalItems()"
+          [pageSizeOptions]="[10, 20, 50, 100]"
+          aria-label="Seleccionar página de pisos"></mat-paginator>
       </div>
-    }
+    </div>
   </div>
-} @else {
-  <div class="no-selection">
-    <p>Debes seleccionar una residencia para ver los pisos</p>
-  </div>
-}

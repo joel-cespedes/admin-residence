@@ -60,16 +60,21 @@ export class FloorFormModal {
       residence_id: ['', [Validators.required]]
     });
 
-    this.loadResidences();
+    // Use residences from parent component if available, otherwise load them
+    if (this.data?.residences) {
+      this.residences.set(this.data.residences);
+    } else {
+      this.loadResidences();
+    }
 
     if (this.isEditMode() && this.data) {
       this.floorForm.patchValue({
         name: this.data.name,
         residence_id: this.data.residence_id
       });
-    } else if (this.data?.residence_id) {
+    } else if (this.data?.preselectedResidenceId) {
       this.floorForm.patchValue({
-        residence_id: this.data.residence_id
+        residence_id: this.data.preselectedResidenceId
       });
     }
   }

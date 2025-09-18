@@ -1,0 +1,33 @@
+<div class="title_modal">Eliminar Habitación</div>
+
+<div mat-dialog-content>
+  <div class="delete-warning">
+    <div class="warning-icon">
+      <span class="mat-icon">warning</span>
+    </div>
+    <div class="warning-content">
+      <p class="warning-title">¿Estás seguro de que quieres eliminar esta habitación?</p>
+      <p class="warning-text">Esta acción no se puede deshacer.</p>
+    </div>
+  </div>
+
+  <div class="room-details">
+    <div class="detail-item">
+      <span class="detail-label">Nombre:</span>
+      <span class="detail-value">{{ data.name }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Piso:</span>
+      <span class="detail-value">{{ data.floor_name }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Residencia:</span>
+      <span class="detail-value">{{ data.residence_name }}</span>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button class="btn_color_free btn_lightgray" (click)="onClose()">Cancelar</button>
+  <button class="btn_color_free btn_red" (click)="onDelete()">Eliminar</button>
+</div>

@@ -61,29 +61,49 @@ export class Floor implements AfterViewInit, OnInit {
   isLoadingResidences = signal(false);
   isLoadingFloors = signal(false);
 
+  // Pagination signals
+  pageIndex = signal(0);
+  pageSize = signal(10);
+  totalItems = signal(0);
+
+  // Search signals
+  searchTerm = signal('');
+  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
+
   ngOnInit() {
     this.loadResidences();
+    this.loadFloors();
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // Setup paginator events - IMPORTANT: Don't connect paginator to dataSource for backend pagination
+    if (this.paginator) {
+      this.paginator.page.subscribe((event: any) => {
+        console.log('Paginator event - Page:', event.pageIndex, 'Size:', event.pageSize);
+        this.pageIndex.set(event.pageIndex);
+        this.pageSize.set(event.pageSize);
+        this.loadFloors();
+      });
+    }
+
+    // Setup sort events
+    if (this.sort) {
+      this.sort.sortChange.subscribe(() => {
+        console.log('Sort event triggered');
+        this.pageIndex.set(0); // Reset to first page when sorting
+        this.loadFloors();
+      });
+    }
   }
 
   private loadResidences() {
     this.isLoadingResidences.set(true);
     this.residencesService.listResidencesResidencesGet().subscribe({
-      next: (response: any) => {
+      next: (response: { items: any[] }) => {
         this.residences.set(response.items || []);
         this.isLoadingResidences.set(false);
-
-        // Auto-select first residence if available
-        if (this.residences().length > 0 && !this.selectedResidenceId()) {
-          this.selectedResidenceId.set(this.residences()[0].id);
-          this.loadFloors();
-        }
       },
-      error: error => {
+      error: (error: { status?: number; message?: string }) => {
         this.notificationService.handleApiError(error, 'Error al cargar las residencias');
         this.isLoadingResidences.set(false);
       }
@@ -91,25 +111,48 @@ export class Floor implements AfterViewInit, OnInit {
   }
 
   private loadFloors() {
-    if (!this.selectedResidenceId()) return;
-
     this.isLoadingFloors.set(true);
-    this.structureService.floorsSimpleStructureFloorsResidenceIdSimpleGet({ residence_id: this.selectedResidenceId() }).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = (response || []).map(
-          (item: any) =>
+
+    // Use the paginated endpoint
+    const params: { [key: string]: string | number } = {
+      page: this.pageIndex() + 1, // API uses 1-based indexing
+      size: this.pageSize()
+    };
+
+    // Add filters based on current selection
+    if (this.selectedResidenceId()) {
+      params['X-Residence-Id'] = this.selectedResidenceId();
+    }
+
+    // Add search term if provided
+    if (this.searchTerm()) {
+      params['search'] = this.searchTerm();
+    }
+
+    this.structureService.listFloorsStructureFloorsGet(params).subscribe({
+      next: (response: { items: any[]; total?: number }) => {
+        this.dataSource.data = (response.items || []).map(
+          (item: Record<string, any>) =>
             ({
               id: item['id'],
               name: item['name'],
               residence_id: item['residence_id'],
-              residence_name: this.residences().find(r => r.id === item['residence_id'])?.name || 'Desconocida',
+              residence_name: item['residence_name'] || this.residences().find(r => r.id === item['residence_id'])?.name || 'Desconocida',
               created_at: item['created_at'] || new Date().toISOString(),
               updated_at: item['updated_at'] || null
             }) as FloorWithDetails
         );
+        this.totalItems.set(response.total || 0);
+
+        // Update paginator state manually
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex();
+          this.paginator.pageSize = this.pageSize();
+        }
+
         this.isLoadingFloors.set(false);
       },
-      error: error => {
+      error: (error: { status?: number; message?: string }) => {
         this.notificationService.handleApiError(error, 'Error al cargar los pisos');
         this.isLoadingFloors.set(false);
       }
@@ -123,11 +166,17 @@ export class Floor implements AfterViewInit, OnInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    // Clear existing timeout
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
     }
+
+    // Set new timeout for debounce (300ms)
+    this.searchTimeout = setTimeout(() => {
+      this.searchTerm.set(filterValue.trim());
+      this.loadFloors();
+    }, 300);
   }
 
   viewFloor(floor: FloorWithDetails) {
@@ -137,7 +186,7 @@ export class Floor implements AfterViewInit, OnInit {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.loadFloors();
       }
@@ -151,7 +200,7 @@ export class Floor implements AfterViewInit, OnInit {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.loadFloors();
       }
@@ -165,7 +214,7 @@ export class Floor implements AfterViewInit, OnInit {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.loadFloors();
       }
@@ -173,18 +222,16 @@ export class Floor implements AfterViewInit, OnInit {
   }
 
   addFloor() {
-    if (!this.selectedResidenceId()) {
-      this.notificationService.warning('Debes seleccionar una residencia para agregar pisos');
-      return;
-    }
-
     const dialogRef = this.dialog.open(FloorFormModal, {
-      data: { residence_id: this.selectedResidenceId() },
+      data: {
+        residences: this.residences(),
+        preselectedResidenceId: this.selectedResidenceId()
+      },
       width: '60%',
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.loadFloors();
       }

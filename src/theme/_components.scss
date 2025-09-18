@@ -517,3 +517,23 @@ button.btn_color {
 .mat-mdc-form-field.mat-form-field-animations-enabled .mdc-text-field__input {
   margin-top: 5px;
 }
+
+mat-form-field.style_select {
+  background-color: var(--sneat-bg-primary);
+  color: var(--sneat-text-primary);
+  border-radius: var(--sneat-border-radius);
+  border: 1px solid var(--sneat-border-color);
+  width: 100%;
+  padding: 4px 16px;
+  //   width: fit-content;
+  //   background-color: rgba(105, 108, 255, 0.1);
+  //   //border: 1px solid rgba(105, 108, 255, 0.2) !important;
+  //   color: var(--sneat-primary);
+  //   border-radius: 6px;
+  //   padding: 4px 16px;
+  //   transition: all 0.3s ease;
+  //   &:hover {
+  //     background-color: var(--sneat-primary);
+  //     color: var(--sneat-bg-primary);
+  //   }
+}

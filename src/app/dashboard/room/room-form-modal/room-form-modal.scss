@@ -5,19 +5,46 @@
   font-size: 15px !important;
   --mat-form-field-container-text-size: 15px !important;
   --mat-form-field-outlined-label-text-size: 15px !important;
+  --mat-option-label-text-size: 15px !important;
+  --mat-select-trigger-text-size: 15px !important;
   --mat-form-field-container-vertical-padding: 8px !important;
+}
+
+mat-option {
+  font-size: 15px !important;
+}
+.form-grid {
+  display: grid;
+  gap: 1rem;
+  min-width: 400px;
+}
+.mat-mdc-select {
+  margin-top: 5px;
 }
 
 .full-width {
   width: 100%;
 }
 
-button {
-  font-size: 15px;
+.loading-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
 }
 
-button[mat-raised-button] {
-  min-width: 100px;
+mat-form-field {
+  width: 100%;
+}
+
+.title_modal {
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: var(--sneat-text-primary);
+}
+
+button {
+  cursor: pointer;
 }
 mat-error {
   color: #f44336 !important;
@@ -60,7 +87,4 @@ mat-form-field {
 }
 :ng-deep .mat-mdc-form-field-error-wrapper {
   padding: 0 !important;
-}
-mat-option {
-  font-size: 15px !important;
 }
