@@ -383,3 +383,33 @@ img {
   opacity: 1;
   pointer-events: auto;
 }
+
+table {
+  box-shadow:
+    0 3px 8px rgba(34, 48, 62, 0.1),
+    0 0 transparent,
+    0 0 transparent;
+  background-color: var(--sneat-bg-primary);
+  border-radius: var(--sneat-border-radius-lg);
+}
+.mat-mdc-paginator {
+  margin-top: 2em;
+}
+.filter-field {
+  margin: 2em 0 0.8em 0;
+  input {
+    border: none !important;
+    background-color: var(--sneat-bg-primary);
+    font-size: 0.9375rem;
+    line-height: 1.5rem;
+    outline: none;
+    padding: 8px;
+    box-shadow:
+      0 3px 6px rgba(34, 48, 62, 0.1),
+      0 0 transparent,
+      0 0 transparent;
+    width: 100%;
+    border-radius: var(--sneat-border-radius-lg);
+    box-sizing: border-box;
+  }
+}

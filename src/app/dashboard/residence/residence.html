@@ -1,8 +1,8 @@
 <movsa-header />
-<mat-form-field>
-  <mat-label>Filter</mat-label>
+
+<div class="filter-field">
   <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input />
-</mat-form-field>
+</div>
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" matSort>

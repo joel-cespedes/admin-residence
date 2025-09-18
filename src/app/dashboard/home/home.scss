@@ -564,6 +564,40 @@
 .list_tasks {
   max-height: 400px;
   overflow-y: auto;
+
+  // Ocultar scrollbar por defecto
+  &::-webkit-scrollbar {
+    width: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  // Mostrar scrollbar al hacer hover o al scrollear
+  &:hover {
+    &::-webkit-scrollbar {
+      opacity: 1;
+    }
+  }
+
+  // También mostrar durante el scroll
+  &:scrolling {
+    &::-webkit-scrollbar {
+      opacity: 1;
+    }
+  }
 }
 
 .category {
