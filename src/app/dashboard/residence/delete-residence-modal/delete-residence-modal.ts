@@ -23,6 +23,7 @@ export class DeleteResidenceModal {
   data: ResidenceWithContact = inject(MAT_DIALOG_DATA);
 
   onDelete(): void {
+    console.log('Eliminar residencia:', this.data);
     this.isLoading.set(true);
     this.residencesService.deleteResidenceResidencesIdDelete({ id: this.data.id }).subscribe({
       next: () => {

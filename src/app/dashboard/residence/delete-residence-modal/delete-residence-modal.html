@@ -1,15 +1,15 @@
 <div mat-dialog-content>
-  <h3>
+  <div class="title-modal">
     ¿Estás seguro de que quieres eliminar la residencia
     <strong>"{{ data.name }}"</strong>
     ?
-  </h3>
-  <p>Esta acción no se puede deshacer.</p>
+  </div>
+  <p>¡Esta acción no se puede deshacer!</p>
 </div>
 
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
-  <button class="btn_color_free btn_red" (click)="onDelete()" [disabled]="isLoading">
+  <button class="btn_color_free btn_red" (click)="onDelete()">
     @if (!isLoading()) {
       <span>Eliminar</span>
     }

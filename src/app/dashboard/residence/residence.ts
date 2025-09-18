@@ -119,7 +119,7 @@ export class Residence implements AfterViewInit, OnInit {
   deleteResidence(residence: ResidenceWithContact) {
     const dialogRef = this.dialog.open(DeleteResidenceModal, {
       data: residence,
-      width: '60%',
+      width: '50%',
       maxWidth: '90vw'
     });
 
