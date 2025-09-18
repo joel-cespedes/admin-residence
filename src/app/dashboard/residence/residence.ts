@@ -11,16 +11,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Header } from '../shared/header/header';
 import { CommonModule, DatePipe } from '@angular/common';
 
-// API Services
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
-import { ResidenceOut } from '../../../openapi/generated/models/residence-out';
 import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
-
-interface ResidenceWithContact extends ResidenceOut {
-  phone?: string;
-  email?: string;
-  created_at: string;
-}
+import { ResidenceWithContact } from './model/residence.model';
+import { ViewResidenceModal } from './view-residence-modal/view-residence-modal';
+import { ResidenceFormModal } from './residence-form-modal/residence-form-modal';
+import { DeleteResidenceModal } from './delete-residence-modal/delete-residence-modal';
 
 @Component({
   selector: 'app-residence',
@@ -72,7 +68,8 @@ export class Residence implements AfterViewInit, OnInit {
               address: item['address'],
               phone: item['phone'] || 'No especificado',
               email: item['email'] || 'No especificado',
-              created_at: item['created_at'] || new Date().toISOString()
+              created_at: item['created_at'] || new Date().toISOString(),
+              updated_at: item['updated_at'] || null
             }) as ResidenceWithContact
         );
       },
@@ -92,18 +89,58 @@ export class Residence implements AfterViewInit, OnInit {
   }
 
   viewResidence(residence: ResidenceWithContact) {
-    console.log('Ver residencia:', residence);
+    const dialogRef = this.dialog.open(ViewResidenceModal, {
+      data: residence,
+      width: '600px',
+      maxWidth: '90vw'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadResidences();
+      }
+    });
   }
 
   editResidence(residence: ResidenceWithContact) {
-    console.log('Editar residencia:', residence);
+    const dialogRef = this.dialog.open(ResidenceFormModal, {
+      data: residence,
+      width: '60%',
+      maxWidth: '90vw'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadResidences();
+      }
+    });
   }
 
   deleteResidence(residence: ResidenceWithContact) {
-    console.log('Eliminar residencia:', residence);
+    const dialogRef = this.dialog.open(DeleteResidenceModal, {
+      data: residence,
+      width: '60%',
+      maxWidth: '90vw'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadResidences();
+      }
+    });
   }
 
   addResidence() {
-    console.log('Añadir residencia');
+    const dialogRef = this.dialog.open(ResidenceFormModal, {
+      data: null,
+      width: '60%',
+      maxWidth: '90vw'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadResidences();
+      }
+    });
   }
 }

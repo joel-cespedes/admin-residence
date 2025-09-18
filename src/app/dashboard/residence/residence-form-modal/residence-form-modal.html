@@ -1,0 +1,36 @@
+<div class="title_modal">{{ title() }}</div>
+<div mat-dialog-content>
+  <form [formGroup]="residenceForm" class="form_modal">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" placeholder="Nombre de la residencia" />
+      <mat-error *ngIf="residenceForm.get('name')?.hasError('required')">El nombre es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Dirección</mat-label>
+      <input matInput formControlName="address" placeholder="Dirección de la residencia" />
+      <mat-error *ngIf="residenceForm.get('address')?.hasError('required')">La dirección es obligatoria</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="phone" placeholder="Número de teléfono" />
+      <mat-error *ngIf="residenceForm.get('phone')?.hasError('pattern')">Formato de teléfono inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Correo electrónico" />
+      <mat-error *ngIf="residenceForm.get('email')?.hasError('email')">Formato de email inválido</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="isLoading() || residenceForm.invalid">
+    <span *ngIf="!isLoading()">{{ isEditMode() ? 'Actualizar' : 'Crear' }}</span>
+    <span *ngIf="isLoading()">Guardando...</span>
+  </button>
+</div>

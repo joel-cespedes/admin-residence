@@ -67,10 +67,6 @@
     border-radius: var(--sneat-border-radius) !important;
   }
 
-  .mat-mdc-form-field-subscript-wrapper {
-    margin-top: 4px !important;
-  }
-
   // Label personalizado
   .mat-mdc-form-field-label {
     color: var(--sneat-gray-600) !important;
@@ -145,7 +141,7 @@ img {
   .mat-mdc-cell,
   .mat-mdc-header-cell {
     border-bottom: 1px solid var(--sneat-border-color) !important;
-    padding: var(--sneat-spacing-md) !important;
+    padding: 16px 20px !important;
   }
 }
 
@@ -161,13 +157,16 @@ img {
 // DIALOG
 // ===========================
 .mat-mdc-dialog-container {
-  border-radius: var(--sneat-border-radius-lg) !important;
+  border-radius: 8px !important;
   box-shadow: var(--sneat-shadow-lg) !important;
 
   .mat-mdc-dialog-title {
     color: var(--sneat-gray-800) !important;
     font-weight: 600 !important;
   }
+}
+.mat-mdc-dialog-surface {
+  border-radius: 8px !important;
 }
 
 // ===========================
@@ -396,7 +395,7 @@ table {
   margin-top: 2em;
 }
 .filter-field {
-  margin: 2em 0 0.8em 0;
+  margin: 1em 0 0.8em 0;
   input {
     border: none !important;
     background-color: var(--sneat-bg-primary);
@@ -413,6 +412,19 @@ table {
     box-sizing: border-box;
   }
 }
+.btn_style {
+  width: fit-content;
+  background-color: rgba(105, 108, 255, 0.1);
+  border: 1px solid rgba(105, 108, 255, 0.2) !important;
+  color: var(--sneat-primary);
+  border-radius: 6px;
+  padding: 4px 16px;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: var(--sneat-primary);
+    color: var(--sneat-bg-primary);
+  }
+}
 
 .btn_color {
   width: 40px;
@@ -423,6 +435,19 @@ table {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+}
+.btn_color_free {
+  border-radius: 6px;
+  padding: 4px 16px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.btn_small {
+  width: 32px !important;
+  height: 32px !important;
 }
 .btn_lightblue {
   background-color: rgba(3, 195, 236, 0.1);
@@ -446,8 +471,8 @@ table {
 }
 .btn_red {
   background-color: rgba(255, 62, 29, 0.1);
-  border: 1px solid rgba(255, 62, 29, 1);
-  color: rgba(255, 62, 29, 1);
+  border: 1px solid rgb(255, 3, 3);
+  color: rgba(255, 3, 3, 1);
 }
 .btn_orange {
   background-color: rgba(255, 171, 0, 0.1);
@@ -473,4 +498,14 @@ button.btn_color {
   height: 100%;
   min-height: 200px;
   width: 100%;
+}
+
+.title_modal {
+  font-size: 1.1rem;
+}
+
+.form_modal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }

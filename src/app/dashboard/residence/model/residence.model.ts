@@ -1,30 +1,16 @@
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  fruit: string;
+import { ResidenceOut } from '../../../../openapi/generated/models/residence-out';
+
+export interface ResidenceWithContact extends ResidenceOut {
+  phone?: string;
+  email?: string;
+  created_at: string;
+  updated_at?: string;
 }
 
-/** Constants used to fill up our data base. */
-export const FRUITS: string[] = ['blueberry', 'lychee', 'kiwi', 'mango', 'peach', 'lime', 'pomegranate', 'pineapple'];
-export const NAMES: string[] = [
-  'Maia',
-  'Asher',
-  'Olivia',
-  'Atticus',
-  'Amelia',
-  'Jack',
-  'Charlotte',
-  'Theodore',
-  'Isla',
-  'Oliver',
-  'Isabella',
-  'Jasper',
-  'Cora',
-  'Levi',
-  'Violet',
-  'Arthur',
-  'Mia',
-  'Thomas',
-  'Elizabeth'
-];
+export interface ResidenceFormData {
+  id?: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+}
