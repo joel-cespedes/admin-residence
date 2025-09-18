@@ -8,9 +8,13 @@
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancelar</button>
+  <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
   <button class="btn_color_free btn_red" (click)="onDelete()" [disabled]="isLoading">
-    <span *ngIf="!isLoading">Eliminar</span>
-    <span *ngIf="isLoading">Eliminando...</span>
+    @if (!isLoading()) {
+      <span>Eliminar</span>
+    }
+    @if (isLoading()) {
+      <span>Eliminando...</span>
+    }
   </button>
 </div>

@@ -501,11 +501,18 @@ button.btn_color {
 }
 
 .title_modal {
-  font-size: 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 20px 24px 0 24px;
 }
 
 .form_modal {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  row-gap: 0;
+  column-gap: 11px;
+}
+
+.mat-mdc-form-field.mat-form-field-animations-enabled .mdc-text-field__input {
+  margin-top: 5px;
 }

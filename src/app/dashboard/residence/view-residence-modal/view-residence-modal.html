@@ -1,49 +1,43 @@
+<div class="title_modal">{{ data.name }}</div>
 <div mat-dialog-content>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>{{ data.name }}</mat-card-title>
-      <mat-card-subtitle>Información completa</mat-card-subtitle>
-    </mat-card-header>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">ID:</div>
+      <div class="info-value">{{ data.id }}</div>
+    </div>
 
-    <mat-card-content>
-      <div class="info-grid">
-        <div class="info-item">
-          <div class="info-label">ID:</div>
-          <div class="info-value">{{ data.id }}</div>
-        </div>
+    <div class="info-item">
+      <div class="info-label">Nombre:</div>
+      <div class="info-value">{{ data.name }}</div>
+    </div>
 
-        <div class="info-item">
-          <div class="info-label">Nombre:</div>
-          <div class="info-value">{{ data.name }}</div>
-        </div>
+    <div class="info-item">
+      <div class="info-label">Dirección:</div>
+      <div class="info-value">{{ data.address || 'No especificada' }}</div>
+    </div>
 
-        <div class="info-item">
-          <div class="info-label">Dirección:</div>
-          <div class="info-value">{{ data.address || 'No especificada' }}</div>
-        </div>
+    <div class="info-item">
+      <div class="info-label">Teléfono:</div>
+      <div class="info-value">{{ data.phone || 'No especificado' }}</div>
+    </div>
 
-        <div class="info-item">
-          <div class="info-label">Teléfono:</div>
-          <div class="info-value">{{ data.phone || 'No especificado' }}</div>
-        </div>
+    <div class="info-item">
+      <div class="info-label">Email:</div>
+      <div class="info-value">{{ data.email || 'No especificado' }}</div>
+    </div>
 
-        <div class="info-item">
-          <div class="info-label">Email:</div>
-          <div class="info-value">{{ data.email || 'No especificado' }}</div>
-        </div>
+    <div class="info-item">
+      <div class="info-label">Fecha de Creación:</div>
+      <div class="info-value">{{ data.created_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
 
-        <div class="info-item">
-          <div class="info-label">Fecha de Creación:</div>
-          <div class="info-value">{{ data.created_at | date: 'dd/MM/yyyy HH:mm' }}</div>
-        </div>
-
-        <div class="info-item" *ngIf="data.updated_at">
-          <div class="info-label">Última Actualización:</div>
-          <div class="info-value">{{ data.updated_at | date: 'dd/MM/yyyy HH:mm' }}</div>
-        </div>
+    @if (data.updated_at) {
+      <div class="info-item">
+        <div class="info-label">Última Actualización:</div>
+        <div class="info-value">{{ data.updated_at | date: 'dd/MM/yyyy HH:mm' }}</div>
       </div>
-    </mat-card-content>
-  </mat-card>
+    }
+  </div>
 </div>
 
 <div mat-dialog-actions align="end">

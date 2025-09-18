@@ -1,44 +1,36 @@
-import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { ResidenceWithContact } from '../model/residence.model';
 import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
+import { ResidenceWithContact } from '../model/residence.model';
 
 @Component({
   selector: 'app-delete-residence-modal',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule
-  ],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './delete-residence-modal.html',
   styleUrl: './delete-residence-modal.scss'
 })
 export class DeleteResidenceModal {
-  isLoading: boolean = false;
+  isLoading = signal(false);
 
-  constructor(
-    public dialogRef: MatDialogRef<DeleteResidenceModal>,
-    @Inject(MAT_DIALOG_DATA) public data: ResidenceWithContact,
-    private residencesService: ResidencesService
-  ) {}
+  private residencesService = inject(ResidencesService);
+  private dialogRef = inject(MatDialogRef<DeleteResidenceModal>);
+  data: ResidenceWithContact = inject(MAT_DIALOG_DATA);
 
   onDelete(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.residencesService.deleteResidenceResidencesIdDelete({ id: this.data.id }).subscribe({
       next: () => {
         this.dialogRef.close(true);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error deleting residence:', error);
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
   }
