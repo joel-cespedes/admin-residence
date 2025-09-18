@@ -413,3 +413,64 @@ table {
     box-sizing: border-box;
   }
 }
+
+.btn_color {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.btn_lightblue {
+  background-color: rgba(3, 195, 236, 0.1);
+  border: 1px solid rgba(3, 195, 236, 1);
+  color: rgba(3, 195, 236, 1);
+}
+.btn_darkblue {
+  background-color: rgba(105, 108, 255, 0.1);
+  border: 1px solid rgba(105, 108, 255, 1);
+  color: rgba(105, 108, 255, 1);
+}
+.btn_green {
+  background-color: rgba(113, 221, 55, 0.1);
+  border: 1px solid rgba(113, 221, 55, 1);
+  color: rgba(113, 221, 55, 1);
+}
+.btn_gray {
+  background-color: rgba(133, 146, 163, 0.1);
+  border: 1px solid rgba(133, 146, 163, 1);
+  color: rgba(133, 146, 163, 1);
+}
+.btn_red {
+  background-color: rgba(255, 62, 29, 0.1);
+  border: 1px solid rgba(255, 62, 29, 1);
+  color: rgba(255, 62, 29, 1);
+}
+.btn_orange {
+  background-color: rgba(255, 171, 0, 0.1);
+  border: 1px solid rgba(255, 171, 0, 1);
+  color: rgba(255, 171, 0, 1);
+}
+.btn_purple {
+  background-color: rgba(157, 0, 255, 0.1);
+  border: 1px solid rgb(157, 0, 255);
+  color: rgb(157, 0, 255);
+}
+
+button.btn_color {
+  &:hover {
+    background-color: var(--sneat-bg-primary);
+    color: var(--sneat-text-primary);
+  }
+}
+.chart-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 200px;
+  width: 100%;
+}
