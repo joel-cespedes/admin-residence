@@ -1,0 +1,30 @@
+<div class="title_modal">{{ data.name }}</div>
+<div mat-dialog-content>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Nombre del Piso:</div>
+      <div class="info-value">{{ data.name }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Residencia:</div>
+      <div class="info-value">{{ data.residence_name }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Fecha de Creación:</div>
+      <div class="info-value">{{ data.created_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+
+    @if (data.updated_at) {
+      <div class="info-item">
+        <div class="info-label">Última Actualización:</div>
+        <div class="info-value">{{ data.updated_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    }
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button class="btn_color_free btn_darkblue" (click)="onClose()">Cerrar</button>
+</div>
