@@ -9,7 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 import { AuthService, ResidenceService } from '@core';
@@ -88,6 +88,7 @@ export class Home implements OnInit {
   isLoadingResidentStats = signal(false);
   residentStatsError = signal<string | null>(null);
   recentActivities = signal<any[]>([]);
+  router = inject(Router);
 
   metrics = computed(() => {
     const originalMetrics = this.dashboardData()?.metrics || [];
@@ -144,7 +145,6 @@ export class Home implements OnInit {
     // Usar el nuevo endpoint de navigation-counts para obtener todos los datos sin filtro
     this.dashboardService.getNavigationCountsDashboardNavigationCountsGet$Response().subscribe({
       next: response => {
-
         // Transformar los datos de navigation counts al formato esperado por el dashboard
         const navigationData = response.body;
 
@@ -969,8 +969,7 @@ export class Home implements OnInit {
           default:
         }
       },
-      error: error => {
-      }
+      error: error => {}
     });
   }
 
@@ -1127,5 +1126,9 @@ export class Home implements OnInit {
         year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
       });
     }
+  }
+
+  goToResidences() {
+    this.router.navigate(['/dashboard/residences']);
   }
 }
