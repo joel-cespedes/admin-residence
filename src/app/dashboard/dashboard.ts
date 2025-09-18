@@ -23,6 +23,7 @@ export class Dashboard implements OnInit {
   residentsCount = signal(0);
   roomsCount = signal(0);
   bedsCount = signal(0);
+  floorsCount = signal(0);
   managersCount = signal(0);
   professionalsCount = signal(0);
   categoriesCount = signal(0);
@@ -51,14 +52,14 @@ export class Dashboard implements OnInit {
         this.categoriesCount.set(data?.categories || 0);
         this.tasksCount.set(data?.tasks || 0);
         this.devicesCount.set(data?.devices || 0);
+        this.floorsCount.set(data?.floors || 0);
 
         // Mantener los contadores existentes para comportamiento y movimientos
         // (Estos podrían necesitar endpoints específicos en el futuro)
         this.behaviorCount.set(0);
         this.movementsCount.set(0);
-
       },
-      error: (error) => {
+      error: () => {
         // Set default values on error
         this.residencesCount.set(0);
         this.residentsCount.set(0);

@@ -4,14 +4,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
 import { ResidenceWithContact } from '../model/residence.model';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-delete-residence-modal',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatSnackBarModule],
   templateUrl: './delete-residence-modal.html',
   styleUrl: './delete-residence-modal.scss'
 })
@@ -20,6 +22,7 @@ export class DeleteResidenceModal {
 
   private residencesService = inject(ResidencesService);
   private dialogRef = inject(MatDialogRef<DeleteResidenceModal>);
+  private notificationService = inject(NotificationService);
   data: ResidenceWithContact = inject(MAT_DIALOG_DATA);
 
   onDelete(): void {
@@ -27,10 +30,11 @@ export class DeleteResidenceModal {
     this.isLoading.set(true);
     this.residencesService.deleteResidenceResidencesIdDelete({ id: this.data.id }).subscribe({
       next: () => {
+        this.notificationService.success('Residencia eliminada correctamente');
         this.dialogRef.close(true);
       },
       error: (error: any) => {
-        console.error('Error deleting residence:', error);
+        this.notificationService.handleApiError(error, 'Error al eliminar la residencia');
         this.isLoading.set(false);
       }
     });

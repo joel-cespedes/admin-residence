@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Header } from '../shared/header/header';
 import { CommonModule, DatePipe } from '@angular/common';
 
@@ -17,6 +18,7 @@ import { ResidenceWithContact } from './model/residence.model';
 import { ViewResidenceModal } from './view-residence-modal/view-residence-modal';
 import { ResidenceFormModal } from './residence-form-modal/residence-form-modal';
 import { DeleteResidenceModal } from './delete-residence-modal/delete-residence-modal';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-residence',
@@ -33,6 +35,7 @@ import { DeleteResidenceModal } from './delete-residence-modal/delete-residence-
     MatIconModule,
     MatTooltipModule,
     MatDialogModule,
+    MatSnackBarModule,
     DatePipe
   ],
   templateUrl: './residence.html',
@@ -47,6 +50,7 @@ export class Residence implements AfterViewInit, OnInit {
 
   private residencesService = inject(ResidencesService);
   private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
 
   ngOnInit() {
     this.loadResidences();
@@ -74,7 +78,7 @@ export class Residence implements AfterViewInit, OnInit {
         );
       },
       error: error => {
-        console.error('Error loading residences:', error);
+        this.notificationService.handleApiError(error, 'Error al cargar las residencias');
       }
     });
   }

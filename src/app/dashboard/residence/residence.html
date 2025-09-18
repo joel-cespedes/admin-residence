@@ -1,4 +1,4 @@
-<movsa-header />
+<movsa-header title="Residencias" />
 
 <div class="add-table-button">
   <button class="btn_style btn_rounded" matTooltip="Agregar residencia" (click)="addResidence()">
@@ -67,5 +67,5 @@
     }
   </table>
 
-  <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Seleccionar página de residencias"></mat-paginator>
+  <mat-paginator [pageSize]="20" [pageSizeOptions]="[35, 50, 100]" aria-label="Seleccionar página de residencias"></mat-paginator>
 </div>

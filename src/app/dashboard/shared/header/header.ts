@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -15,6 +15,7 @@ export class Header implements OnInit {
   isDarkTheme = signal(false);
   sidebarCollapsed = signal(false);
 
+  title = input<string>('');
   ngOnInit() {
     this.isDarkTheme.set(false);
     this.applyTheme();

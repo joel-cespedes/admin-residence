@@ -8,9 +8,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
 import { ResidenceFormData } from '../model/residence.model';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-residence-form-modal',
@@ -24,7 +26,8 @@ import { ResidenceFormData } from '../model/residence.model';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
   ],
   templateUrl: './residence-form-modal.html',
   styleUrl: './residence-form-modal.scss'
@@ -38,6 +41,7 @@ export class ResidenceFormModal {
   private residencesService = inject(ResidencesService);
   private dialogRef = inject(MatDialogRef<ResidenceFormModal>);
   private data = inject(MAT_DIALOG_DATA);
+  private notificationService = inject(NotificationService);
 
   constructor() {
     this.isEditMode.set(!!this.data);
@@ -70,20 +74,22 @@ export class ResidenceFormModal {
     if (this.isEditMode() && this.data) {
       this.residencesService.updateResidenceResidencesIdPut({ id: this.data.id, body: formData }).subscribe({
         next: response => {
+          this.notificationService.success('Residencia actualizada correctamente');
           this.dialogRef.close(response);
         },
         error: error => {
-          console.error('Error updating residence:', error);
+          this.notificationService.handleApiError(error, 'Error al actualizar la residencia');
           this.isLoading.set(false);
         }
       });
     } else {
       this.residencesService.createResidenceResidencesPost({ body: formData }).subscribe({
         next: response => {
+          this.notificationService.success('Residencia creada correctamente');
           this.dialogRef.close(response);
         },
         error: error => {
-          console.error('Error creating residence:', error);
+          this.notificationService.handleApiError(error, 'Error al crear la residencia');
           this.isLoading.set(false);
         }
       });

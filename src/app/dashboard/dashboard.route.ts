@@ -30,12 +30,16 @@ export const dashboardRoutes: Routes = [
     loadComponent: () => import('./room/room').then(m => m.Room)
   },
   {
+    path: 'floors',
+    loadComponent: () => import('./floor/floor').then(m => m.Floor)
+  },
+  {
     path: 'residents',
     loadComponent: () => import('./residents/residents').then(m => m.Residents)
   },
   {
     path: 'beds',
-    loadComponent: () => import('./room/room').then(m => m.Room)  // Temporalmente usar el componente de habitaciones
+    loadComponent: () => import('./room/room').then(m => m.Room) // Temporalmente usar el componente de habitaciones
   },
   {
     path: 'categories',
