@@ -99,15 +99,21 @@
           </div>
         </div>
         <div class="chart-card__chart">
-          <apx-chart
-            [series]="revenueChartData().series"
-            [chart]="revenueChartData().chart"
-            [colors]="revenueChartData().colors"
-            [plotOptions]="revenueChartData().plotOptions"
-            [dataLabels]="revenueChartData().dataLabels"
-            [grid]="revenueChartData().grid"
-            [xaxis]="revenueChartData().xaxis"
-            [yaxis]="revenueChartData().yaxis"></apx-chart>
+          @if (chartsLoading()) {
+            <div class="chart-loading">
+              <mat-spinner diameter="40"></mat-spinner>
+            </div>
+          } @else {
+            <apx-chart
+              [series]="revenueChartData().series"
+              [chart]="revenueChartData().chart"
+              [colors]="revenueChartData().colors"
+              [plotOptions]="revenueChartData().plotOptions"
+              [dataLabels]="revenueChartData().dataLabels"
+              [grid]="revenueChartData().grid"
+              [xaxis]="revenueChartData().xaxis"
+              [yaxis]="revenueChartData().yaxis"></apx-chart>
+          }
         </div>
       </mat-card-content>
     </mat-card>
@@ -122,13 +128,19 @@
       </mat-card-header>
       <mat-card-content class="growth-card__content">
         <div class="chartt">
-          <apx-chart
-            [series]="chartRadial().series"
-            [chart]="chartRadial().chart"
-            [plotOptions]="chartRadial().plotOptions"
-            [labels]="chartRadial().labels"
-            [fill]="chartRadial().fill"
-            [stroke]="chartRadial().stroke"></apx-chart>
+          @if (chartsLoading()) {
+            <div class="chart-loading">
+              <mat-spinner diameter="40"></mat-spinner>
+            </div>
+          } @else {
+            <apx-chart
+              [series]="chartRadial().series"
+              [chart]="chartRadial().chart"
+              [plotOptions]="chartRadial().plotOptions"
+              [labels]="chartRadial().labels"
+              [fill]="chartRadial().fill"
+              [stroke]="chartRadial().stroke"></apx-chart>
+          }
         </div>
         <div class="subtitle">62% Company Growth</div>
       </mat-card-content>
@@ -144,14 +156,20 @@
         <div class="result">{{ totalResidents() }} residentes</div>
       </div>
       <div class="profile-card_right">
-        <apx-chart
-          [series]="lineChart().series"
-          [stroke]="lineChart().stroke"
-          [chart]="lineChart().chart"
-          [dataLabels]="lineChart().dataLabels"
-          [grid]="lineChart().grid"
-          [yaxis]="lineChart().yaxis"
-          [xaxis]="lineChart().xaxis"></apx-chart>
+        @if (chartsLoading()) {
+          <div class="chart-loading">
+            <mat-spinner diameter="40"></mat-spinner>
+          </div>
+        } @else {
+          <apx-chart
+            [series]="lineChart().series"
+            [stroke]="lineChart().stroke"
+            [chart]="lineChart().chart"
+            [dataLabels]="lineChart().dataLabels"
+            [grid]="lineChart().grid"
+            [yaxis]="lineChart().yaxis"
+            [xaxis]="lineChart().xaxis"></apx-chart>
+        }
       </div>
     </mat-card-content>
   </mat-card>
@@ -172,16 +190,21 @@
           <div class="orders-card__label">Total residencias.</div>
         </div>
         <div class="orders-card__weekly">
-          <apx-chart
-            [series]="circleChart().series"
-            [chart]="circleChart().chart"
-            [labels]="circleChart().labels"
-            [plotOptions]="circleChart().plotOptions"
-            ¡></apx-chart>
+          @if (chartsLoading()) {
+            <div class="chart-loading">
+              <mat-spinner diameter="40"></mat-spinner>
+            </div>
+          } @else {
+            <apx-chart
+              [series]="circleChart().series"
+              [chart]="circleChart().chart"
+              [labels]="circleChart().labels"
+              [plotOptions]="circleChart().plotOptions"></apx-chart>
+          }
         </div>
       </div>
 
-      <div class="orders-card__categories">
+      <div class="orders-card__categories list_tasks">
         @for (category of orderCategories(); track category.name) {
           <div class="category">
             <div class="category__info">
@@ -236,15 +259,21 @@
       </div>
 
       <div class="orders-card__chart">
-        <apx-chart
-          [series]="profitChartData().series"
-          [chart]="profitChartData().chart"
-          [colors]="profitChartData().colors"
-          [stroke]="profitChartData().stroke"
-          [dataLabels]="profitChartData().dataLabels"
-          [grid]="profitChartData().grid"
-          [xaxis]="profitChartData().xaxis"
-          [yaxis]="profitChartData().yaxis"></apx-chart>
+        @if (chartsLoading()) {
+          <div class="chart-loading">
+            <mat-spinner diameter="40"></mat-spinner>
+          </div>
+        } @else {
+          <apx-chart
+            [series]="profitChartData().series"
+            [chart]="profitChartData().chart"
+            [colors]="profitChartData().colors"
+            [stroke]="profitChartData().stroke"
+            [dataLabels]="profitChartData().dataLabels"
+            [grid]="profitChartData().grid"
+            [xaxis]="profitChartData().xaxis"
+            [yaxis]="profitChartData().yaxis"></apx-chart>
+        }
       </div>
     </mat-card-content>
   </mat-card>
@@ -261,8 +290,6 @@
             <button type="button" mat-menu-item (click)="setTaskFilter('all')">Todas las tareas</button>
             <button type="button" mat-menu-item (click)="setTaskFilter('active')">Tareas activas</button>
             <button type="button" mat-menu-item (click)="setTaskFilter('completed')">Tareas completadas</button>
-            <!-- Removed problematic residence filter - now handled by interceptor and residence service -->
-            <!-- Residence selection is managed globally through the residence service -->
           </mat-menu>
         </div>
       </div>

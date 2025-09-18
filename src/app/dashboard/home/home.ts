@@ -61,6 +61,7 @@ export class Home implements OnInit {
   sidebarCollapsed = signal(false);
   loading = signal(true);
   error = signal<string | null>(null);
+  chartsLoading = signal(true);
   // Filtro global para compatibilidad
   timeFilter = signal<'week' | 'month' | 'year'>('year');
   taskFilter = signal<'all' | 'active' | 'completed'>('all');
@@ -124,6 +125,14 @@ export class Home implements OnInit {
     this.loadUserInfo();
     this.initializeDashboard();
     this.loadRecentActivity();
+
+    // Pequeño retraso para asegurar que el DOM esté estable antes de renderizar gráficos
+    setTimeout(() => {
+      // Forzar actualización de los computed properties para que se re-rendericen los gráficos
+      this.dashboardData.update(value => value);
+      this.taskCategories.update(value => value);
+      this.residentStats.update(value => value);
+    }, 0);
   }
 
   private initializeDashboard() {
@@ -234,6 +243,21 @@ export class Home implements OnInit {
         this.tareasValue.set(navigationData.tasks.toString());
 
         this.loading.set(false);
+
+        // Forzar redimensionamiento de gráficos después de la carga de datos
+        setTimeout(() => {
+          this.dashboardData.update(value => value);
+
+          // Forzar redimensionamiento manual de los gráficos
+          setTimeout(() => {
+            this.forceChartResize();
+          }, 0);
+
+        // Ocultar loading de gráficos después de que estén renderizados
+        setTimeout(() => {
+          this.chartsLoading.set(false);
+        }, 500);
+        }, 0);
       },
       error: () => {
         this.error.set('Error loading dashboard data');
@@ -250,6 +274,11 @@ export class Home implements OnInit {
       next: (response: any) => {
         this.taskCategories.set(response);
         this.isLoadingTaskCategories.set(false);
+
+        // Pequeño retraso para asegurar que los gráficos se rendericen correctamente
+        setTimeout(() => {
+          this.taskCategories.update(value => value);
+        }, 50);
       },
       error: () => {
         this.taskCategoriesError.set('Error loading task categories');
@@ -267,6 +296,11 @@ export class Home implements OnInit {
       next: (response: any) => {
         this.residentStats.set(response.body);
         this.isLoadingResidentStats.set(false);
+
+        // Pequeño retraso para asegurar que los gráficos se rendericen correctamente
+        setTimeout(() => {
+          this.residentStats.update(value => value);
+        }, 0);
       },
       error: () => {
         this.residentStatsError.set('Error loading resident statistics');
@@ -295,6 +329,7 @@ export class Home implements OnInit {
           stacked: true,
           parentHeightOffset: 6,
           height: 335,
+          width: '100%',
           offsetX: -12,
           toolbar: { show: false }
         } satisfies ApexChart,
@@ -388,7 +423,7 @@ export class Home implements OnInit {
           stacked: true,
           parentHeightOffset: 6,
           height: 335,
-          width: 400,
+          width: '100%',
           offsetX: -12,
           toolbar: { show: false }
         } satisfies ApexChart,
@@ -494,6 +529,7 @@ export class Home implements OnInit {
       series: [completionPercentage],
       chart: {
         height: 350,
+        width: '100%',
         type: 'radialBar' as const,
         offsetY: -10
       } as ApexChart,
@@ -582,6 +618,7 @@ export class Home implements OnInit {
       chart: {
         type: 'area',
         height: 230,
+        width: '100%',
         toolbar: { show: false }
       } satisfies ApexChart,
       colors: ['#696cff'],
@@ -677,6 +714,8 @@ export class Home implements OnInit {
         colors: ['#FFAC04', 'red'],
         chart: {
           parentHeightOffset: 0,
+          height: 200,
+          width: '100%',
           toolbar: { show: false },
           foreColor: '#ffac04',
           dropShadow: {
@@ -1130,5 +1169,47 @@ export class Home implements OnInit {
 
   goToResidences() {
     this.router.navigate(['/dashboard/residences']);
+  }
+
+  private forceChartResize(): void {
+    // Forzar redimensionamiento agresivo de todos los gráficos
+    const charts = document.querySelectorAll('apx-chart');
+
+    charts.forEach((chartElement, index) => {
+      try {
+        // Acceder al componente Angular y su instancia de ApexCharts
+        const chartComponent = chartElement as any;
+        if (chartComponent.chart && typeof chartComponent.chart.resize === 'function') {
+          // Forzar redimensionamiento del gráfico
+          chartComponent.chart.resize();
+        }
+
+        // Forzar actualización del DOM
+        const parent = chartElement.parentElement;
+        if (parent) {
+          // Disparar evento de redimensionamiento
+          parent.dispatchEvent(new Event('resize'));
+
+          // Forzar reflow del elemento
+          parent.style.display = 'none';
+          parent.offsetHeight;
+          parent.style.display = '';
+        }
+
+        // Timeout adicional para asegurar que el contenedor tenga el tamaño correcto
+        setTimeout(() => {
+          if (chartComponent.chart && typeof chartComponent.chart.resize === 'function') {
+            chartComponent.chart.resize();
+          }
+        }, index * 50); // Pequeño retraso entre gráficos
+      } catch (error) {
+        console.warn('Error al redimensionar gráfico:', error);
+      }
+    });
+
+    // Forzar redimensionamiento global al final
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 0);
   }
 }
