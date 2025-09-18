@@ -97,7 +97,12 @@
           }
         </table>
 
-        <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Seleccionar página de pisos"></mat-paginator>
+        @if (dataSource.filteredData.length > 34) {
+          <mat-paginator
+            [pageSize]="20"
+            [pageSizeOptions]="[35, 50, 100]"
+            aria-label="Seleccionar página de pisos"></mat-paginator>
+        }
       </div>
     }
   </div>

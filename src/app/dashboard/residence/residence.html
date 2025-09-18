@@ -67,5 +67,10 @@
     }
   </table>
 
-  <mat-paginator [pageSize]="20" [pageSizeOptions]="[35, 50, 100]" aria-label="Seleccionar página de residencias"></mat-paginator>
+  @if (dataSource.filteredData.length > 34) {
+    <mat-paginator
+      [pageSize]="20"
+      [pageSizeOptions]="[35, 50, 100]"
+      aria-label="Seleccionar página de residencias"></mat-paginator>
+  }
 </div>
