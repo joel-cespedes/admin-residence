@@ -16,26 +16,24 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 
   .shape {
     position: absolute;
     opacity: 0.6;
 
     &.shape-1 {
-      top: -10%;
-      left: -10%;
-      width: 300px;
+      top: -15%;
+      right: -12%;
+      width: 192px;
       height: auto;
-      transform: rotate(-15deg);
     }
 
     &.shape-2 {
-      bottom: -15%;
-      right: -10%;
-      width: 350px;
+      bottom: -24%;
+      left: -15%;
+      width: 280px;
       height: auto;
-      transform: rotate(25deg);
     }
   }
 }

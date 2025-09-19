@@ -1,0 +1,20 @@
+<div mat-dialog-content>
+  <div class="title-modal">
+    ¿Estás seguro de que quieres eliminar la cama
+    <strong>"{{ data.name }}"</strong>
+    ?
+  </div>
+  <p>¡Esta acción no se puede deshacer!</p>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+  <button class="btn_color_free btn_red" (click)="onDelete()">
+    @if (!isLoading()) {
+      <span>Eliminar</span>
+    }
+    @if (isLoading()) {
+      <span>Eliminando...</span>
+    }
+  </button>
+</div>

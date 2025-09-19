@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  background-color: var(--sneat-bg-primary);
+  padding: 20px 10px !important;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.info-item {
+  display: contents;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #666;
+  border-bottom: 1px solid #eee;
+}
+
+.info-value {
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.status-discharged {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.status-deceased {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.no-bed {
+  color: #666;
+  font-style: italic;
+}
+
+mat-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+button {
+  cursor: pointer;
+}

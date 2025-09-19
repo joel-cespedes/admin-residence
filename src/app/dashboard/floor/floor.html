@@ -3,7 +3,7 @@
 <!-- Residence Selection -->
 <div class="residence-selector">
   <div class="selector-header">
-    <h3>Selecciona una Residencia</h3>
+    <div class="selector-header-title">Selecciona una Residencia</div>
     @if (isLoadingResidences()) {
       <mat-spinner diameter="20"></mat-spinner>
     }
@@ -25,83 +25,83 @@
 </div>
 
 <!-- Floors Table -->
-  <div class="floors-section">
-    <div class="table-header">
-      <div class="add-table-button">
-        <button class="btn_style btn_rounded" matTooltip="Agregar piso" (click)="addFloor()">
-          <span class="mat-icon">add</span>
-        </button>
-      </div>
-      <div class="filter-field">
-        <input matInput (keyup)="applyFilter($event)" placeholder="Buscar piso..." #input />
-      </div>
+<div class="floors-section">
+  <div class="table-header">
+    <div class="add-table-button">
+      <button class="btn_style btn_rounded" matTooltip="Agregar piso" (click)="addFloor()">
+        <span class="mat-icon">add</span>
+      </button>
     </div>
-
-    <div class="table-container">
-      @if (isLoadingFloors()) {
-        <div class="loading-container">
-          <mat-spinner diameter="40"></mat-spinner>
-          <p>Cargando pisos...</p>
-        </div>
-      }
-
-      <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort>
-          <!-- Name Column -->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-            <td mat-cell *matCellDef="let floor">{{ floor.name }}</td>
-          </ng-container>
-
-          <!-- Residence Name Column -->
-          <ng-container matColumnDef="residence_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Residencia</th>
-            <td mat-cell *matCellDef="let floor">{{ floor.residence_name }}</td>
-          </ng-container>
-
-          <!-- Created At Column -->
-          <ng-container matColumnDef="created_at">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creación</th>
-            <td mat-cell *matCellDef="let floor">{{ floor.created_at | date: 'dd/MM/yyyy' }}</td>
-          </ng-container>
-
-          <!-- Actions Column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Acciones</th>
-            <td mat-cell *matCellDef="let floor">
-              <div class="action-buttons">
-                <button class="btn_color btn_lightblue btn_small" color="primary" (click)="viewFloor(floor)" matTooltip="Ver">
-                  <span class="mat-icon">visibility</span>
-                </button>
-
-                <button class="btn_color btn_darkblue btn_small" color="accent" (click)="editFloor(floor)" matTooltip="Editar">
-                  <span class="mat-icon">edit</span>
-                </button>
-
-                <button class="btn_color btn_red btn_small" color="warn" (click)="deleteFloor(floor)" matTooltip="Eliminar">
-                  <span class="mat-icon">delete</span>
-                </button>
-              </div>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-          <!-- Row shown when there is no matching data. -->
-          @if (dataSource.filteredData.length === 0) {
-            <tr class="mat-row">
-              <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-                No se encontraron pisos que coincidan con "{{ input.value }}"
-              </td>
-            </tr>
-          }
-        </table>
-
-        <mat-paginator
-          [length]="totalItems()"
-          [pageSizeOptions]="[10, 20, 50, 100]"
-          aria-label="Seleccionar página de pisos"></mat-paginator>
-      </div>
+    <div class="filter-field">
+      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar piso..." #input />
     </div>
   </div>
+
+  <div class="table-container">
+    @if (isLoadingFloors()) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando pisos...</p>
+      </div>
+    }
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let floor">{{ floor.name }}</td>
+        </ng-container>
+
+        <!-- Residence Name Column -->
+        <ng-container matColumnDef="residence_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Residencia</th>
+          <td mat-cell *matCellDef="let floor">{{ floor.residence_name }}</td>
+        </ng-container>
+
+        <!-- Created At Column -->
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creación</th>
+          <td mat-cell *matCellDef="let floor">{{ floor.created_at | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let floor">
+            <div class="action-buttons">
+              <button class="btn_color btn_lightblue btn_small" color="primary" (click)="viewFloor(floor)" matTooltip="Ver">
+                <span class="mat-icon">visibility</span>
+              </button>
+
+              <button class="btn_color btn_darkblue btn_small" color="accent" (click)="editFloor(floor)" matTooltip="Editar">
+                <span class="mat-icon">edit</span>
+              </button>
+
+              <button class="btn_color btn_red btn_small" color="warn" (click)="deleteFloor(floor)" matTooltip="Eliminar">
+                <span class="mat-icon">delete</span>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        @if (dataSource.filteredData.length === 0) {
+          <tr class="mat-row">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No se encontraron pisos que coincidan con "{{ input.value }}"
+            </td>
+          </tr>
+        }
+      </table>
+
+      <mat-paginator
+        [length]="totalItems()"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        aria-label="Seleccionar página de pisos"></mat-paginator>
+    </div>
+  </div>
+</div>

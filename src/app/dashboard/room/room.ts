@@ -18,7 +18,7 @@ import { ResidencesService } from '../../../openapi/generated/services/residence
 import { StructureService } from '../../../openapi/generated/services/structure.service';
 import { ResidenceWithContact } from '../residence/model/residence.model';
 import { FloorWithDetails } from '../floor/model/floor.model';
-import { RoomWithDetails } from './model/room.model';
+import { RoomFormData, RoomWithDetails } from './model/room.model';
 import { ViewRoomModal } from './view-room-modal/view-room-modal';
 import { RoomFormModal } from './room-form-modal/room-form-modal';
 import { DeleteRoomModal } from './delete-room-modal/delete-room-modal';
@@ -107,8 +107,19 @@ export class Room implements AfterViewInit, OnInit {
   private loadResidences() {
     this.isLoadingResidences.set(true);
     this.residencesService.listResidencesResidencesGet().subscribe({
-      next: (response: { items: any[] }) => {
-        this.residences.set(response.items || []);
+      next: (response: { items: Record<string, any>[] }) => {
+        this.residences.set((response.items || []).map(
+          (item: Record<string, any>) =>
+            ({
+              id: item['id'],
+              name: item['name'],
+              address: item['address'],
+              phone: item['phone'] || 'No especificado',
+              email: item['email'] || 'No especificado',
+              created_at: item['created_at'] || new Date().toISOString(),
+              updated_at: item['updated_at'] || null
+            }) as ResidenceWithContact
+        ));
         this.isLoadingResidences.set(false);
       },
       error: (error: { status?: number; message?: string }) => {
@@ -309,7 +320,7 @@ export class Room implements AfterViewInit, OnInit {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe((result: RoomFormData | null) => {
       if (result) {
         this.loadRoomsData();
       }
@@ -323,7 +334,7 @@ export class Room implements AfterViewInit, OnInit {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe((result: RoomFormData | null) => {
       if (result) {
         // Update the room using the service
         this.structureService
@@ -353,7 +364,7 @@ export class Room implements AfterViewInit, OnInit {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe((result: RoomFormData | null) => {
       if (result) {
         // Delete the room using the service
         this.structureService
@@ -375,16 +386,12 @@ export class Room implements AfterViewInit, OnInit {
 
   addRoom() {
     const dialogRef = this.dialog.open(RoomFormModal, {
-      data: {
-        residences: this.residences(),
-        preselectedResidenceId: this.selectedResidenceId(),
-        preselectedFloorId: this.selectedFloorId()
-      },
+      data: { residences: this.residences() },
       width: '60%',
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe((result: RoomFormData | null) => {
       if (result) {
         // Create the room using the service
         this.structureService

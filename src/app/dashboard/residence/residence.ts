@@ -1,24 +1,23 @@
-import { Component, AfterViewInit, ViewChild, inject, OnInit, signal } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Header } from '../shared/header/header';
-import { CommonModule, DatePipe } from '@angular/common';
 
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
-import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
-import { ResidenceWithContact } from './model/residence.model';
-import { ViewResidenceModal } from './view-residence-modal/view-residence-modal';
-import { ResidenceFormModal } from './residence-form-modal/residence-form-modal';
-import { DeleteResidenceModal } from './delete-residence-modal/delete-residence-modal';
 import { NotificationService } from '../../core/services/notification.service';
+import { DeleteResidenceModal } from './delete-residence-modal/delete-residence-modal';
+import { ResidenceWithContact } from './model/residence.model';
+import { ResidenceFormModal } from './residence-form-modal/residence-form-modal';
+import { ViewResidenceModal } from './view-residence-modal/view-residence-modal';
 
 @Component({
   selector: 'app-residence',
@@ -88,7 +87,7 @@ export class Residence implements AfterViewInit, OnInit {
 
   private loadResidences() {
     // Use the paginated endpoint
-    const params: { [key: string]: string | number } = {
+    const params: Record<string, string | number> = {
       page: this.pageIndex() + 1, // API uses 1-based indexing
       size: this.pageSize()
     };

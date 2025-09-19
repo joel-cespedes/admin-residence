@@ -121,9 +121,6 @@ img {
   box-shadow: var(--sneat-shadow-sm) !important;
 }
 
-// ===========================
-// TABLES
-// ===========================
 .mat-mdc-table {
   background-color: var(--sneat-bg-primary) !important;
   border-radius: var(--sneat-border-radius-lg) !important;
@@ -390,6 +387,7 @@ table {
     0 0 transparent;
   background-color: var(--sneat-bg-primary);
   border-radius: var(--sneat-border-radius-lg);
+  font-size: 15px;
 }
 .mat-mdc-paginator {
   margin-top: 2em;
@@ -399,7 +397,7 @@ table {
   input {
     border: none !important;
     background-color: var(--sneat-bg-primary);
-    font-size: 0.9375rem;
+    font-size: 15px;
     line-height: 1.5rem;
     outline: none;
     padding: 16px 20px;
@@ -525,15 +523,13 @@ mat-form-field.style_select {
   border: 1px solid var(--sneat-border-color);
   width: 100%;
   padding: 4px 16px;
-  //   width: fit-content;
-  //   background-color: rgba(105, 108, 255, 0.1);
-  //   //border: 1px solid rgba(105, 108, 255, 0.2) !important;
-  //   color: var(--sneat-primary);
-  //   border-radius: 6px;
-  //   padding: 4px 16px;
-  //   transition: all 0.3s ease;
-  //   &:hover {
-  //     background-color: var(--sneat-primary);
-  //     color: var(--sneat-bg-primary);
-  //   }
+  box-sizing: border-box;
+}
+.selector-header-title {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--sneat-gray-800);
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  text-align: center;
 }

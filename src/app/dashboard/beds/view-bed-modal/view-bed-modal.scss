@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  background-color: var(--sneat-bg-primary);
+  padding: 20px 10px !important;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.info-item {
+  display: contents;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #666;
+  border-bottom: 1px solid #eee;
+}
+
+.info-value {
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+mat-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+button {
+  cursor: pointer;
+}

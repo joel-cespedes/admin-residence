@@ -1,0 +1,93 @@
+<div class="title_modal">{{ data.full_name }}</div>
+<div mat-dialog-content>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Nombre Completo:</div>
+      <div class="info-value">{{ data.full_name }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Fecha de Nacimiento:</div>
+      <div class="info-value">{{ data.birth_date | date: 'dd/MM/yyyy' }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Sexo:</div>
+      <div class="info-value">{{ data.sex || 'No especificado' }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Género:</div>
+      <div class="info-value">{{ data.gender || 'No especificado' }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Estado:</div>
+      <div class="info-value">
+        <span class="status-badge status-{{ data.status }}">
+          @if (data.status === 'active') {
+            Activo
+          } @else if (data.status === 'discharged') {
+            Dado de Alta
+          } @else if (data.status === 'deceased') {
+            Fallecido
+          }
+        </span>
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Cama:</div>
+      <div class="info-value">
+        @if (data.bed_name && data.bed_name !== 'Sin asignar') {
+          {{ data.bed_name }}
+        } @else {
+          <span class="no-bed">Sin asignar</span>
+        }
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Habitación:</div>
+      <div class="info-value">{{ data.room_name || 'No asignada' }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Piso:</div>
+      <div class="info-value">{{ data.floor_name || 'No asignado' }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Residencia:</div>
+      <div class="info-value">{{ data.residence_name }}</div>
+    </div>
+
+    <div class="info-item" style="grid-column: 1 / -1;">
+      <div class="info-label">Comentarios:</div>
+      <div class="info-value">{{ data.comments || 'Sin comentarios' }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Fecha de Creación:</div>
+      <div class="info-value">{{ data.created_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+
+    @if (data.updated_at) {
+      <div class="info-item">
+        <div class="info-label">Última Actualización:</div>
+        <div class="info-value">{{ data.updated_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    }
+
+    @if (data.status_changed_at) {
+      <div class="info-item">
+        <div class="info-label">Cambio de Estado:</div>
+        <div class="info-value">{{ data.status_changed_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    }
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button class="btn_color_free btn_darkblue" (click)="onClose()">Cerrar</button>
+</div>

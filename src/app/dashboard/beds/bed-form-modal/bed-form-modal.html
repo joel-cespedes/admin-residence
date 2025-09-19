@@ -1,0 +1,124 @@
+<div class="title_modal">{{ bed ? 'Editar Cama' : 'Agregar Nueva Cama' }}</div>
+<form [formGroup]="bedForm" (ngSubmit)="submit()">
+  <div class="modal-content">
+    <div class="form-section">
+      <div class="form-row">
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre de la Cama</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: Cama 1, Cama A1, etc." />
+            @if (bedForm.get('name')?.invalid && bedForm.get('name')?.touched) {
+              <mat-error>
+                @if (bedForm.get('name')?.hasError('required')) {
+                  El nombre es requerido
+                } @else if (bedForm.get('name')?.hasError('minlength')) {
+                  Mínimo 2 caracteres
+                } @else if (bedForm.get('name')?.hasError('maxlength')) {
+                  Máximo 50 caracteres
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-row">
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Residencia</mat-label>
+            <mat-select formControlName="residence_id" (selectionChange)="onResidenceChange($event.value)">
+              <mat-option value="">Seleccionar residencia</mat-option>
+              @for (residence of residences; track residence.id) {
+                <mat-option [value]="residence.id">{{ residence.name }}</mat-option>
+              }
+            </mat-select>
+            @if (bedForm.get('residence_id')?.invalid && bedForm.get('residence_id')?.touched) {
+              <mat-error>La residencia es requerida</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      @if (selectedResidenceId()) {
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Piso</mat-label>
+              @if (isLoadingFloors()) {
+                <mat-select disabled>
+                  <mat-option>Cargando pisos...</mat-option>
+                </mat-select>
+              } @else {
+                <mat-select formControlName="floor_id" (selectionChange)="onFloorChange($event.value)">
+                  <mat-option value="">Seleccionar piso</mat-option>
+                  @for (floor of floors(); track floor.id) {
+                    <mat-option [value]="floor.id">{{ floor.name }}</mat-option>
+                  }
+                </mat-select>
+                @if (bedForm.get('floor_id')?.invalid && bedForm.get('floor_id')?.touched) {
+                  <mat-error>El piso es requerido</mat-error>
+                }
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      }
+
+      @if (selectedFloorId()) {
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Habitación</mat-label>
+              @if (isLoadingRooms()) {
+                <mat-select disabled>
+                  <mat-option>Cargando habitaciones...</mat-option>
+                </mat-select>
+              } @else {
+                <mat-select formControlName="room_id" (selectionChange)="onRoomChange($event.value)">
+                  <mat-option value="">Seleccionar habitación</mat-option>
+                  @for (room of rooms(); track room.id) {
+                    <mat-option [value]="room.id">{{ room.name }}</mat-option>
+                  }
+                </mat-select>
+                @if (bedForm.get('room_id')?.invalid && bedForm.get('room_id')?.touched) {
+                  <mat-error>La habitación es requerida</mat-error>
+                }
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (bed) {
+      <div class="form-section">
+        <h3>Información Adicional</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Residente Actual:</div>
+            <span>
+              @if (bed.resident_name && bed.resident_name !== 'Sin asignar') {
+                {{ bed.resident_name }}
+              } @else {
+                <span class="no-resident">Sin asignar</span>
+              }
+            </span>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Fecha de Creación:</div>
+            <span>{{ bed.created_at | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="modal-actions">
+    <button mat-button type="button" (click)="close()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="bedForm.invalid">
+      {{ bed ? 'Actualizar' : 'Crear' }}
+    </button>
+  </div>
+</form>
