@@ -26,6 +26,7 @@ import { NotificationService } from '../../core/services/notification.service';
 import { ViewResidentModal } from './view-resident-modal/view-resident-modal';
 import { ResidentFormModal } from './resident-form-modal/resident-form-modal';
 import { DeleteResidentModal } from './delete-resident-modal/delete-resident-modal';
+import { StorageService } from '@core';
 
 @Component({
   selector: 'app-residents',
@@ -51,7 +52,17 @@ import { DeleteResidentModal } from './delete-resident-modal/delete-resident-mod
   styleUrl: './residents.scss'
 })
 export class Residents implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['full_name', 'birth_date', 'status', 'bed_name', 'room_name', 'floor_name', 'residence_name', 'created_at', 'actions'];
+  displayedColumns: string[] = [
+    'full_name',
+    'birth_date',
+    'status',
+    'bed_name',
+    'room_name',
+    'floor_name',
+    'residence_name',
+    'created_at',
+    'actions'
+  ];
   dataSource: MatTableDataSource<ResidentWithDetails> = new MatTableDataSource<ResidentWithDetails>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -62,6 +73,7 @@ export class Residents implements AfterViewInit, OnInit {
   private residentsService = inject(ResidentsService);
   private dialog = inject(MatDialog);
   private notificationService = inject(NotificationService);
+  private storageService = inject(StorageService);
 
   residences = signal<ResidenceWithContact[]>([]);
   floors = signal<FloorWithDetails[]>([]);
@@ -118,18 +130,20 @@ export class Residents implements AfterViewInit, OnInit {
     this.isLoadingResidences.set(true);
     this.residencesService.listResidencesResidencesGet().subscribe({
       next: (response: { items: Record<string, any>[] }) => {
-        this.residences.set((response.items || []).map(
-          (item: Record<string, any>) =>
-            ({
-              id: item['id'],
-              name: item['name'],
-              address: item['address'],
-              phone: item['phone'] || 'No especificado',
-              email: item['email'] || 'No especificado',
-              created_at: item['created_at'] || new Date().toISOString(),
-              updated_at: item['updated_at'] || null
-            }) as ResidenceWithContact
-        ));
+        this.residences.set(
+          (response.items || []).map(
+            (item: Record<string, any>) =>
+              ({
+                id: item['id'],
+                name: item['name'],
+                address: item['address'],
+                phone: item['phone'] || 'No especificado',
+                email: item['email'] || 'No especificado',
+                created_at: item['created_at'] || new Date().toISOString(),
+                updated_at: item['updated_at'] || null
+              }) as ResidenceWithContact
+          )
+        );
         this.isLoadingResidences.set(false);
       },
       error: (error: { status?: number; message?: string }) => {
@@ -141,6 +155,8 @@ export class Residents implements AfterViewInit, OnInit {
 
   onResidenceChange(residenceId: string) {
     this.selectedResidenceId.set(residenceId);
+    // Also update the storage service to keep it in sync
+    this.storageService.setSelectedResidenceId(residenceId || null);
     this.selectedFloorId.set(''); // Reset floor selection
     this.selectedRoomId.set(''); // Reset room selection
     this.selectedBedId.set(''); // Reset bed selection
@@ -149,11 +165,10 @@ export class Residents implements AfterViewInit, OnInit {
     this.beds.set([]);
     this.pageIndex.set(0); // Reset to first page
 
+    this.loadResidentsData(); // Always reload residents with current filters
+
     if (residenceId) {
-      this.loadFloors();
-    } else {
-      // Load all residents when no residence is selected
-      this.loadResidentsData();
+      this.loadFloors(); // Load next level options
     }
   }
 
@@ -196,10 +211,10 @@ export class Residents implements AfterViewInit, OnInit {
     this.beds.set([]);
     this.pageIndex.set(0); // Reset to first page
 
+    this.loadResidentsData(); // Always reload residents with current filters
+
     if (floorId) {
-      this.loadRooms();
-    } else {
-      this.loadResidentsData();
+      this.loadRooms(); // Load next level options
     }
   }
 
@@ -240,10 +255,10 @@ export class Residents implements AfterViewInit, OnInit {
     this.beds.set([]);
     this.pageIndex.set(0); // Reset to first page
 
+    this.loadResidentsData(); // Always reload residents with current filters
+
     if (roomId) {
-      this.loadBeds();
-    } else {
-      this.loadResidentsData();
+      this.loadBeds(); // Load next level options
     }
   }
 
@@ -295,9 +310,23 @@ export class Residents implements AfterViewInit, OnInit {
       size: this.pageSize()
     };
 
-    // Add filters based on current selection
+    // X-Residence-Id is handled automatically by the interceptor
+    // But we also need to send residence_id as a query parameter for filtering
+    // especially for superadmin users who don't have X-Residence-Id set
+
+    // Add filters based on selected structure - always include residence if selected
     if (this.selectedResidenceId()) {
-      params['X-Residence-Id'] = this.selectedResidenceId();
+      params['residence_id'] = this.selectedResidenceId();
+      console.log('Adding residence_id filter:', this.selectedResidenceId());
+    }
+    if (this.selectedFloorId()) {
+      params['floor_id'] = this.selectedFloorId();
+    }
+    if (this.selectedRoomId()) {
+      params['room_id'] = this.selectedRoomId();
+    }
+    if (this.selectedBedId()) {
+      params['bed_id'] = this.selectedBedId();
     }
 
     // Add search term if provided
@@ -305,28 +334,30 @@ export class Residents implements AfterViewInit, OnInit {
       params['search'] = this.searchTerm();
     }
 
+    console.log('Calling residents API with params:', params);
     this.residentsService.listResidentsResidentsGet(params).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.dataSource.data = (response.items || []).map(
-          (item: any) => ({
-            id: item.id,
-            residence_id: item.residence_id,
-            full_name: item.full_name,
-            birth_date: item.birth_date,
-            sex: item.sex,
-            gender: item.gender,
-            comments: item.comments,
-            status: item.status,
-            status_changed_at: item.status_changed_at,
-            deleted_at: item.deleted_at,
-            bed_id: item.bed_id,
-            created_at: item.created_at,
-            updated_at: item.updated_at,
-            residence_name: item.residence_name,
-            bed_name: item.bed_name,
-            room_name: item.room_name,
-            floor_name: item.floor_name
-          }) as ResidentWithDetails
+          (item: any) =>
+            ({
+              id: item.id,
+              residence_id: item.residence_id,
+              full_name: item.full_name,
+              birth_date: item.birth_date,
+              sex: item.sex,
+              gender: item.gender,
+              comments: item.comments,
+              status: item.status,
+              status_changed_at: item.status_changed_at,
+              deleted_at: item.deleted_at,
+              bed_id: item.bed_id,
+              created_at: item.created_at,
+              updated_at: item.updated_at,
+              residence_name: item.residence_name,
+              bed_name: item.bed_name,
+              room_name: item.room_name,
+              floor_name: item.floor_name
+            }) as ResidentWithDetails
         );
         this.totalItems.set(response.total || 0);
         this.isLoadingResidents.set(false);
@@ -346,12 +377,12 @@ export class Residents implements AfterViewInit, OnInit {
       clearTimeout(this.searchTimeout);
     }
 
-    // Set new timeout for debounce (300ms)
+    // Set new timeout for debounce (200ms - faster response)
     this.searchTimeout = setTimeout(() => {
       this.searchTerm.set(filterValue.trim());
       this.pageIndex.set(0); // Reset to first page when filtering
       this.loadResidentsData();
-    }, 300);
+    }, 200);
   }
 
   viewResident(resident: ResidentWithDetails) {
@@ -388,15 +419,18 @@ export class Residents implements AfterViewInit, OnInit {
     dialogRef.afterClosed().subscribe((result: ResidentFormData | null) => {
       if (result) {
         this.residentsService
-          .updateResidentResidentsIdPut({ id: resident.id, body: {
-            full_name: result.full_name,
-            birth_date: result.birth_date,
-            sex: result.sex,
-            gender: result.gender,
-            comments: result.comments,
-            status: result.status,
-            bed_id: result.bed_id
-          }})
+          .updateResidentResidentsIdPut({
+            id: resident.id,
+            body: {
+              full_name: result.full_name,
+              birth_date: result.birth_date,
+              sex: result.sex,
+              gender: result.gender,
+              comments: result.comments,
+              status: result.status,
+              bed_id: result.bed_id
+            }
+          })
           .subscribe({
             next: () => {
               this.notificationService.success('Residente actualizado exitosamente');
@@ -419,17 +453,15 @@ export class Residents implements AfterViewInit, OnInit {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.residentsService
-          .deleteResidentResidentsIdDelete({ id: resident.id })
-          .subscribe({
-            next: () => {
-              this.notificationService.success('Residente eliminado exitosamente');
-              this.loadResidentsData();
-            },
-            error: (error: { status?: number; message?: string }) => {
-              this.notificationService.handleApiError(error, 'Error al eliminar el residente');
-            }
-          });
+        this.residentsService.deleteResidentResidentsIdDelete({ id: resident.id }).subscribe({
+          next: () => {
+            this.notificationService.success('Residente eliminado exitosamente');
+            this.loadResidentsData();
+          },
+          error: (error: { status?: number; message?: string }) => {
+            this.notificationService.handleApiError(error, 'Error al eliminar el residente');
+          }
+        });
       }
     });
   }
@@ -453,15 +485,17 @@ export class Residents implements AfterViewInit, OnInit {
     dialogRef.afterClosed().subscribe((result: ResidentFormData | null) => {
       if (result) {
         this.residentsService
-          .createResidentResidentsPost({ body: {
-            full_name: result.full_name,
-            birth_date: result.birth_date,
-            sex: result.sex,
-            gender: result.gender,
-            comments: result.comments,
-            status: result.status,
-            bed_id: result.bed_id
-          }})
+          .createResidentResidentsPost({
+            body: {
+              full_name: result.full_name,
+              birth_date: result.birth_date,
+              sex: result.sex,
+              gender: result.gender,
+              comments: result.comments,
+              status: result.status,
+              bed_id: result.bed_id
+            }
+          })
           .subscribe({
             next: () => {
               this.notificationService.success('Residente creado exitosamente');

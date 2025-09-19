@@ -5,3 +5,4 @@ export * from './interceptors/auth.interceptor';
 export * from './interceptors/residence.interceptor';
 export * from './services/auth.service';
 export * from './services/residence.service';
+export * from './services/storage.service';
