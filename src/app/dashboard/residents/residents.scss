@@ -40,27 +40,6 @@
   min-width: 400px;
 }
 
-mat-button-toggle-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-
-  mat-button-toggle {
-    width: 18%;
-    background-color: rgba(105, 108, 255, 0.1);
-    border: 1px solid rgba(105, 108, 255, 0.2) !important;
-    color: var(--sneat-primary);
-    border-radius: 26px;
-    margin-bottom: 1em;
-    padding: 4px 16px;
-    transition: all 0.3s ease;
-    &:hover {
-      background-color: var(--sneat-primary);
-      color: var(--sneat-bg-primary);
-    }
-  }
-}
-
 // Status styles
 .status-active {
   color: #4caf50;

@@ -15,8 +15,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
 import { StructureService } from '../../../../openapi/generated/services/structure.service';
 import { ResidenceWithContact } from '../../residence/model/residence.model';
+
 import { FloorFormData } from '../model/floor.model';
-import { NotificationService } from '../../../core/services/notification.service';
+import { NotificationService } from '../../../shared/notification.service';
+
+type ResidenceOption = Pick<ResidenceWithContact, 'id' | 'name'>;
 
 @Component({
   selector: 'app-floor-form-modal',
@@ -42,7 +45,7 @@ export class FloorFormModal {
   floorForm: FormGroup;
   isEditMode = signal(false);
   isLoading = signal(false);
-  residences = signal<ResidenceWithContact[]>([]);
+  residences = signal<ResidenceOption[]>([]);
   isLoadingResidences = signal(false);
 
   private fb = inject(FormBuilder);
@@ -61,8 +64,8 @@ export class FloorFormModal {
     });
 
     // Use residences from parent component if available, otherwise load them
-    if (this.data?.residences) {
-      this.residences.set(this.data.residences);
+    if (this.data?.residences?.length) {
+      this.residences.set(this.data.residences as ResidenceOption[]);
     } else {
       this.loadResidences();
     }
@@ -73,17 +76,19 @@ export class FloorFormModal {
         residence_id: this.data.residence_id
       });
     } else if (this.data?.preselectedResidenceId) {
-      this.floorForm.patchValue({
-        residence_id: this.data.preselectedResidenceId
-      });
+      this.floorForm.patchValue({ residence_id: this.data.preselectedResidenceId });
     }
   }
 
   private loadResidences() {
     this.isLoadingResidences.set(true);
-    this.residencesService.listResidencesResidencesGet().subscribe({
+    this.residencesService.listResidencesResidencesGet({ size: 100 }).subscribe({
       next: (response: any) => {
-        this.residences.set(response.items || []);
+        const mapped = (response?.items ?? []).map((item: Record<string, any>) => ({
+          id: item['id'],
+          name: item['name']
+        }));
+        this.residences.set(mapped);
         this.isLoadingResidences.set(false);
       },
       error: error => {
@@ -99,10 +104,17 @@ export class FloorFormModal {
     }
 
     this.isLoading.set(true);
-    const formData: FloorFormData = this.floorForm.value;
+    const formData = this.floorForm.getRawValue() as FloorFormData;
 
     if (this.isEditMode() && this.data?.id) {
-      this.structureService.updateFloorStructureFloorsIdPut({ id: this.data.id, body: { name: formData.name } }).subscribe({
+      this.structureService.updateFloorStructureFloorsIdPut({
+        id: this.data.id,
+        residence_id: this.data.residence_id,
+        body: {
+          name: formData.name,
+          residence_id: formData.residence_id
+        }
+      }).subscribe({
         next: response => {
           this.notificationService.success('Piso actualizado correctamente');
           this.dialogRef.close(response);
@@ -113,19 +125,21 @@ export class FloorFormModal {
         }
       });
     } else {
-      this.structureService.createFloorStructureFloorsPost({
-        body: { name: formData.name },
-        'X-Residence-Id': formData.residence_id
-      }).subscribe({
-        next: response => {
-          this.notificationService.success('Piso creado correctamente');
-          this.dialogRef.close(response);
-        },
-        error: error => {
-          this.notificationService.handleApiError(error, 'Error al crear el piso');
-          this.isLoading.set(false);
-        }
-      });
+      this.structureService
+        .createFloorStructureFloorsPost({
+          residence_id: (formData.residence_id ?? this.data?.preselectedResidenceId ?? this.data?.residence_id),
+          body: { name: formData.name }
+        })
+        .subscribe({
+          next: response => {
+            this.notificationService.success('Piso creado correctamente');
+            this.dialogRef.close(response);
+          },
+          error: error => {
+            this.notificationService.handleApiError(error, 'Error al crear el piso');
+            this.isLoading.set(false);
+          }
+        });
     }
   }
 
@@ -133,5 +147,5 @@ export class FloorFormModal {
     this.dialogRef.close();
   }
 
-  title = computed(() => this.isEditMode() ? 'Editar Piso' : 'Agregar Nuevo Piso');
+  title = computed(() => (this.isEditMode() ? 'Editar Piso' : 'Agregar Nuevo Piso'));
 }

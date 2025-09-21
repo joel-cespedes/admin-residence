@@ -11,14 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 
 export interface DeleteMeasurementMeasurementsMeasurementIdDelete$Params {
   measurement_id: string;
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function deleteMeasurementMeasurementsMeasurementIdDelete(http: HttpClient, rootUrl: string, params: DeleteMeasurementMeasurementsMeasurementIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, deleteMeasurementMeasurementsMeasurementIdDelete.PATH, 'delete');
   if (params) {
     rb.path('measurement_id', params.measurement_id, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

@@ -1,146 +1,80 @@
-import { CommonModule, DatePipe } from '@angular/common';
-import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Header } from '../shared/header/header';
+import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { DatePipe } from '@angular/common';
 
+import { BaseEntityComponent, ResidenceWithContact, EntityType } from '../../shared/base-entity.component';
+import { Header } from '../shared/header/header';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
-import { NotificationService } from '../../core/services/notification.service';
+import { ResidenceFormData } from './model/residence.model';
 import { DeleteResidenceModal } from './delete-residence-modal/delete-residence-modal';
-import { ResidenceWithContact } from './model/residence.model';
 import { ResidenceFormModal } from './residence-form-modal/residence-form-modal';
 import { ViewResidenceModal } from './view-residence-modal/view-residence-modal';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-residence',
   standalone: true,
   imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatTableModule,
-    MatSortModule,
     MatPaginatorModule,
-    Header,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    DatePipe
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    DatePipe,
+    Header
   ],
   templateUrl: './residence.html',
   styleUrl: './residence.scss'
 })
-export class Residence implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['name', 'address', 'phone', 'email', 'created_at', 'actions'];
-  dataSource: MatTableDataSource<ResidenceWithContact> = new MatTableDataSource<ResidenceWithContact>([]);
+export class Residence extends BaseEntityComponent<ResidenceWithContact> {
+  // Override los inputs del componente base
+  override entityType = input<EntityType>('residences');
+  override displayedColumns = input<string[]>(['name', 'address', 'phone', 'email', 'created_at', 'actions']);
+  override title = input<string>('Residencias');
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  protected override dialog = inject(MatDialog);
+  protected override residencesService = inject(ResidencesService);
 
-  private residencesService = inject(ResidencesService);
-  private dialog = inject(MatDialog);
-  private notificationService = inject(NotificationService);
+  // Implementar el método abstracto loadData
+  protected override loadData(): void {
+    this.isLoadingData.set(true);
 
-  // Pagination signals
-  pageIndex = signal(0);
-  pageSize = signal(10);
-  totalItems = signal(0);
-
-  // Search signals
-  searchTerm = signal('');
-  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
-
-  ngOnInit() {
-    this.loadResidences();
-  }
-
-  ngAfterViewInit() {
-    // Setup paginator events - IMPORTANT: Don't connect paginator to dataSource for backend pagination
-    if (this.paginator) {
-      this.paginator.page.subscribe((event: any) => {
-        console.log('Paginator event - Page:', event.pageIndex, 'Size:', event.pageSize);
-        this.pageIndex.set(event.pageIndex);
-        this.pageSize.set(event.pageSize);
-        this.loadResidences();
-      });
-    }
-
-    // Setup sort events
-    if (this.sort) {
-      this.sort.sortChange.subscribe(() => {
-        console.log('Sort event triggered');
-        this.pageIndex.set(0); // Reset to first page when sorting
-        this.loadResidences();
-      });
-    }
-  }
-
-  private loadResidences() {
-    // Use the paginated endpoint
-    const params: Record<string, string | number> = {
-      page: this.pageIndex() + 1, // API uses 1-based indexing
-      size: this.pageSize()
-    };
-
-    // Add search term if provided
-    if (this.searchTerm()) {
-      params['search'] = this.searchTerm();
-    }
+    const params = this.getFilterParams();
+    console.log('Loading residences with params:', params);
 
     this.residencesService.listResidencesResidencesGet(params).subscribe({
-      next: (response: { items: any[]; total?: number }) => {
-        this.dataSource.data = (response.items || []).map(
-          (item: Record<string, any>) =>
-            ({
-              id: item['id'],
-              name: item['name'],
-              address: item['address'],
-              phone: item['phone'] || 'No especificado',
-              email: item['email'] || 'No especificado',
-              created_at: item['created_at'] || new Date().toISOString(),
-              updated_at: item['updated_at'] || null
-            }) as ResidenceWithContact
-        );
-        this.totalItems.set(response.total || 0);
+      next: (response: any) => {
+        this.dataSource.data = (response.items || []).map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          address: item.address,
+          phone: item.phone || 'No especificado',
+          email: item.email || 'No especificado',
+          created_at: item.created_at || new Date().toISOString(),
+          updated_at: item.updated_at || null
+        })) as ResidenceWithContact[];
 
-        // Update paginator state manually
-        if (this.paginator) {
-          this.paginator.pageIndex = this.pageIndex();
-          this.paginator.pageSize = this.pageSize();
-        }
+        this.pagination.update(pag => ({ ...pag, total: response.total || 0 }));
+        this.isLoadingData.set(false);
       },
-      error: (error: { status?: number; message?: string }) => {
+      error: (error: any) => {
         this.notificationService.handleApiError(error, 'Error al cargar las residencias');
+        this.isLoadingData.set(false);
       }
     });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-
-    // Clear existing timeout
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-
-    // Set new timeout for debounce (300ms)
-    this.searchTimeout = setTimeout(() => {
-      this.searchTerm.set(filterValue.trim());
-      this.pageIndex.set(0); // Reset to first page when filtering
-      this.loadResidences();
-    }, 300);
-  }
-
+  // CRUD Operations
   viewResidence(residence: ResidenceWithContact) {
     const dialogRef = this.dialog.open(ViewResidenceModal, {
       data: residence,
@@ -148,23 +82,34 @@ export class Residence implements AfterViewInit, OnInit {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadResidences();
-      }
+    dialogRef.afterClosed().subscribe(() => {
+      this.loadData();
     });
   }
 
   editResidence(residence: ResidenceWithContact) {
     const dialogRef = this.dialog.open(ResidenceFormModal, {
-      data: residence,
+      data: { residence },
       width: '60%',
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: ResidenceFormData | null) => {
       if (result) {
-        this.loadResidences();
+        this.residencesService
+          .updateResidenceResidencesIdPut({
+            id: residence.id,
+            body: result
+          })
+          .subscribe({
+            next: () => {
+              this.notificationService.success('Residencia actualizada exitosamente');
+              this.loadData();
+            },
+            error: (error: any) => {
+              this.notificationService.handleApiError(error, 'Error al actualizar la residencia');
+            }
+          });
       }
     });
   }
@@ -176,23 +121,43 @@ export class Residence implements AfterViewInit, OnInit {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadResidences();
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.residencesService.deleteResidenceResidencesIdDelete({ id: residence.id }).subscribe({
+          next: () => {
+            this.notificationService.success('Residencia eliminada exitosamente');
+            this.loadData();
+          },
+          error: (error: any) => {
+            this.notificationService.handleApiError(error, 'Error al eliminar la residencia');
+          }
+        });
       }
     });
   }
 
   addResidence() {
     const dialogRef = this.dialog.open(ResidenceFormModal, {
-      data: null,
+      data: { residences: this.residences() },
       width: '60%',
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: ResidenceFormData | null) => {
       if (result) {
-        this.loadResidences();
+        this.residencesService
+          .createResidenceResidencesPost({
+            body: result
+          })
+          .subscribe({
+            next: () => {
+              this.notificationService.success('Residencia creada exitosamente');
+              this.loadData();
+            },
+            error: (error: any) => {
+              this.notificationService.handleApiError(error, 'Error al crear la residencia');
+            }
+          });
       }
     });
   }

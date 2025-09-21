@@ -3,7 +3,8 @@
 <!-- Filter Section -->
 <div class="filter-section">
   <div class="grid_selects">
-    <div class="residence-selector">
+    <!-- Residence Section - Always visible -->
+    <div class="residence-section">
       <div class="selector-header">
         <div class="selector-header-title">Filtrar por Residencia</div>
         @if (isLoadingResidences()) {
@@ -14,17 +15,13 @@
       <div class="select-container">
         <mat-form-field class="style_select">
           <mat-label>Residencia</mat-label>
-          <mat-select
-            [value]="selectedResidenceId()"
-            (selectionChange)="onResidenceChange($event.value)"
-            placeholder="Todas las residencias">
-            <mat-option value="">Todas las residencias</mat-option>
+          <mat-select [value]="filters().residence_id" (selectionChange)="onResidenceChange($event.value)">
             @for (residence of residences(); track residence.id) {
               <mat-option [value]="residence.id">
                 {{ residence.name }}
               </mat-option>
             }
-            @if (residences().length === 0) {
+            @if (residences().length === 0 && !isLoadingResidences()) {
               <mat-option disabled>No hay residencias disponibles</mat-option>
             }
           </mat-select>
@@ -45,11 +42,9 @@
         <mat-form-field class="style_select">
           <mat-label>Piso</mat-label>
           <mat-select
-            [value]="selectedFloorId()"
+            [value]="filters().floor_id"
             (selectionChange)="onFloorChange($event.value)"
-            [disabled]="!selectedResidenceId()"
-            placeholder="Todos los pisos">
-            <mat-option value="">Todos los pisos</mat-option>
+            [disabled]="!filters().residence_id">
             @for (floor of floors(); track floor.id) {
               <mat-option [value]="floor.id">
                 {{ floor.name }}
@@ -66,7 +61,7 @@
     <!-- Rooms Section - Always visible but disabled when no floor selected -->
     <div class="rooms-section">
       <div class="selector-header">
-        <div class="selector-header-title">Filtrar por Habitaci髇</div>
+        <div class="selector-header-title">Filtrar por Habitaci贸n</div>
         @if (isLoadingRooms()) {
           <mat-spinner diameter="20"></mat-spinner>
         }
@@ -74,13 +69,8 @@
 
       <div class="select-container">
         <mat-form-field class="style_select">
-          <mat-label>Habitaci髇</mat-label>
-          <mat-select
-            [value]="selectedRoomId()"
-            (selectionChange)="onRoomChange($event.value)"
-            [disabled]="!selectedFloorId()"
-            placeholder="Todas las habitaciones">
-            <mat-option value="">Todas las habitaciones</mat-option>
+          <mat-label>Habitaci贸n</mat-label>
+          <mat-select [value]="filters().room_id" (selectionChange)="onRoomChange($event.value)" [disabled]="!filters().floor_id">
             @for (room of rooms(); track room.id) {
               <mat-option [value]="room.id">
                 {{ room.name }}
@@ -96,7 +86,7 @@
   </div>
 
   <!-- Beds Section - Only visible when room is selected -->
-  @if (selectedRoomId()) {
+  @if (filters().room_id) {
     <div class="beds-section">
       <div class="selector-header">
         <div class="selector-header-title">Filtrar por Cama</div>
@@ -107,10 +97,10 @@
 
       @if (beds().length === 0 && !isLoadingBeds()) {
         <div class="no-beds">
-          <p>No hay camas disponibles en esta habitaci髇.</p>
+          <p>No hay camas disponibles en esta habitaci贸n.</p>
         </div>
       } @else {
-        <mat-button-toggle-group [value]="selectedBedId()" (change)="onBedChange($event.value)" class="bed-toggles">
+        <mat-button-toggle-group [value]="filters().bed_id" (change)="onBedChange($event.value)" class="bed-toggles">
           @for (bed of beds(); track bed.id) {
             <mat-button-toggle [value]="bed.id">
               {{ bed.name }}
@@ -136,7 +126,7 @@
   </div>
 
   <div class="table-container">
-    @if (isLoadingResidents()) {
+    @if (isLoadingData()) {
       <div class="loading-container">
         <mat-spinner diameter="40"></mat-spinner>
         <p>Cargando residentes...</p>
@@ -154,7 +144,7 @@
         <!-- Birth Date Column -->
         <ng-container matColumnDef="birth_date">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Nacimiento</th>
-          <td mat-cell *matCellDef="let resident">{{ resident.birth_date | date: 'dd/MM/yyyy' }}</td>
+          <td mat-cell *matCellDef="let resident">{{ resident.birth_date | dateFormat }}</td>
         </ng-container>
 
         <!-- Status Column -->
@@ -179,7 +169,7 @@
 
         <!-- Room Name Column -->
         <ng-container matColumnDef="room_name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Habitaci髇</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Habitaci贸n</th>
           <td mat-cell *matCellDef="let resident">{{ resident.room_name || 'Sin asignar' }}</td>
         </ng-container>
 
@@ -197,8 +187,8 @@
 
         <!-- Created At Column -->
         <ng-container matColumnDef="created_at">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creaci髇</th>
-          <td mat-cell *matCellDef="let resident">{{ resident.created_at | date: 'dd/MM/yyyy' }}</td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creaci贸n</th>
+          <td mat-cell *matCellDef="let resident">{{ resident.created_at | dateFormat: 'full' }}</td>
         </ng-container>
 
         <!-- Actions Column -->
@@ -210,7 +200,11 @@
                 <span class="mat-icon">visibility</span>
               </button>
 
-              <button class="btn_color btn_darkblue btn_small" color="accent" (click)="editResident(resident)" matTooltip="Editar">
+              <button
+                class="btn_color btn_darkblue btn_small"
+                color="accent"
+                (click)="editResident(resident)"
+                matTooltip="Editar">
                 <span class="mat-icon">edit</span>
               </button>
 
@@ -228,7 +222,7 @@
         @if (dataSource.data.length === 0) {
           <tr class="mat-row">
             <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-              @if (searchTerm()) {
+              @if (filters().search) {
                 No se encontraron residentes que coincidan con "{{ input.value }}"
               } @else {
                 No se encontraron residentes
@@ -239,11 +233,11 @@
       </table>
 
       <mat-paginator
-        [length]="totalItems()"
-        [pageIndex]="pageIndex()"
-        [pageSize]="pageSize()"
+        [length]="pagination().total"
+        [pageIndex]="pagination().page"
+        [pageSize]="pagination().size"
         [pageSizeOptions]="[10, 20, 50, 100]"
-        aria-label="Seleccionar p醙ina de residentes"></mat-paginator>
+        aria-label="Seleccionar p贸gina de residentes"></mat-paginator>
     </div>
   </div>
 </div>

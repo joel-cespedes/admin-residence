@@ -16,14 +16,14 @@ export interface GetTasksStatsDashboardTasksStatsGet$Params {
  * Time filter: week, month, or year
  */
   time_filter?: string;
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function getTasksStatsDashboardTasksStatsGet(http: HttpClient, rootUrl: string, params?: GetTasksStatsDashboardTasksStatsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskStats>> {
   const rb = new RequestBuilder(rootUrl, getTasksStatsDashboardTasksStatsGet.PATH, 'get');
   if (params) {
     rb.query('time_filter', params.time_filter, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

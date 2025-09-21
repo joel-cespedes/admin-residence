@@ -1,7 +1,7 @@
 <div class="title_modal">{{ title() }}</div>
 <div mat-dialog-content>
   <form [formGroup]="residenceForm" class="form_modal">
-    <mat-form-field appearance="outline" class="full-width custom-field">
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Nombre</mat-label>
       <input matInput formControlName="name" placeholder="Nombre de la residencia" />
       @if (residenceForm.get('name')?.hasError('required')) {

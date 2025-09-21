@@ -11,13 +11,13 @@ import { RequestBuilder } from '../../request-builder';
 import { TaskCategoryOut } from '../../models/task-category-out';
 
 export interface ListCategoriesSimpleTasksCategoriesSimpleGet$Params {
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function listCategoriesSimpleTasksCategoriesSimpleGet(http: HttpClient, rootUrl: string, params?: ListCategoriesSimpleTasksCategoriesSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TaskCategoryOut>>> {
   const rb = new RequestBuilder(rootUrl, listCategoriesSimpleTasksCategoriesSimpleGet.PATH, 'get');
   if (params) {
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

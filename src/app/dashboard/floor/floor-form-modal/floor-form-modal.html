@@ -14,32 +14,33 @@
           <mat-error>El nombre del piso es obligatorio</mat-error>
         }
       </mat-form-field>
-
-      @if (!isEditMode()) {
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Residencia</mat-label>
-          <mat-select formControlName="residence_id" placeholder="Selecciona una residencia">
-            @for (residence of residences(); track residence.id) {
-              <mat-option [value]="residence.id">
-                {{ residence.name }}
-              </mat-option>
-            }
-            @if (residences().length === 0) {
-              <mat-option disabled>No hay residencias disponibles</mat-option>
-            }
-          </mat-select>
-          @if (floorForm.get('residence_id')?.hasError('required')) {
-            <mat-error>Debes seleccionar una residencia</mat-error>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Residencia</mat-label>
+        <mat-select formControlName="residence_id" placeholder="Selecciona una residencia">
+          @for (residence of residences(); track residence.id) {
+            <mat-option [value]="residence.id">
+              {{ residence.name }}
+            </mat-option>
           }
-        </mat-form-field>
-      }
+          @if (residences().length === 0) {
+            <mat-option disabled>No hay residencias disponibles</mat-option>
+          }
+        </mat-select>
+        @if (floorForm.get('residence_id')?.hasError('required')) {
+          <mat-error>Debes seleccionar una residencia</mat-error>
+        }
+      </mat-form-field>
     </form>
   }
 </div>
 
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="isLoading() || floorForm.invalid || isLoadingResidences()">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="isLoading() || floorForm.invalid || isLoadingResidences()">
     @if (!isLoading()) {
       <span>{{ isEditMode() ? 'Actualizar' : 'Crear' }}</span>
     }

@@ -68,7 +68,13 @@
       </button>
     </div>
     <div class="filter-field">
-      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar habitación..." #input />
+      <input
+        matInput
+        type="search"
+        [value]="searchTerm()"
+        (keyup)="applyFilter($event)"
+        placeholder="Buscar habitación..."
+      />
     </div>
   </div>
 
@@ -81,7 +87,13 @@
     }
 
     <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" matSort>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        [matSortActive]="pagination().sortBy"
+        [matSortDirection]="pagination().sortOrder"
+        matSortDisableClear>
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
@@ -130,10 +142,14 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
         <!-- Row shown when there is no matching data. -->
-        @if (dataSource.filteredData.length === 0) {
+        @if (!isLoadingRooms() && dataSource.data.length === 0) {
           <tr class="mat-row">
             <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-              No se encontraron habitaciones que coincidan con "{{ input.value }}"
+              @if (searchTerm().trim()) {
+                No se encontraron habitaciones que coincidan con "{{ searchTerm().trim() }}"
+              } @else {
+                No hay habitaciones registradas todavía
+              }
             </td>
           </tr>
         }
@@ -141,10 +157,11 @@
 
       <mat-paginator
         [length]="totalItems()"
-        [pageIndex]="pageIndex()"
-        [pageSize]="pageSize()"
+        [pageIndex]="pagination().pageIndex"
+        [pageSize]="pagination().pageSize"
         [pageSizeOptions]="[10, 20, 50, 100]"
-        aria-label="Seleccionar página de habitaciones"></mat-paginator>
+        aria-label="Seleccionar página de habitaciones"
+        (page)="onPageChange($event)"></mat-paginator>
     </div>
   </div>
 </div>

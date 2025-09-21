@@ -10,12 +10,12 @@ export interface ResidentOut {
   full_name: string;
   birth_date: string;
   sex?: string | null;
-  gender?: string | null;
   comments?: string | null;
   status: 'active' | 'discharged' | 'deceased';
   status_changed_at?: string | null;
   deleted_at?: string | null;
   bed_id?: string | null;
+  created_by?: string | null;
   created_at: string;
   updated_at?: string;
 }
@@ -24,7 +24,6 @@ export interface ResidentCreate {
   full_name: string;
   birth_date: string;
   sex?: string | null;
-  gender?: string | null;
   comments?: string | null;
   status?: 'active' | 'discharged' | 'deceased';
   bed_id?: string | null;
@@ -34,7 +33,6 @@ export interface ResidentUpdate {
   full_name?: string | null;
   birth_date?: string | null;
   sex?: string | null;
-  gender?: string | null;
   comments?: string | null;
   status?: 'active' | 'discharged' | 'deceased' | null;
   bed_id?: string | null;
@@ -51,6 +49,7 @@ export interface ResidentWithDetails extends ResidentOut {
   bed_name?: string;
   room_name?: string;
   floor_name?: string;
+  created_by_name?: string;
   created_at: string;
   updated_at?: string;
 }
@@ -60,7 +59,6 @@ export interface ResidentFormData {
   full_name: string;
   birth_date: string;
   sex?: string;
-  gender?: string;
   comments?: string;
   status: 'active' | 'discharged' | 'deceased';
   residence_id: string;
@@ -78,7 +76,7 @@ export class ResidentsService {
     const token = localStorage.getItem('access_token');
     return {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     };
   }
 
@@ -86,7 +84,10 @@ export class ResidentsService {
     page?: number;
     size?: number;
     search?: string;
-    'X-Residence-Id'?: string;
+    residence_id?: string;
+    floor_id?: string;
+    room_id?: string;
+    bed_id?: string;
   }): Observable<{
     items: ResidentWithDetails[];
     total?: number;

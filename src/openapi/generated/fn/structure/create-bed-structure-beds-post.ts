@@ -12,14 +12,18 @@ import { BedCreate } from '../../models/bed-create';
 import { BedOut } from '../../models/bed-out';
 
 export interface CreateBedStructureBedsPost$Params {
-  'X-Residence-Id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
       body: BedCreate
 }
 
 export function createBedStructureBedsPost(http: HttpClient, rootUrl: string, params: CreateBedStructureBedsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<BedOut>> {
   const rb = new RequestBuilder(rootUrl, createBedStructureBedsPost.PATH, 'post');
   if (params) {
-    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.query('residence_id', params.residence_id, {});
     rb.body(params.body, 'application/json');
   }
 

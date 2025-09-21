@@ -13,6 +13,7 @@ import { FloorUpdate } from '../../models/floor-update';
 
 export interface UpdateFloorStructureFloorsIdPut$Params {
   id: string;
+  residence_id?: (string | null);
       body: FloorUpdate
 }
 
@@ -20,6 +21,7 @@ export function updateFloorStructureFloorsIdPut(http: HttpClient, rootUrl: strin
   const rb = new RequestBuilder(rootUrl, updateFloorStructureFloorsIdPut.PATH, 'put');
   if (params) {
     rb.path('id', params.id, {});
+    rb.query('residence_id', params.residence_id, {});
     rb.body(params.body, 'application/json');
   }
 

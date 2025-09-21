@@ -15,7 +15,7 @@
         <mat-form-field class="style_select">
           <mat-label>Residencia</mat-label>
           <mat-select
-            [value]="selectedResidenceId()"
+            [value]="filters().residence_id"
             (selectionChange)="onResidenceChange($event.value)"
             placeholder="Todas las residencias">
             <mat-option value="">Todas las residencias</mat-option>
@@ -45,9 +45,9 @@
         <mat-form-field class="style_select">
           <mat-label>Piso</mat-label>
           <mat-select
-            [value]="selectedFloorId()"
+            [value]="filters().floor_id"
             (selectionChange)="onFloorChange($event.value)"
-            [disabled]="!selectedResidenceId()"
+            [disabled]="!filters().residence_id"
             placeholder="Todos los pisos">
             <mat-option value="">Todos los pisos</mat-option>
             @for (floor of floors(); track floor.id) {
@@ -65,7 +65,7 @@
   </div>
 
   <!-- Rooms Section - Only visible when floor is selected -->
-  @if (selectedFloorId()) {
+  @if (filters().floor_id) {
     <div class="rooms-section">
       <div class="selector-header">
         <div class="selector-header-title">Filtrar por Habitación</div>
@@ -79,7 +79,7 @@
           <p>No hay habitaciones disponibles en este piso.</p>
         </div>
       } @else {
-        <mat-button-toggle-group [value]="selectedRoomId()" (change)="onRoomChange($event.value)" class="room-toggles">
+        <mat-button-toggle-group [value]="filters().room_id" (change)="onRoomChange($event.value)" class="room-toggles">
           @for (room of rooms(); track room.id) {
             <mat-button-toggle [value]="room.id">
               {{ room.name }}
@@ -105,7 +105,7 @@
   </div>
 
   <div class="table-container">
-    @if (isLoadingBeds()) {
+    @if (isLoadingData()) {
       <div class="loading-container">
         <mat-spinner diameter="40"></mat-spinner>
         <p>Cargando camas...</p>

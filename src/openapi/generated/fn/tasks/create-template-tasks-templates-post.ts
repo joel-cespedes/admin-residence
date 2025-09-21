@@ -12,14 +12,14 @@ import { TaskTemplateCreate } from '../../models/task-template-create';
 import { TaskTemplateOut } from '../../models/task-template-out';
 
 export interface CreateTemplateTasksTemplatesPost$Params {
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
       body: TaskTemplateCreate
 }
 
 export function createTemplateTasksTemplatesPost(http: HttpClient, rootUrl: string, params: CreateTemplateTasksTemplatesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskTemplateOut>> {
   const rb = new RequestBuilder(rootUrl, createTemplateTasksTemplatesPost.PATH, 'post');
   if (params) {
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
     rb.body(params.body, 'application/json');
   }
 

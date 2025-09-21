@@ -13,7 +13,7 @@ import { MeasurementUpdate } from '../../models/measurement-update';
 
 export interface PatchMeasurementMeasurementsMeasurementIdPatch$Params {
   measurement_id: string;
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
       body: MeasurementUpdate
 }
 
@@ -21,7 +21,7 @@ export function patchMeasurementMeasurementsMeasurementIdPatch(http: HttpClient,
   const rb = new RequestBuilder(rootUrl, patchMeasurementMeasurementsMeasurementIdPatch.PATH, 'patch');
   if (params) {
     rb.path('measurement_id', params.measurement_id, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
     rb.body(params.body, 'application/json');
   }
 

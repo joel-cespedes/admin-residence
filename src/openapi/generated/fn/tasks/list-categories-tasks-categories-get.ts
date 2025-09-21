@@ -20,7 +20,7 @@ export interface ListCategoriesTasksCategoriesGet$Params {
   date_to?: (string | null);
   status?: (string | null);
   type?: (string | null);
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function listCategoriesTasksCategoriesGet(http: HttpClient, rootUrl: string, params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
@@ -35,7 +35,7 @@ export function listCategoriesTasksCategoriesGet(http: HttpClient, rootUrl: stri
     rb.query('date_to', params.date_to, {});
     rb.query('status', params.status, {});
     rb.query('type', params.type, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

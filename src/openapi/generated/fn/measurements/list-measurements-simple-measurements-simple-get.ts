@@ -28,7 +28,7 @@ export interface ListMeasurementsSimpleMeasurementsSimpleGet$Params {
  */
   until?: (string | null);
   limit?: number;
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function listMeasurementsSimpleMeasurementsSimpleGet(http: HttpClient, rootUrl: string, params?: ListMeasurementsSimpleMeasurementsSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
@@ -39,7 +39,7 @@ export function listMeasurementsSimpleMeasurementsSimpleGet(http: HttpClient, ro
     rb.query('since', params.since, {});
     rb.query('until', params.until, {});
     rb.query('limit', params.limit, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterModule, RouterLinkActive } from '@angular/router';
-import { ResidenceService } from '@core';
+// Removed ResidenceService dependency - backend filters by user role
 import { ApiService } from '../../openapi/generated/services/api.service';
 import { DashboardService } from '../../openapi/generated/services/dashboard.service';
 
@@ -12,7 +12,7 @@ import { DashboardService } from '../../openapi/generated/services/dashboard.ser
   styleUrls: ['./dashboard.scss']
 })
 export class Dashboard implements OnInit {
-  private residenceService = inject(ResidenceService);
+  // Removed ResidenceService dependency
   private apiService = inject(ApiService);
   private dashboardService = inject(DashboardService);
 

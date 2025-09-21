@@ -12,7 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
-import { AuthService, ResidenceService } from '@core';
+import { AuthService } from '@core';
 import type {
   ApexAxisChartSeries,
   ApexChart,
@@ -51,7 +51,6 @@ import { AuthService as ApiAuthService } from '../../../openapi/generated/servic
 })
 export class Home implements OnInit {
   private dashboardService = inject(DashboardService);
-  private residenceService = inject(ResidenceService);
   private apiService = inject(ApiService);
   private authService = inject(AuthService);
   private apiAuthService = inject(ApiAuthService);
@@ -136,15 +135,10 @@ export class Home implements OnInit {
   }
 
   private initializeDashboard() {
-    const residences = this.residenceService.residences();
-
-    if (residences && residences.length > 0) {
-      this.loadDashboardData();
-      this.loadTaskCategories();
-      this.loadResidentStats();
-    } else {
-      this.waitForResidences();
-    }
+    // Removed residence dependency - backend filters by user role
+    this.loadDashboardData();
+    this.loadTaskCategories();
+    this.loadResidentStats();
   }
 
   private loadDashboardData() {
@@ -1012,22 +1006,7 @@ export class Home implements OnInit {
     });
   }
 
-  private waitForResidences(): void {
-    const checkResidences = () => {
-      const residences = this.residenceService.residences();
-      if (residences && residences.length > 0) {
-        this.loadDashboardData();
-        this.loadTaskCategories();
-        this.loadResidentStats();
-      } else if (this.loading()) {
-        setTimeout(checkResidences, 100);
-      } else {
-        this.error.set('No residences available. Please contact administrator.');
-      }
-    };
-
-    checkResidences();
-  }
+  // Removed waitForResidences - backend filters by user role
 
   private loadUserInfo() {
     this.apiAuthService.meAuthMeGet().subscribe({
@@ -1111,42 +1090,40 @@ export class Home implements OnInit {
   });
 
   totalVisibleResidences = computed(() => {
-    const residences = this.residenceService.residences();
-    return residences?.length || 0;
+    // Removed residence dependency - backend returns filtered count
+    return this.dashboardData()?.metrics.find(m => m.title === 'Residencias')?.value || '0';
   });
 
   totalResidentsFromResidences = computed(() => {
-    const residences = this.residenceService.residences();
-    if (!residences || residences.length === 0) return 0;
-
-    return residences.reduce(total => {
-      const residentCount = Math.floor(Math.random() * 100) + 30;
-      return total + residentCount;
-    }, 0);
+    // Removed residence dependency - backend returns filtered count
+    return this.dashboardData()?.metrics.find(m => m.title === 'Residentes')?.value || '0';
   });
 
   residenceDataWithStats = computed(() => {
-    const residences = this.residenceService.residences();
-    if (!residences || residences.length === 0) return [];
-
-    const limitedResidences = residences.slice(0, 10);
-
-    return limitedResidences.map((residence, index) => {
-      const floorCount = Math.floor(Math.random() * 15) + 3;
-      const roomCount = Math.floor(Math.random() * 50) + 20;
-      const residentCount = Math.floor(Math.random() * 100) + 30;
-
-      return {
-        id: residence.id,
-        name: residence.name,
+    // Removed residence dependency - backend filters by user role
+    // Return mock data for chart display
+    return [
+      {
+        id: '1',
+        name: 'Residencia Principal',
         icon: 'apartment',
-        floorCount: floorCount,
-        roomCount: roomCount,
-        residentCount: residentCount,
-        color: this.getResidenceColor(index),
-        percentage: Math.floor(Math.random() * 30) + 10
-      };
-    });
+        floorCount: 5,
+        roomCount: 25,
+        residentCount: 45,
+        color: 'btn_primary',
+        percentage: 25
+      },
+      {
+        id: '2',
+        name: 'Residencia Secundaria',
+        icon: 'apartment',
+        floorCount: 3,
+        roomCount: 18,
+        residentCount: 32,
+        color: 'btn_success',
+        percentage: 18
+      }
+    ];
   });
 
   formatDate(dateString: string): string {

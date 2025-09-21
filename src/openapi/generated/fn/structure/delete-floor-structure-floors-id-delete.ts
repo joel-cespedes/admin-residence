@@ -11,12 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 
 export interface DeleteFloorStructureFloorsIdDelete$Params {
   id: string;
+  residence_id?: (string | null);
 }
 
 export function deleteFloorStructureFloorsIdDelete(http: HttpClient, rootUrl: string, params: DeleteFloorStructureFloorsIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, deleteFloorStructureFloorsIdDelete.PATH, 'delete');
   if (params) {
     rb.path('id', params.id, {});
+    rb.query('residence_id', params.residence_id, {});
   }
 
   return http.request(

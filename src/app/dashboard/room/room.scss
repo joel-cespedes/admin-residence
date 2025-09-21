@@ -1,23 +1,84 @@
-.action-buttons {
+.filters {
   display: flex;
-  button {
-    margin-left: 14px;
-    cursor: pointer;
-  }
+  flex-direction: column;
+  gap: 16px;
 }
 
-.add-table-button {
-  margin-top: 1em;
+.filters__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.filters__residence {
+  min-width: 240px;
+  position: relative;
+}
+
+.filters__spinner {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.filters__search {
+  flex: 1 1 260px;
+}
+
+.filters__floors {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filters__floors-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.filters__floors-empty {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.filters__floor-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.table-wrapper {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.table-header {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 12px;
-  button {
-    cursor: pointer;
-  }
 }
-mat-option,
-.mat-mdc-option {
-  margin: 0.5em 0;
+
+.table-container {
+  position: relative;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
 }
 
 .btn_rounded {
@@ -29,28 +90,6 @@ mat-option,
   justify-content: center;
 }
 
-mat-button-toggle-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-
-  mat-button-toggle {
-    width: 18%;
-    background-color: rgba(105, 108, 255, 0.1);
-    border: 1px solid rgba(105, 108, 255, 0.2) !important;
-    color: var(--sneat-primary);
-    border-radius: 26px;
-    margin-bottom: 1em;
-    padding: 4px 16px;
-    transition: all 0.3s ease;
-    &:hover {
-      background-color: var(--sneat-primary);
-      color: var(--sneat-bg-primary);
-    }
-  }
-}
-
-// Establecer ancho fijo para la columna de acciones
 .mat-mdc-cell.mat-column-actions,
 .mat-mdc-header-cell.mat-column-actions {
   width: 190px;

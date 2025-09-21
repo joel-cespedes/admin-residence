@@ -14,7 +14,7 @@ export interface ListApplicationsSimpleTasksApplicationsSimpleGet$Params {
   resident_id?: (string | null);
   template_id?: (string | null);
   limit?: number;
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function listApplicationsSimpleTasksApplicationsSimpleGet(http: HttpClient, rootUrl: string, params?: ListApplicationsSimpleTasksApplicationsSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TaskApplicationOut>>> {
@@ -23,7 +23,7 @@ export function listApplicationsSimpleTasksApplicationsSimpleGet(http: HttpClien
     rb.query('resident_id', params.resident_id, {});
     rb.query('template_id', params.template_id, {});
     rb.query('limit', params.limit, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

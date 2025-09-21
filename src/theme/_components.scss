@@ -351,7 +351,6 @@ img {
   font-family: 'Material Icons Sharp', monospace;
   font-size: 24px;
   font-weight: normal;
-
   letter-spacing: normal;
   text-transform: none;
   white-space: nowrap;
@@ -380,7 +379,7 @@ img {
   pointer-events: auto;
 }
 
-table {
+table:not(.mat-calendar-table) {
   box-shadow:
     0 3px 8px rgba(34, 48, 62, 0.1),
     0 0 transparent,
@@ -445,7 +444,10 @@ table {
 }
 .btn_small {
   width: 32px !important;
-  height: 32px !important;
+  height: 28px !important;
+  .mat-icon {
+    font-size: 21px;
+  }
 }
 .btn_lightblue {
   background-color: rgba(3, 195, 236, 0.1);
@@ -532,4 +534,68 @@ mat-form-field.style_select {
   margin-top: 1em;
   margin-bottom: 0.5em;
   text-align: center;
+}
+.mat-form-field-disabled {
+  background-color: rgba(235, 235, 235, 0.694) !important;
+}
+mat-button-toggle-group {
+  display: grid !important;
+  gap: 1em;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+}
+body mat-button-toggle-group mat-button-toggle {
+  width: 100%;
+  box-sizing: border-box !important;
+  font-size: 15px !important;
+  background-color: rgba(105, 108, 255, 0.1) !important;
+  border: 1px solid rgba(105, 108, 255, 0.2) !important;
+  color: var(--sneat-primary) !important;
+  border-radius: 26px;
+  margin-bottom: 1em !important;
+  padding: 0 !important;
+  transition: all 0.3s ease !important;
+  &:hover {
+    background-color: var(--sneat-primary) !important;
+    color: var(--sneat-bg-primary) !important;
+  }
+}
+.mat-button-toggle-checked .mat-button-toggle-button:has(.mat-button-toggle-checkbox-wrapper) {
+  padding-left: 16px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mat-button-toggle-appearance-standard .mat-button-toggle-checkbox-wrapper {
+  left: 6px !important;
+  transform: none !important;
+  top: -2px !important;
+}
+.mat-button-toggle-checkbox-wrapper {
+  position: relative !important;
+}
+
+.colum-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+  min-width: 400px;
+}
+
+mat-calendar,
+.mat-datepicker-content .mat-calendar {
+  background-color: var(--sneat-bg-primary);
+  border-radius: var(--sneat-border-radius);
+  border: 1px solid var(--sneat-border-color);
+  box-shadow: var(--sneat-shadow);
+  padding: 0.5em;
+  .mat-calendar-header {
+    background-color: var(--sneat-bg-primary);
+  }
+  .mat-calendar-body-cell-content {
+    color: var(--sneat-text-primary);
+  }
+  .mat-calendar-body-cell-content:hover {
+    background-color: var(--sneat-bg-primary);
+    color: var(--sneat-text-primary);
+  }
 }

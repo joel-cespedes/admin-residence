@@ -8,7 +8,13 @@
  *
  * Attributes:
  *     name (Optional[str]): Nuevo nombre de la cama
+ *     residence_id (Optional[str]): Nueva residencia a la que pertenece la cama
+ *     floor_id (Optional[str]): Nuevo piso al que pertenece la cama
+ *     room_id (Optional[str]): Nueva habitación a la que pertenece la cama
  */
 export interface BedUpdate {
+  floor_id?: (string | null);
   name?: (string | null);
+  residence_id?: (string | null);
+  room_id?: (string | null);
 }

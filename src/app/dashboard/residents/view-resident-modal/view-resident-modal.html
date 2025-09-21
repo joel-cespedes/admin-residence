@@ -1,14 +1,32 @@
 <div class="title_modal">{{ data.full_name }}</div>
 <div mat-dialog-content>
   <div class="info-grid">
+    <!-- Campos de identificación -->
+    <div class="info-item">
+      <div class="info-label">ID:</div>
+      <div class="info-value"><code>{{ data.id }}</code></div>
+    </div>
+
     <div class="info-item">
       <div class="info-label">Nombre Completo:</div>
       <div class="info-value">{{ data.full_name }}</div>
     </div>
 
+    <!-- Campos personales -->
     <div class="info-item">
       <div class="info-label">Fecha de Nacimiento:</div>
       <div class="info-value">{{ data.birth_date | date: 'dd/MM/yyyy' }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Edad:</div>
+      <div class="info-value">
+        @if (data.birth_date) {
+          {{ data.birth_date | age }} años
+        } @else {
+          No disponible
+        }
+      </div>
     </div>
 
     <div class="info-item">
@@ -16,11 +34,7 @@
       <div class="info-value">{{ data.sex || 'No especificado' }}</div>
     </div>
 
-    <div class="info-item">
-      <div class="info-label">Género:</div>
-      <div class="info-value">{{ data.gender || 'No especificado' }}</div>
-    </div>
-
+    <!-- Estado y asignación -->
     <div class="info-item">
       <div class="info-label">Estado:</div>
       <div class="info-value">
@@ -34,6 +48,12 @@
           }
         </span>
       </div>
+    </div>
+
+    <!-- Ubicación completa -->
+    <div class="info-item">
+      <div class="info-label">Residencia:</div>
+      <div class="info-value">{{ data.residence_name }}</div>
     </div>
 
     <div class="info-item">
@@ -62,9 +82,22 @@
       <div class="info-value">{{ data.residence_name }}</div>
     </div>
 
+    <!-- Comentarios -->
     <div class="info-item" style="grid-column: 1 / -1;">
       <div class="info-label">Comentarios:</div>
-      <div class="info-value">{{ data.comments || 'Sin comentarios' }}</div>
+      <div class="info-value comments-value">{{ data.comments || 'Sin comentarios' }}</div>
+    </div>
+
+    <!-- Auditoría -->
+    <div class="info-item">
+      <div class="info-label">Creado por:</div>
+      <div class="info-value">
+        @if (data.created_by_name) {
+          {{ data.created_by_name }}
+        } @else {
+          Sistema
+        }
+      </div>
     </div>
 
     <div class="info-item">
@@ -83,6 +116,13 @@
       <div class="info-item">
         <div class="info-label">Cambio de Estado:</div>
         <div class="info-value">{{ data.status_changed_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    }
+
+    @if (data.deleted_at) {
+      <div class="info-item" style="grid-column: 1 / -1;">
+        <div class="info-label">Fecha de Eliminación:</div>
+        <div class="info-value deleted-value">{{ data.deleted_at | date: 'dd/MM/yyyy HH:mm' }}</div>
       </div>
     }
   </div>

@@ -8,7 +8,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { StructureService } from '../../../../openapi/generated/services/structure.service';
 import { FloorWithDetails } from '../model/floor.model';
-import { NotificationService } from '../../../core/services/notification.service';
+import { NotificationService } from '../../../shared/notification.service';
 
 @Component({
   selector: 'app-delete-floor-modal',
@@ -26,8 +26,13 @@ export class DeleteFloorModal {
   data: FloorWithDetails = inject(MAT_DIALOG_DATA);
 
   onDelete(): void {
+    if (this.isLoading()) {
+      return;
+    }
     this.isLoading.set(true);
-    this.structureService.deleteFloorStructureFloorsIdDelete({ id: this.data.id }).subscribe({
+    this.structureService
+      .deleteFloorStructureFloorsIdDelete({ id: this.data.id, residence_id: this.data.residence_id })
+      .subscribe({
       next: () => {
         this.notificationService.success('Piso eliminado correctamente');
         this.dialogRef.close(true);

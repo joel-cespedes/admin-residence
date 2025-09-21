@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { bedDetailsStructureBedsIdDetailsGet } from '../fn/structure/bed-details-structure-beds-id-details-get';
+import { BedDetailsStructureBedsIdDetailsGet$Params } from '../fn/structure/bed-details-structure-beds-id-details-get';
 import { BedOut } from '../models/bed-out';
 import { bedsSimpleStructureBedsRoomIdSimpleGet } from '../fn/structure/beds-simple-structure-beds-room-id-simple-get';
 import { BedsSimpleStructureBedsRoomIdSimpleGet$Params } from '../fn/structure/beds-simple-structure-beds-room-id-simple-get';
@@ -460,7 +462,7 @@ export class StructureService extends BaseService {
   /**
    * List Beds.
    *
-   * List beds with pagination
+   * List beds with pagination and related names
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listBedsStructureBedsGet()` instead.
@@ -474,7 +476,7 @@ export class StructureService extends BaseService {
   /**
    * List Beds.
    *
-   * List beds with pagination
+   * List beds with pagination and related names
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listBedsStructureBedsGet$Response()` instead.
@@ -649,6 +651,39 @@ export class StructureService extends BaseService {
   deleteBedStructureBedsIdDelete(params: DeleteBedStructureBedsIdDelete$Params, context?: HttpContext): Observable<void> {
     return this.deleteBedStructureBedsIdDelete$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `bedDetailsStructureBedsIdDetailsGet()` */
+  static readonly BedDetailsStructureBedsIdDetailsGetPath = '/structure/beds/{id}/details';
+
+  /**
+   * Bed Details.
+   *
+   * Get detailed bed information
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `bedDetailsStructureBedsIdDetailsGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  bedDetailsStructureBedsIdDetailsGet$Response(params: BedDetailsStructureBedsIdDetailsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return bedDetailsStructureBedsIdDetailsGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Bed Details.
+   *
+   * Get detailed bed information
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `bedDetailsStructureBedsIdDetailsGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  bedDetailsStructureBedsIdDetailsGet(params: BedDetailsStructureBedsIdDetailsGet$Params, context?: HttpContext): Observable<any> {
+    return this.bedDetailsStructureBedsIdDetailsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 

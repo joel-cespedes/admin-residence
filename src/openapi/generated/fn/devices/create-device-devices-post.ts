@@ -12,14 +12,14 @@ import { DeviceCreate } from '../../models/device-create';
 import { DeviceOut } from '../../models/device-out';
 
 export interface CreateDeviceDevicesPost$Params {
-  'X-Residence-Id'?: (string | null);
+  residence_id?: (string | null);
       body: DeviceCreate
 }
 
 export function createDeviceDevicesPost(http: HttpClient, rootUrl: string, params: CreateDeviceDevicesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<DeviceOut>> {
   const rb = new RequestBuilder(rootUrl, createDeviceDevicesPost.PATH, 'post');
   if (params) {
-    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.query('residence_id', params.residence_id, {});
     rb.body(params.body, 'application/json');
   }
 

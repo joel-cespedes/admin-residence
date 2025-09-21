@@ -11,13 +11,11 @@ import { RequestBuilder } from '../../request-builder';
 import { NavigationCounts } from '../../models/navigation-counts';
 
 export interface GetNavigationCountsDashboardNavigationCountsGet$Params {
-  'X-Residence-Id'?: (string | null);
 }
 
 export function getNavigationCountsDashboardNavigationCountsGet(http: HttpClient, rootUrl: string, params?: GetNavigationCountsDashboardNavigationCountsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<NavigationCounts>> {
   const rb = new RequestBuilder(rootUrl, getNavigationCountsDashboardNavigationCountsGet.PATH, 'get');
   if (params) {
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
   }
 
   return http.request(

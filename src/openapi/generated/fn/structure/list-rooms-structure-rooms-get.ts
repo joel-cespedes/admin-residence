@@ -11,10 +11,19 @@ import { RequestBuilder } from '../../request-builder';
 import { PaginatedResponse } from '../../models/paginated-response';
 
 export interface ListRoomsStructureRoomsGet$Params {
-  'X-Residence-Id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
+
+/**
+ * Filter by floor ID
+ */
+  floor_id?: (string | null);
+  search?: (string | null);
   page?: number;
   size?: number;
-  search?: (string | null);
   sort_by?: (string | null);
   sort_order?: ('asc' | 'desc' | null);
   date_from?: (string | null);
@@ -26,10 +35,11 @@ export interface ListRoomsStructureRoomsGet$Params {
 export function listRoomsStructureRoomsGet(http: HttpClient, rootUrl: string, params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
   const rb = new RequestBuilder(rootUrl, listRoomsStructureRoomsGet.PATH, 'get');
   if (params) {
-    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.query('residence_id', params.residence_id, {});
+    rb.query('floor_id', params.floor_id, {});
+    rb.query('search', params.search, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
-    rb.query('search', params.search, {});
     rb.query('sort_by', params.sort_by, {});
     rb.query('sort_order', params.sort_order, {});
     rb.query('date_from', params.date_from, {});

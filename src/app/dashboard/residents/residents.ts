@@ -1,511 +1,459 @@
-import { Component, AfterViewInit, ViewChild, inject, OnInit, signal } from '@angular/core';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { AfterViewInit, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { CommonModule, DatePipe } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort, SortDirection } from '@angular/material/sort';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+// import { DatePipe } from '@angular/common';
+import { DateFormatPipe } from '../../shared/pipes/date-format-pipe';
 
 import { Header } from '../shared/header/header';
-import { ResidencesService } from '../../../openapi/generated/services/residences.service';
+import { ResidentsService as ResidentsApiService } from '../../../openapi/generated/services/residents.service';
 import { StructureService } from '../../../openapi/generated/services/structure.service';
-import { ResidenceWithContact } from '../residence/model/residence.model';
-import { FloorWithDetails } from '../floor/model/floor.model';
-import { RoomWithDetails } from '../room/model/room.model';
-import { BedWithDetails } from '../beds/model/bed.model';
-import { ResidentWithDetails, ResidentFormData } from './model/resident.model';
-import { ResidentsService } from '../../../openapi/generated/services/residents.service';
-import { NotificationService } from '../../core/services/notification.service';
+import { ResidencesService } from '../../../openapi/generated/services/residences.service';
+import { NotificationService } from '../../shared/notification.service';
+import { ResidentFormData, ResidentWithDetails } from './model/resident.model';
 import { ViewResidentModal } from './view-resident-modal/view-resident-modal';
 import { ResidentFormModal } from './resident-form-modal/resident-form-modal';
 import { DeleteResidentModal } from './delete-resident-modal/delete-resident-modal';
-import { StorageService } from '@core';
+import { firstValueFrom } from 'rxjs';
+
+interface ResidenceOption {
+  id: string;
+  name: string;
+}
+
+interface FloorOption {
+  id: string;
+  name: string;
+}
+
+interface RoomOption {
+  id: string;
+  name: string;
+}
+
+interface BedOption {
+  id: string;
+  name: string;
+}
+
+interface ResidentFilters {
+  residence_id: string;
+  floor_id: string;
+  room_id: string;
+  bed_id: string;
+  search: string;
+}
 
 @Component({
   selector: 'app-residents',
   standalone: true,
   imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatTableModule,
-    MatSortModule,
     MatPaginatorModule,
-    Header,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatDialogModule,
-    MatButtonToggleModule,
     MatProgressSpinnerModule,
     MatSelectModule,
-    DatePipe
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule,
+    MatButtonToggleModule,
+    DateFormatPipe,
+    Header
   ],
   templateUrl: './residents.html',
   styleUrl: './residents.scss'
 })
-export class Residents implements AfterViewInit, OnInit {
-  displayedColumns: string[] = [
-    'full_name',
-    'birth_date',
-    'status',
-    'bed_name',
-    'room_name',
-    'floor_name',
-    'residence_name',
-    'created_at',
-    'actions'
-  ];
-  dataSource: MatTableDataSource<ResidentWithDetails> = new MatTableDataSource<ResidentWithDetails>([]);
-
+export class Residents implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  private residencesService = inject(ResidencesService);
-  private structureService = inject(StructureService);
-  private residentsService = inject(ResidentsService);
-  private dialog = inject(MatDialog);
-  private notificationService = inject(NotificationService);
-  private storageService = inject(StorageService);
+  private readonly residentsService = inject(ResidentsApiService);
+  private readonly residencesService = inject(ResidencesService);
+  private readonly structureService = inject(StructureService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly dialog = inject(MatDialog);
 
-  residences = signal<ResidenceWithContact[]>([]);
-  floors = signal<FloorWithDetails[]>([]);
-  rooms = signal<RoomWithDetails[]>([]);
-  beds = signal<BedWithDetails[]>([]);
-  selectedResidenceId = signal<string>('');
-  selectedFloorId = signal<string>('');
-  selectedRoomId = signal<string>('');
-  selectedBedId = signal<string>('');
-  isLoadingResidences = signal(false);
-  isLoadingFloors = signal(false);
-  isLoadingRooms = signal(false);
-  isLoadingBeds = signal(false);
-  isLoadingResidents = signal(false);
+  readonly displayedColumns = [
+    'full_name',
+    'birth_date',
+    'residence_name',
+    'floor_name',
+    'room_name',
+    'bed_name',
+    'status',
+    'created_at',
+    'actions'
+  ];
+  readonly dataSource = new MatTableDataSource<ResidentWithDetails>([]);
+  readonly filters = signal<ResidentFilters>({ residence_id: '', floor_id: '', room_id: '', bed_id: '', search: '' });
+  readonly pagination = signal({
+    page: 1,
+    size: 10,
+    total: 0,
+    sortBy: 'created_at',
+    sortOrder: 'desc' as 'asc' | 'desc'
+  });
 
-  // Pagination signals
-  pageIndex = signal(0);
-  pageSize = signal(10);
-  totalItems = signal(0);
+  readonly residences = signal<ResidenceOption[]>([]);
+  readonly floors = signal<FloorOption[]>([]);
+  readonly rooms = signal<RoomOption[]>([]);
+  readonly beds = signal<BedOption[]>([]);
 
-  // Search signals
-  searchTerm = signal('');
-  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
+  readonly isLoadingData = signal(false);
+  readonly isLoadingResidences = signal(false);
+  readonly isLoadingFloors = signal(false);
+  readonly isLoadingRooms = signal(false);
+  readonly isLoadingBeds = signal(false);
 
-  ngOnInit() {
-    console.log('Residents component initialized');
-    // Load all residences and residents on init
+  private searchDebounce: ReturnType<typeof setTimeout> | null = null;
+
+  ngOnInit(): void {
     this.loadResidences();
-    this.loadResidentsData(); // Load all residents initially
+    this.loadResidents();
   }
 
-  ngAfterViewInit() {
-    // Setup paginator events - IMPORTANT: Don't connect paginator to dataSource for backend pagination
+  ngAfterViewInit(): void {
     if (this.paginator) {
-      this.paginator.page.subscribe((event: PageEvent) => {
-        console.log('Paginator event - Page:', event.pageIndex, 'Size:', event.pageSize);
-        this.pageIndex.set(event.pageIndex);
-        this.pageSize.set(event.pageSize);
-        this.loadResidentsData();
-      });
+      const state = this.pagination();
+      this.paginator.pageIndex = state.page - 1;
+      this.paginator.pageSize = state.size;
     }
 
-    // Setup sort events
     if (this.sort) {
-      this.sort.sortChange.subscribe(() => {
-        console.log('Sort event triggered');
-        this.pageIndex.set(0); // Reset to first page when sorting
-        this.loadResidentsData();
+      // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+      setTimeout(() => {
+        const state = this.pagination();
+        this.sort.active = state.sortBy;
+        this.sort.direction = state.sortOrder as SortDirection;
+        this.sort.disableClear = true;
+        this.dataSource.sort = this.sort;
+      });
+
+      this.sort.sortChange.subscribe(({ active, direction }: Sort) => {
+        const sortDirection = (direction || 'desc') as 'asc' | 'desc';
+        const sortBy = active || 'created_at';
+
+        this.pagination.update(current => ({
+          ...current,
+          page: 1,
+          sortBy,
+          sortOrder: sortDirection
+        }));
+        this.loadResidents();
       });
     }
   }
 
-  private loadResidences() {
-    this.isLoadingResidences.set(true);
-    this.residencesService.listResidencesResidencesGet().subscribe({
-      next: (response: { items: Record<string, any>[] }) => {
-        this.residences.set(
-          (response.items || []).map(
-            (item: Record<string, any>) =>
-              ({
-                id: item['id'],
-                name: item['name'],
-                address: item['address'],
-                phone: item['phone'] || 'No especificado',
-                email: item['email'] || 'No especificado',
-                created_at: item['created_at'] || new Date().toISOString(),
-                updated_at: item['updated_at'] || null
-              }) as ResidenceWithContact
-          )
-        );
-        this.isLoadingResidences.set(false);
-      },
-      error: (error: { status?: number; message?: string }) => {
-        this.notificationService.handleApiError(error, 'Error al cargar las residencias');
-        this.isLoadingResidences.set(false);
-      }
-    });
+  onPageChange(event: PageEvent): void {
+    this.pagination.update(state => ({
+      ...state,
+      page: event.pageIndex + 1,
+      size: event.pageSize
+    }));
+    this.loadResidents();
   }
 
-  onResidenceChange(residenceId: string) {
-    this.selectedResidenceId.set(residenceId);
-    // Also update the storage service to keep it in sync
-    this.storageService.setSelectedResidenceId(residenceId || null);
-    this.selectedFloorId.set(''); // Reset floor selection
-    this.selectedRoomId.set(''); // Reset room selection
-    this.selectedBedId.set(''); // Reset bed selection
+  applyFilter(event: Event): void {
+    const value = (event.target as HTMLInputElement).value ?? '';
+    if (this.searchDebounce) {
+      clearTimeout(this.searchDebounce);
+    }
+    this.searchDebounce = setTimeout(() => {
+      this.filters.update(current => ({ ...current, search: value }));
+      this.resetToFirstPage();
+      this.loadResidents();
+    }, 300);
+  }
+
+  onResidenceChange(residenceId: string): void {
+    this.filters.update(current => ({
+      ...current,
+      residence_id: residenceId,
+      floor_id: '',
+      room_id: '',
+      bed_id: ''
+    }));
     this.floors.set([]);
     this.rooms.set([]);
     this.beds.set([]);
-    this.pageIndex.set(0); // Reset to first page
-
-    this.loadResidentsData(); // Always reload residents with current filters
 
     if (residenceId) {
-      this.loadFloors(); // Load next level options
+      this.loadFloorsForResidence(residenceId);
     }
+
+    this.resetToFirstPage();
+    this.loadResidents();
   }
 
-  private loadFloors() {
-    if (!this.selectedResidenceId()) return;
+  onFloorChange(floorId: string): void {
+    this.filters.update(current => ({ ...current, floor_id: floorId, room_id: '', bed_id: '' }));
+    this.rooms.set([]);
+    this.beds.set([]);
 
-    this.isLoadingFloors.set(true);
-    this.structureService
-      .floorsSimpleStructureFloorsResidenceIdSimpleGet({ residence_id: this.selectedResidenceId() })
-      .subscribe({
-        next: (response: Record<string, any>[]) => {
-          this.floors.set(
-            (response || []).map(
-              (item: Record<string, any>) =>
-                ({
-                  id: item['id'],
-                  name: item['name'],
-                  residence_id: item['residence_id'],
-                  residence_name: item['residence_name'],
-                  created_at: item['created_at'] || new Date().toISOString(),
-                  updated_at: item['updated_at'] || null
-                }) as FloorWithDetails
-            )
-          );
-          this.isLoadingFloors.set(false);
+    if (floorId) {
+      this.loadRoomsForFloor(floorId);
+    }
+
+    this.resetToFirstPage();
+    this.loadResidents();
+  }
+
+  onRoomChange(roomId: string): void {
+    this.filters.update(current => ({ ...current, room_id: roomId, bed_id: '' }));
+    this.beds.set([]);
+
+    if (roomId) {
+      this.loadBedsForRoom(roomId);
+    }
+
+    this.resetToFirstPage();
+    this.loadResidents();
+  }
+
+  onBedChange(bedId: string): void {
+    this.filters.update(current => ({ ...current, bed_id: bedId }));
+    this.resetToFirstPage();
+    this.loadResidents();
+  }
+
+  addResident(): void {
+    this.dialog
+      .open(ResidentFormModal, {
+        data: {
+          residences: this.residences(),
+          selectedResidenceId: this.filters().residence_id || undefined,
+          selectedFloorId: this.filters().floor_id || undefined,
+          selectedRoomId: this.filters().room_id || undefined,
+          selectedBedId: this.filters().bed_id || undefined,
+          floors: this.floors(),
+          rooms: this.rooms(),
+          beds: this.beds()
         },
-        error: (error: { status?: number; message?: string }) => {
-          this.notificationService.handleApiError(error, 'Error al cargar los pisos');
-          this.isLoadingFloors.set(false);
+        width: '60%',
+        maxWidth: '90vw'
+      })
+      .afterClosed()
+      .subscribe((result: ResidentFormData | null) => {
+        if (result) {
+          this.residentsService.createResidentResidentsPost({ body: result }).subscribe({
+            next: () => {
+              this.notificationService.success('Residente creado exitosamente');
+              this.loadResidents();
+            },
+            error: (error: any) => {
+              this.notificationService.handleApiError(error, 'Error al crear el residente');
+            }
+          });
         }
       });
   }
 
-  onFloorChange(floorId: string) {
-    console.log('Floor changed to:', floorId);
-    this.selectedFloorId.set(floorId);
-    this.selectedRoomId.set(''); // Reset room selection
-    this.selectedBedId.set(''); // Reset bed selection
-    this.rooms.set([]);
-    this.beds.set([]);
-    this.pageIndex.set(0); // Reset to first page
-
-    this.loadResidentsData(); // Always reload residents with current filters
-
-    if (floorId) {
-      this.loadRooms(); // Load next level options
-    }
+  editResident(resident: ResidentWithDetails): void {
+    this.dialog
+      .open(ResidentFormModal, {
+        data: {
+          resident,
+          residences: this.residences(),
+          selectedResidenceId: this.filters().residence_id || resident.residence_id,
+          selectedFloorId: this.filters().floor_id || undefined,
+          selectedRoomId: this.filters().room_id || undefined,
+          selectedBedId: this.filters().bed_id || resident.bed_id,
+          floors: this.floors(),
+          rooms: this.rooms(),
+          beds: this.beds()
+        },
+        width: '60%',
+        maxWidth: '90vw'
+      })
+      .afterClosed()
+      .subscribe((result: ResidentFormData | null) => {
+        if (result) {
+          this.residentsService.updateResidentResidentsIdPut({ id: resident.id, body: result }).subscribe({
+            next: () => {
+              this.notificationService.success('Residente actualizado exitosamente');
+              this.loadResidents();
+            },
+            error: (error: any) => {
+              this.notificationService.handleApiError(error, 'Error al actualizar el residente');
+            }
+          });
+        }
+      });
   }
 
-  private loadRooms() {
-    if (!this.selectedFloorId()) return;
-
-    this.isLoadingRooms.set(true);
-    this.structureService.roomsSimpleStructureRoomsFloorIdSimpleGet({ floor_id: this.selectedFloorId() }).subscribe({
-      next: (response: Record<string, any>[]) => {
-        this.rooms.set(
-          (response || []).map(
-            (item: Record<string, any>) =>
-              ({
-                id: item['id'],
-                name: item['name'],
-                residence_id: item['residence_id'],
-                floor_id: item['floor_id'],
-                residence_name: item['residence_name'] || 'Desconocida',
-                floor_name: item['floor_name'] || 'Desconocido',
-                created_at: item['created_at'] || new Date().toISOString(),
-                updated_at: item['updated_at'] || null
-              }) as RoomWithDetails
-          )
-        );
-        this.isLoadingRooms.set(false);
-      },
-      error: (error: { status?: number; message?: string }) => {
-        this.notificationService.handleApiError(error, 'Error al cargar las habitaciones');
-        this.isLoadingRooms.set(false);
-      }
-    });
+  deleteResident(resident: ResidentWithDetails): void {
+    this.dialog
+      .open(DeleteResidentModal, {
+        data: resident,
+        width: '50%',
+        maxWidth: '90vw'
+      })
+      .afterClosed()
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.residentsService.deleteResidentResidentsIdDelete({ id: resident.id }).subscribe({
+            next: () => {
+              this.notificationService.success('Residente eliminado exitosamente');
+              this.loadResidents();
+            },
+            error: (error: any) => {
+              this.notificationService.handleApiError(error, 'Error al eliminar el residente');
+            }
+          });
+        }
+      });
   }
 
-  onRoomChange(roomId: string) {
-    console.log('Room changed to:', roomId);
-    this.selectedRoomId.set(roomId);
-    this.selectedBedId.set(''); // Reset bed selection
-    this.beds.set([]);
-    this.pageIndex.set(0); // Reset to first page
-
-    this.loadResidentsData(); // Always reload residents with current filters
-
-    if (roomId) {
-      this.loadBeds(); // Load next level options
-    }
-  }
-
-  private loadBeds() {
-    if (!this.selectedRoomId()) return;
-
-    this.isLoadingBeds.set(true);
-    this.structureService.bedsSimpleStructureBedsRoomIdSimpleGet({ room_id: this.selectedRoomId() }).subscribe({
-      next: (response: Record<string, any>[]) => {
-        this.beds.set(
-          (response || []).map(
-            (item: Record<string, any>) =>
-              ({
-                id: item['id'],
-                name: item['name'],
-                residence_id: item['residence_id'],
-                room_id: item['room_id'],
-                residence_name: item['residence_name'] || 'Desconocida',
-                room_name: item['room_name'] || 'Desconocida',
-                floor_name: item['floor_name'] || 'Desconocido',
-                resident_name: item['resident_name'] || 'Sin asignar',
-                created_at: item['created_at'] || new Date().toISOString(),
-                updated_at: item['updated_at'] || null
-              }) as BedWithDetails
-          )
-        );
-        this.isLoadingBeds.set(false);
-      },
-      error: (error: { status?: number; message?: string }) => {
-        this.notificationService.handleApiError(error, 'Error al cargar las camas');
-        this.isLoadingBeds.set(false);
-      }
-    });
-  }
-
-  onBedChange(bedId: string) {
-    console.log('Bed changed to:', bedId);
-    this.selectedBedId.set(bedId);
-    this.pageIndex.set(0); // Reset to first page
-    this.loadResidentsData();
-  }
-
-  private loadResidentsData() {
-    this.isLoadingResidents.set(true);
-
-    // Use the residents service for backend pagination
-    const params: Record<string, string | number> = {
-      page: this.pageIndex() + 1, // API uses 1-based indexing
-      size: this.pageSize()
-    };
-
-    // X-Residence-Id is handled automatically by the interceptor
-    // But we also need to send residence_id as a query parameter for filtering
-    // especially for superadmin users who don't have X-Residence-Id set
-
-    // Add filters based on selected structure - always include residence if selected
-    if (this.selectedResidenceId()) {
-      params['residence_id'] = this.selectedResidenceId();
-      console.log('Adding residence_id filter:', this.selectedResidenceId());
-    }
-    if (this.selectedFloorId()) {
-      params['floor_id'] = this.selectedFloorId();
-    }
-    if (this.selectedRoomId()) {
-      params['room_id'] = this.selectedRoomId();
-    }
-    if (this.selectedBedId()) {
-      params['bed_id'] = this.selectedBedId();
-    }
-
-    // Add search term if provided
-    if (this.searchTerm()) {
-      params['search'] = this.searchTerm();
-    }
-
-    console.log('Calling residents API with params:', params);
-    this.residentsService.listResidentsResidentsGet(params).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = (response.items || []).map(
-          (item: any) =>
-            ({
-              id: item.id,
-              residence_id: item.residence_id,
-              full_name: item.full_name,
-              birth_date: item.birth_date,
-              sex: item.sex,
-              gender: item.gender,
-              comments: item.comments,
-              status: item.status,
-              status_changed_at: item.status_changed_at,
-              deleted_at: item.deleted_at,
-              bed_id: item.bed_id,
-              created_at: item.created_at,
-              updated_at: item.updated_at,
-              residence_name: item.residence_name,
-              bed_name: item.bed_name,
-              room_name: item.room_name,
-              floor_name: item.floor_name
-            }) as ResidentWithDetails
-        );
-        this.totalItems.set(response.total || 0);
-        this.isLoadingResidents.set(false);
-      },
-      error: (error: { status?: number; message?: string }) => {
-        this.notificationService.handleApiError(error, 'Error al cargar los residentes');
-        this.isLoadingResidents.set(false);
-      }
-    });
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-
-    // Clear existing timeout
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-
-    // Set new timeout for debounce (200ms - faster response)
-    this.searchTimeout = setTimeout(() => {
-      this.searchTerm.set(filterValue.trim());
-      this.pageIndex.set(0); // Reset to first page when filtering
-      this.loadResidentsData();
-    }, 200);
-  }
-
-  viewResident(resident: ResidentWithDetails) {
-    const dialogRef = this.dialog.open(ViewResidentModal, {
+  viewResident(resident: ResidentWithDetails): void {
+    this.dialog.open(ViewResidentModal, {
       data: resident,
       width: '600px',
       maxWidth: '90vw'
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadResidentsData();
-      }
-    });
   }
 
-  editResident(resident: ResidentWithDetails) {
-    const dialogRef = this.dialog.open(ResidentFormModal, {
-      data: {
-        resident,
-        residences: this.residences(),
-        selectedResidenceId: this.selectedResidenceId(),
-        selectedFloorId: this.selectedFloorId(),
-        selectedRoomId: this.selectedRoomId(),
-        selectedBedId: this.selectedBedId(),
-        floors: this.floors(),
-        rooms: this.rooms(),
-        beds: this.beds()
-      },
-      width: '60%',
-      maxWidth: '90vw'
-    });
-
-    dialogRef.afterClosed().subscribe((result: ResidentFormData | null) => {
-      if (result) {
-        this.residentsService
-          .updateResidentResidentsIdPut({
-            id: resident.id,
-            body: {
-              full_name: result.full_name,
-              birth_date: result.birth_date,
-              sex: result.sex,
-              gender: result.gender,
-              comments: result.comments,
-              status: result.status,
-              bed_id: result.bed_id
-            }
-          })
-          .subscribe({
-            next: () => {
-              this.notificationService.success('Residente actualizado exitosamente');
-              this.loadResidentsData();
-            },
-            error: (error: { status?: number; message?: string }) => {
-              this.notificationService.handleApiError(error, 'Error al actualizar el residente');
-            }
-          });
-      }
-    });
+  private resetToFirstPage(): void {
+    this.pagination.update(state => ({ ...state, page: 1 }));
   }
 
-  deleteResident(resident: ResidentWithDetails) {
-    const dialogRef = this.dialog.open(DeleteResidentModal, {
-      data: resident,
-      width: '50%',
-      maxWidth: '90vw'
-    });
+  private async loadResidents(): Promise<void> {
+    this.isLoadingData.set(true);
+    const state = this.pagination();
+    const currentFilters = this.filters();
 
-    dialogRef.afterClosed().subscribe((result: boolean) => {
-      if (result) {
-        this.residentsService.deleteResidentResidentsIdDelete({ id: resident.id }).subscribe({
-          next: () => {
-            this.notificationService.success('Residente eliminado exitosamente');
-            this.loadResidentsData();
-          },
-          error: (error: { status?: number; message?: string }) => {
-            this.notificationService.handleApiError(error, 'Error al eliminar el residente');
-          }
-        });
-      }
-    });
+    const params: Record<string, any> = {
+      page: state.page,
+      size: state.size,
+      sort_by: state.sortBy,
+      sort_order: state.sortOrder
+    };
+
+    if (currentFilters.residence_id) {
+      params['residence_id'] = currentFilters.residence_id;
+    }
+
+    if (currentFilters.floor_id) {
+      params['floor_id'] = currentFilters.floor_id;
+    }
+
+    if (currentFilters.room_id) {
+      params['room_id'] = currentFilters.room_id;
+    }
+
+    if (currentFilters.bed_id) {
+      params['bed_id'] = currentFilters.bed_id;
+    }
+
+    const search = currentFilters.search.trim();
+    if (search) {
+      params['search'] = search;
+    }
+
+    try {
+      const response: any = await firstValueFrom(this.residentsService.listResidentsResidentsGet(params));
+
+      const items = (response.items || []).map((item: any) => ({
+        id: item.id,
+        full_name: item.full_name,
+        birth_date: item.birth_date,
+        sex: item.sex,
+        status: item.status,
+        status_changed_at: item.status_changed_at,
+        residence_id: item.residence_id,
+        residence_name: item.residence_name || 'Desconocida',
+        floor_name: item.floor_name || 'Desconocido',
+        room_name: item.room_name || 'Desconocida',
+        bed_name: item.bed_name || 'Sin asignar',
+        bed_id: item.bed_id,
+        created_at: item.created_at,
+        updated_at: item.updated_at
+      })) as ResidentWithDetails[];
+
+      this.dataSource.data = items;
+      this.pagination.update(current => ({ ...current, total: response.total || items.length }));
+    } catch (error: any) {
+      this.notificationService.handleApiError(error, 'Error al cargar los residentes');
+    } finally {
+      this.isLoadingData.set(false);
+    }
   }
 
-  addResident() {
-    const dialogRef = this.dialog.open(ResidentFormModal, {
-      data: {
-        residences: this.residences(),
-        selectedResidenceId: this.selectedResidenceId(),
-        selectedFloorId: this.selectedFloorId(),
-        selectedRoomId: this.selectedRoomId(),
-        selectedBedId: this.selectedBedId(),
-        floors: this.floors(),
-        rooms: this.rooms(),
-        beds: this.beds()
-      },
-      width: '60%',
-      maxWidth: '90vw'
-    });
+  private async loadResidences(): Promise<void> {
+    this.isLoadingResidences.set(true);
+    try {
+      const response: any = await firstValueFrom(this.residencesService.listResidencesResidencesGet({ size: 100 }));
+      const items = (response.items || []).map((item: any) => ({
+        id: item['id'],
+        name: item['name']
+      }));
+      this.residences.set(items);
+    } catch (error: any) {
+      this.notificationService.handleApiError(error, 'Error al cargar las residencias');
+    } finally {
+      this.isLoadingResidences.set(false);
+    }
+  }
 
-    dialogRef.afterClosed().subscribe((result: ResidentFormData | null) => {
-      if (result) {
-        this.residentsService
-          .createResidentResidentsPost({
-            body: {
-              full_name: result.full_name,
-              birth_date: result.birth_date,
-              sex: result.sex,
-              gender: result.gender,
-              comments: result.comments,
-              status: result.status,
-              bed_id: result.bed_id
-            }
-          })
-          .subscribe({
-            next: () => {
-              this.notificationService.success('Residente creado exitosamente');
-              this.loadResidentsData();
-            },
-            error: (error: { status?: number; message?: string }) => {
-              this.notificationService.handleApiError(error, 'Error al crear el residente');
-            }
-          });
-      }
-    });
+  private async loadFloorsForResidence(residenceId: string): Promise<void> {
+    this.isLoadingFloors.set(true);
+    try {
+      const response = await firstValueFrom(
+        this.structureService.floorsSimpleStructureFloorsResidenceIdSimpleGet({ residence_id: residenceId })
+      );
+      const items = (response || []).map((item: any) => ({
+        id: item['id'],
+        name: item['name']
+      }));
+      this.floors.set(items);
+    } catch (error: any) {
+      this.notificationService.handleApiError(error, 'Error al cargar los pisos');
+    } finally {
+      this.isLoadingFloors.set(false);
+    }
+  }
+
+  private async loadRoomsForFloor(floorId: string): Promise<void> {
+    this.isLoadingRooms.set(true);
+    try {
+      const response = await firstValueFrom(
+        this.structureService.roomsSimpleStructureRoomsFloorIdSimpleGet({ floor_id: floorId })
+      );
+      const items = (response || []).map((item: any) => ({
+        id: item['id'],
+        name: item['name']
+      }));
+      this.rooms.set(items);
+    } catch (error: any) {
+      this.notificationService.handleApiError(error, 'Error al cargar las habitaciones');
+    } finally {
+      this.isLoadingRooms.set(false);
+    }
+  }
+
+  private async loadBedsForRoom(roomId: string): Promise<void> {
+    this.isLoadingBeds.set(true);
+    try {
+      const response = await firstValueFrom(this.structureService.bedsSimpleStructureBedsRoomIdSimpleGet({ room_id: roomId }));
+      const items = (response || []).map((item: any) => ({
+        id: item['id'],
+        name: item['name']
+      }));
+      this.beds.set(items);
+    } catch (error: any) {
+      this.notificationService.handleApiError(error, 'Error al cargar las camas');
+    } finally {
+      this.isLoadingBeds.set(false);
+    }
   }
 }

@@ -40,7 +40,7 @@ export class ResidentsService extends BaseService {
   /**
    * List Residents.
    *
-   * List residents with pagination and filters
+   * List residents with pagination and filters - filtered by user role and assignments
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listResidentsResidentsGet()` instead.
@@ -54,7 +54,7 @@ export class ResidentsService extends BaseService {
   /**
    * List Residents.
    *
-   * List residents with pagination and filters
+   * List residents with pagination and filters - filtered by user role and assignments
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listResidentsResidentsGet$Response()` instead.
@@ -113,7 +113,7 @@ export class ResidentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getResidentResidentsIdGet$Response(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentOut>> {
+  getResidentResidentsIdGet$Response(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
     return getResidentResidentsIdGet(this.http, this.rootUrl, params, context);
   }
 
@@ -127,9 +127,9 @@ export class ResidentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getResidentResidentsIdGet(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<ResidentOut> {
+  getResidentResidentsIdGet(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<any> {
     return this.getResidentResidentsIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ResidentOut>): ResidentOut => r.body)
+      map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 

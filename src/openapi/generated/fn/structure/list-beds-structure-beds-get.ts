@@ -11,7 +11,16 @@ import { RequestBuilder } from '../../request-builder';
 import { PaginatedResponse } from '../../models/paginated-response';
 
 export interface ListBedsStructureBedsGet$Params {
-  'X-Residence-Id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
+
+/**
+ * Filter by floor ID
+ */
+  floor_id?: (string | null);
   page?: number;
   size?: number;
   search?: (string | null);
@@ -26,7 +35,8 @@ export interface ListBedsStructureBedsGet$Params {
 export function listBedsStructureBedsGet(http: HttpClient, rootUrl: string, params?: ListBedsStructureBedsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
   const rb = new RequestBuilder(rootUrl, listBedsStructureBedsGet.PATH, 'get');
   if (params) {
-    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.query('residence_id', params.residence_id, {});
+    rb.query('floor_id', params.floor_id, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
     rb.query('search', params.search, {});

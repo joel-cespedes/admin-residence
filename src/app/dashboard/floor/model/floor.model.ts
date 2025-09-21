@@ -11,3 +11,8 @@ export interface FloorFormData {
   name: string;
   residence_id: string;
 }
+
+export interface ResidenceOption {
+  id: string;
+  name: string;
+}

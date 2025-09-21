@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChang
 import { provideRouter } from '@angular/router';
 
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authInterceptor, residenceInterceptor } from '@core';
+import { authInterceptor } from '@core';
 import { provideApiConfiguration } from '../openapi/api-config.provider';
 import { routes } from './app.routes';
 
@@ -11,7 +11,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor, residenceInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideApiConfiguration()
   ]
 };

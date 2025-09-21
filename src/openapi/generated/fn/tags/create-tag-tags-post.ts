@@ -12,14 +12,14 @@ import { TagCreate } from '../../models/tag-create';
 import { TagOut } from '../../models/tag-out';
 
 export interface CreateTagTagsPost$Params {
-  'X-Residence-Id'?: (string | null);
+  residence_id?: (string | null);
       body: TagCreate
 }
 
 export function createTagTagsPost(http: HttpClient, rootUrl: string, params: CreateTagTagsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TagOut>> {
   const rb = new RequestBuilder(rootUrl, createTagTagsPost.PATH, 'post');
   if (params) {
-    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.query('residence_id', params.residence_id, {});
     rb.body(params.body, 'application/json');
   }
 

@@ -12,14 +12,14 @@ import { TaskTemplateOut } from '../../models/task-template-out';
 
 export interface ListTemplatesSimpleTasksTemplatesSimpleGet$Params {
   category_id?: (string | null);
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function listTemplatesSimpleTasksTemplatesSimpleGet(http: HttpClient, rootUrl: string, params?: ListTemplatesSimpleTasksTemplatesSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TaskTemplateOut>>> {
   const rb = new RequestBuilder(rootUrl, listTemplatesSimpleTasksTemplatesSimpleGet.PATH, 'get');
   if (params) {
     rb.query('category_id', params.category_id, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

@@ -12,14 +12,18 @@ import { RoomCreate } from '../../models/room-create';
 import { RoomOut } from '../../models/room-out';
 
 export interface CreateRoomStructureRoomsPost$Params {
-  'X-Residence-Id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
       body: RoomCreate
 }
 
 export function createRoomStructureRoomsPost(http: HttpClient, rootUrl: string, params: CreateRoomStructureRoomsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<RoomOut>> {
   const rb = new RequestBuilder(rootUrl, createRoomStructureRoomsPost.PATH, 'post');
   if (params) {
-    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.query('residence_id', params.residence_id, {});
     rb.body(params.body, 'application/json');
   }
 

@@ -2,77 +2,74 @@
 <form [formGroup]="residentForm" (ngSubmit)="submit()">
   <div class="modal-content">
     <div class="form-section">
-      <div class="form-row">
-        <div class="form-field">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Nombre Completo</mat-label>
-            <input matInput formControlName="full_name" placeholder="Ej: Juan Pérez" />
-            @if (residentForm.get('full_name')?.invalid && residentForm.get('full_name')?.touched) {
-              <mat-error>
-                @if (residentForm.get('full_name')?.hasError('required')) {
-                  El nombre completo es requerido
-                } @else if (residentForm.get('full_name')?.hasError('minlength')) {
-                  Mínimo 2 caracteres
-                } @else if (residentForm.get('full_name')?.hasError('maxlength')) {
-                  Máximo 100 caracteres
-                }
-              </mat-error>
-            }
-          </mat-form-field>
+      <div class="colum-two">
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nombre Completo</mat-label>
+              <input matInput formControlName="full_name" placeholder="Ej: Juan Pérez" />
+              @if (residentForm.get('full_name')?.invalid && residentForm.get('full_name')?.touched) {
+                <mat-error>
+                  @if (residentForm.get('full_name')?.hasError('required')) {
+                    El nombre completo es requerido
+                  } @else if (residentForm.get('full_name')?.hasError('minlength')) {
+                    Mínimo 2 caracteres
+                  } @else if (residentForm.get('full_name')?.hasError('maxlength')) {
+                    Máximo 100 caracteres
+                  }
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Fecha de Nacimiento</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="birth_date" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (residentForm.get('birth_date')?.invalid && residentForm.get('birth_date')?.touched) {
+                <mat-error>
+                  @if (residentForm.get('birth_date')?.hasError('required')) {
+                    La fecha de nacimiento es requerida
+                  }
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
         </div>
       </div>
-
-      <div class="form-row">
-        <div class="form-field">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Fecha de Nacimiento</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="birth_date" />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            @if (residentForm.get('birth_date')?.invalid && residentForm.get('birth_date')?.touched) {
-              <mat-error>
-                @if (residentForm.get('birth_date')?.hasError('required')) {
-                  La fecha de nacimiento es requerida
-                }
-              </mat-error>
-            }
-          </mat-form-field>
+      <div class="colum-two">
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Sexo</mat-label>
+              <mat-select formControlName="sex">
+                <mat-option value="">Seleccionar sexo</mat-option>
+                <mat-option value="M">Masculino</mat-option>
+                <mat-option value="F">Femenino</mat-option>
+                <mat-option value="O">Otro</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
-      </div>
 
-      <div class="form-row">
-        <div class="form-field">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Sexo</mat-label>
-            <mat-select formControlName="sex">
-              <mat-option value="">Seleccionar sexo</mat-option>
-              <mat-option value="masculino">Masculino</mat-option>
-              <mat-option value="femenino">Femenino</mat-option>
-              <mat-option value="otro">Otro</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="form-field">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Género</mat-label>
-            <input matInput formControlName="gender" placeholder="Ej: Hombre, Mujer, No binario, etc." />
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-field">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Estado</mat-label>
-            <mat-select formControlName="status">
-              <mat-option value="active">Activo</mat-option>
-              <mat-option value="discharged">Dado de Alta</mat-option>
-              <mat-option value="deceased">Fallecido</mat-option>
-            </mat-select>
-            @if (residentForm.get('status')?.invalid && residentForm.get('status')?.touched) {
-              <mat-error>El estado es requerido</mat-error>
-            }
-          </mat-form-field>
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Estado</mat-label>
+              <mat-select formControlName="status">
+                <mat-option value="active">Activo</mat-option>
+                <mat-option value="discharged">Dado de Alta</mat-option>
+                <mat-option value="deceased">Fallecido</mat-option>
+              </mat-select>
+              @if (residentForm.get('status')?.invalid && residentForm.get('status')?.touched) {
+                <mat-error>El estado es requerido</mat-error>
+              }
+            </mat-form-field>
+          </div>
         </div>
       </div>
 
@@ -88,24 +85,24 @@
 
     <div class="form-section">
       <h3>Asignación de Residencia</h3>
-      <div class="form-row">
-        <div class="form-field">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Residencia</mat-label>
-            <mat-select formControlName="residence_id" (selectionChange)="onResidenceChange($event.value)">
-              <mat-option value="">Seleccionar residencia</mat-option>
-              @for (residence of residences; track residence.id) {
-                <mat-option [value]="residence.id">{{ residence.name }}</mat-option>
+      <div class="colum-two">
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Residencia</mat-label>
+              <mat-select formControlName="residence_id" (selectionChange)="onResidenceChange($event.value)">
+                <mat-option value="">Seleccionar residencia</mat-option>
+                @for (residence of residences; track residence.id) {
+                  <mat-option [value]="residence.id">{{ residence.name }}</mat-option>
+                }
+              </mat-select>
+              @if (residentForm.get('residence_id')?.invalid && residentForm.get('residence_id')?.touched) {
+                <mat-error>La residencia es requerida</mat-error>
               }
-            </mat-select>
-            @if (residentForm.get('residence_id')?.invalid && residentForm.get('residence_id')?.touched) {
-              <mat-error>La residencia es requerida</mat-error>
-            }
-          </mat-form-field>
+            </mat-form-field>
+          </div>
         </div>
-      </div>
 
-      @if (selectedResidenceId()) {
         <div class="form-row">
           <div class="form-field">
             <mat-form-field appearance="outline" class="full-width">
@@ -125,56 +122,57 @@
             </mat-form-field>
           </div>
         </div>
-      }
-
-      @if (selectedFloorId()) {
-        <div class="form-row">
-          <div class="form-field">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Habitación</mat-label>
-              @if (isLoadingRooms()) {
-                <mat-select disabled>
-                  <mat-option>Cargando habitaciones...</mat-option>
-                </mat-select>
-              } @else {
-                <mat-select formControlName="room_id" (selectionChange)="onRoomChange($event.value)">
-                  <mat-option value="">Seleccionar habitación</mat-option>
-                  @for (room of rooms(); track room.id) {
-                    <mat-option [value]="room.id">{{ room.name }}</mat-option>
-                  }
-                </mat-select>
-              }
-            </mat-form-field>
+      </div>
+      <div class="colum-two">
+        @if (selectedFloorId()) {
+          <div class="form-row">
+            <div class="form-field">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Habitación</mat-label>
+                @if (isLoadingRooms()) {
+                  <mat-select disabled>
+                    <mat-option>Cargando habitaciones...</mat-option>
+                  </mat-select>
+                } @else {
+                  <mat-select formControlName="room_id" (selectionChange)="onRoomChange($event.value)">
+                    <mat-option value="">Seleccionar habitación</mat-option>
+                    @for (room of rooms(); track room.id) {
+                      <mat-option [value]="room.id">{{ room.name }}</mat-option>
+                    }
+                  </mat-select>
+                }
+              </mat-form-field>
+            </div>
           </div>
-        </div>
-      }
+        }
 
-      @if (selectedRoomId()) {
-        <div class="form-row">
-          <div class="form-field">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Cama</mat-label>
-              @if (isLoadingBeds()) {
-                <mat-select disabled>
-                  <mat-option>Cargando camas...</mat-option>
-                </mat-select>
-              } @else {
-                <mat-select formControlName="bed_id" (selectionChange)="onBedChange($event.value)">
-                  <mat-option value="">Seleccionar cama</mat-option>
-                  @for (bed of beds(); track bed.id) {
-                    <mat-option [value]="bed.id" [disabled]="bed.resident_name !== 'Sin asignar'">
-                      {{ bed.name }}
-                      @if (bed.resident_name !== 'Sin asignar') {
-                        <span class="occupied-info">(Ocupada por {{ bed.resident_name }})</span>
-                      }
-                    </mat-option>
-                  }
-                </mat-select>
-              }
-            </mat-form-field>
+        @if (selectedRoomId()) {
+          <div class="form-row">
+            <div class="form-field">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Cama</mat-label>
+                @if (isLoadingBeds()) {
+                  <mat-select disabled>
+                    <mat-option>Cargando camas...</mat-option>
+                  </mat-select>
+                } @else {
+                  <mat-select formControlName="bed_id" (selectionChange)="onBedChange($event.value)">
+                    <mat-option value="">Seleccionar cama</mat-option>
+                    @for (bed of beds(); track bed.id) {
+                      <mat-option [value]="bed.id" [disabled]="bed.resident_name !== 'Sin asignar'">
+                        {{ bed.name }}
+                        @if (bed.resident_name !== 'Sin asignar') {
+                          <span class="occupied-info">(Ocupada por {{ bed.resident_name }})</span>
+                        }
+                      </mat-option>
+                    }
+                  </mat-select>
+                }
+              </mat-form-field>
+            </div>
           </div>
-        </div>
-      }
+        }
+      </div>
     </div>
 
     @if (resident) {

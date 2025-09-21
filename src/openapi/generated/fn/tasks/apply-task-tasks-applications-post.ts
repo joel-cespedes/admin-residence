@@ -12,14 +12,14 @@ import { TaskApplicationCreate } from '../../models/task-application-create';
 import { TaskApplicationOut } from '../../models/task-application-out';
 
 export interface ApplyTaskTasksApplicationsPost$Params {
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
       body: TaskApplicationCreate
 }
 
 export function applyTaskTasksApplicationsPost(http: HttpClient, rootUrl: string, params: ApplyTaskTasksApplicationsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskApplicationOut>> {
   const rb = new RequestBuilder(rootUrl, applyTaskTasksApplicationsPost.PATH, 'post');
   if (params) {
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
     rb.body(params.body, 'application/json');
   }
 

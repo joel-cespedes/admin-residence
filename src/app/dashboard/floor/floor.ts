@@ -1,240 +1,268 @@
-import { Component, AfterViewInit, ViewChild, inject, OnInit, signal } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { AfterViewInit, Component, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CommonModule, DatePipe } from '@angular/common';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort, SortDirection } from '@angular/material/sort';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { DatePipe } from '@angular/common';
 
 import { Header } from '../shared/header/header';
-import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 import { StructureService } from '../../../openapi/generated/services/structure.service';
-import { ResidenceWithContact } from '../residence/model/residence.model';
-import { FloorWithDetails } from './model/floor.model';
-import { ViewFloorModal } from './view-floor-modal/view-floor-modal';
-import { FloorFormModal } from './floor-form-modal/floor-form-modal';
+import { ResidencesService } from '../../../openapi/generated/services/residences.service';
+import { NotificationService } from '../../shared/notification.service';
+import { FloorWithDetails, ResidenceOption } from './model/floor.model';
 import { DeleteFloorModal } from './delete-floor-modal/delete-floor-modal';
-import { NotificationService } from '../../core/services/notification.service';
+import { FloorFormModal } from './floor-form-modal/floor-form-modal';
+import { ViewFloorModal } from './view-floor-modal/view-floor-modal';
+import { firstValueFrom } from 'rxjs';
+import { ListFloorsStructureFloorsGet$Params } from '../../../openapi/generated/fn/structure/list-floors-structure-floors-get';
+import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
 
 @Component({
   selector: 'app-floor',
   standalone: true,
   imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatTableModule,
-    MatSortModule,
     MatPaginatorModule,
-    Header,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatDialogModule,
-    MatButtonToggleModule,
     MatProgressSpinnerModule,
-    DatePipe
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule,
+    MatButtonToggleModule,
+    DatePipe,
+    Header
   ],
   templateUrl: './floor.html',
   styleUrl: './floor.scss'
 })
-export class Floor implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['name', 'residence_name', 'created_at', 'actions'];
-  dataSource: MatTableDataSource<FloorWithDetails> = new MatTableDataSource<FloorWithDetails>([]);
-
+export class Floor implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  private residencesService = inject(ResidencesService);
-  private structureService = inject(StructureService);
-  private dialog = inject(MatDialog);
-  private notificationService = inject(NotificationService);
+  private readonly structureService = inject(StructureService);
+  private readonly residencesService = inject(ResidencesService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly dialog = inject(MatDialog);
 
-  residences = signal<ResidenceWithContact[]>([]);
-  selectedResidenceId = signal<string>('');
-  isLoadingResidences = signal(false);
-  isLoadingFloors = signal(false);
+  readonly dataSource = new MatTableDataSource<FloorWithDetails>([]);
+  readonly isLoadingData = signal(false);
+  readonly pagination = signal({
+    pageIndex: 0,
+    pageSize: 10,
+    total: 0,
+    sortBy: 'created_at',
+    sortOrder: 'desc' as 'asc' | 'desc'
+  });
 
-  // Pagination signals
-  pageIndex = signal(0);
-  pageSize = signal(10);
-  totalItems = signal(0);
+  readonly residences = signal<ResidenceOption[]>([]);
+  readonly isLoadingResidences = signal(false);
+  readonly selectedResidence = signal<string>('');
+  readonly searchTerm = signal<string>('');
+  readonly displayedColumns = ['name', 'residence_name', 'created_at', 'actions'];
+  readonly totalItems = computed(() => this.pagination().total);
 
-  // Search signals
-  searchTerm = signal('');
-  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
+  private searchDebounce: ReturnType<typeof setTimeout> | null = null;
+  private suppressNextPageEvent = false;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadResidences();
     this.loadFloors();
   }
 
-  ngAfterViewInit() {
-    // Setup paginator events - IMPORTANT: Don't connect paginator to dataSource for backend pagination
+  ngAfterViewInit(): void {
     if (this.paginator) {
-      this.paginator.page.subscribe((event: any) => {
-        console.log('Paginator event - Page:', event.pageIndex, 'Size:', event.pageSize);
-        this.pageIndex.set(event.pageIndex);
-        this.pageSize.set(event.pageSize);
-        this.loadFloors();
-      });
+      this.paginator.pageIndex = this.pagination().pageIndex;
+      this.paginator.pageSize = this.pagination().pageSize;
     }
 
-    // Setup sort events
     if (this.sort) {
-      this.sort.sortChange.subscribe(() => {
-        console.log('Sort event triggered');
-        this.pageIndex.set(0); // Reset to first page when sorting
+      const state = this.pagination();
+      this.sort.active = state.sortBy;
+      this.sort.direction = state.sortOrder as SortDirection;
+      this.sort.disableClear = true;
+      this.sort.sortChange.subscribe(({ active, direction }: Sort) => {
+        const sortDirection = (direction || 'desc') as 'asc' | 'desc';
+        const sortBy = active || 'created_at';
+
+        this.pagination.update(current => ({
+          ...current,
+          pageIndex: 0,
+          sortBy,
+          sortOrder: sortDirection
+        }));
         this.loadFloors();
       });
     }
   }
 
-  private loadResidences() {
-    this.isLoadingResidences.set(true);
-    this.residencesService.listResidencesResidencesGet().subscribe({
-      next: (response: { items: any[] }) => {
-        this.residences.set(response.items || []);
-        this.isLoadingResidences.set(false);
-      },
-      error: (error: { status?: number; message?: string }) => {
-        this.notificationService.handleApiError(error, 'Error al cargar las residencias');
-        this.isLoadingResidences.set(false);
-      }
-    });
-  }
-
-  private loadFloors() {
-    this.isLoadingFloors.set(true);
-
-    // Use the paginated endpoint
-    const params: { [key: string]: string | number } = {
-      page: this.pageIndex() + 1, // API uses 1-based indexing
-      size: this.pageSize()
-    };
-
-    // Add filters based on current selection
-    if (this.selectedResidenceId()) {
-      params['X-Residence-Id'] = this.selectedResidenceId();
+  applyFilter(event: Event): void {
+    const value = (event.target as HTMLInputElement).value ?? '';
+    if (this.searchDebounce) {
+      clearTimeout(this.searchDebounce);
     }
-
-    // Add search term if provided
-    if (this.searchTerm()) {
-      params['search'] = this.searchTerm();
-    }
-
-    this.structureService.listFloorsStructureFloorsGet(params).subscribe({
-      next: (response: { items: any[]; total?: number }) => {
-        this.dataSource.data = (response.items || []).map(
-          (item: Record<string, any>) =>
-            ({
-              id: item['id'],
-              name: item['name'],
-              residence_id: item['residence_id'],
-              residence_name: item['residence_name'] || this.residences().find(r => r.id === item['residence_id'])?.name || 'Desconocida',
-              created_at: item['created_at'] || new Date().toISOString(),
-              updated_at: item['updated_at'] || null
-            }) as FloorWithDetails
-        );
-        this.totalItems.set(response.total || 0);
-
-        // Update paginator state manually
-        if (this.paginator) {
-          this.paginator.pageIndex = this.pageIndex();
-          this.paginator.pageSize = this.pageSize();
-        }
-
-        this.isLoadingFloors.set(false);
-      },
-      error: (error: { status?: number; message?: string }) => {
-        this.notificationService.handleApiError(error, 'Error al cargar los pisos');
-        this.isLoadingFloors.set(false);
-      }
-    });
-  }
-
-  onResidenceChange(residenceId: string) {
-    this.selectedResidenceId.set(residenceId);
-    this.loadFloors();
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-
-    // Clear existing timeout
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-
-    // Set new timeout for debounce (300ms)
-    this.searchTimeout = setTimeout(() => {
-      this.searchTerm.set(filterValue.trim());
+    this.searchDebounce = setTimeout(() => {
+      this.searchTerm.set(value);
+      this.resetToFirstPage();
       this.loadFloors();
     }, 300);
   }
 
-  viewFloor(floor: FloorWithDetails) {
-    const dialogRef = this.dialog.open(ViewFloorModal, {
+  onResidenceChange(residenceId: string): void {
+    this.selectedResidence.set(residenceId);
+    this.resetToFirstPage();
+    this.loadFloors();
+  }
+
+  viewFloor(floor: FloorWithDetails): void {
+    this.dialog.open(ViewFloorModal, {
       data: floor,
       width: '600px',
       maxWidth: '90vw'
     });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.loadFloors();
-      }
-    });
   }
 
-  editFloor(floor: FloorWithDetails) {
-    const dialogRef = this.dialog.open(FloorFormModal, {
-      data: floor,
-      width: '60%',
-      maxWidth: '90vw'
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.loadFloors();
-      }
-    });
+  editFloor(floor: FloorWithDetails): void {
+    this.dialog
+      .open(FloorFormModal, {
+        data: {
+          ...floor,
+          residences: this.residences(),
+          preselectedResidenceId: floor.residence_id
+        },
+        width: '60%',
+        maxWidth: '90vw'
+      })
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.loadFloors();
+        }
+      });
   }
 
-  deleteFloor(floor: FloorWithDetails) {
-    const dialogRef = this.dialog.open(DeleteFloorModal, {
-      data: floor,
-      width: '50%',
-      maxWidth: '90vw'
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.loadFloors();
-      }
-    });
+  deleteFloor(floor: FloorWithDetails): void {
+    this.dialog
+      .open(DeleteFloorModal, {
+        data: floor,
+        width: '50%',
+        maxWidth: '90vw'
+      })
+      .afterClosed()
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          void this.loadFloors();
+        }
+      });
   }
 
-  addFloor() {
-    const dialogRef = this.dialog.open(FloorFormModal, {
-      data: {
-        residences: this.residences(),
-        preselectedResidenceId: this.selectedResidenceId()
-      },
-      width: '60%',
-      maxWidth: '90vw'
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.loadFloors();
-      }
-    });
+  addFloor(): void {
+    this.dialog
+      .open(FloorFormModal, {
+        data: {
+          residences: this.residences(),
+          preselectedResidenceId: this.selectedResidence() || undefined
+        },
+        width: '60%',
+        maxWidth: '90vw'
+      })
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.loadFloors();
+        }
+      });
   }
+
+  onPageChange(event: PageEvent): void {
+    if (this.suppressNextPageEvent) {
+      this.suppressNextPageEvent = false;
+      return;
+    }
+
+    this.pagination.update(state => ({
+      ...state,
+      pageIndex: event.pageIndex,
+      pageSize: event.pageSize
+    }));
+    this.loadFloors();
+  }
+
+  private resetToFirstPage(): void {
+    this.pagination.update(state => ({ ...state, pageIndex: 0 }));
+    if (this.paginator) {
+      this.suppressNextPageEvent = true;
+      this.paginator.pageIndex = 0;
+    }
+  }
+
+  private async loadFloors(): Promise<void> {
+    this.isLoadingData.set(true);
+    const state = this.pagination();
+
+    const params: ListFloorsStructureFloorsGet$Params = {
+      page: state.pageIndex + 1,
+      size: state.pageSize,
+      sort_by: state.sortBy,
+      sort_order: state.sortOrder
+    };
+
+    const residenceId = this.selectedResidence();
+    if (residenceId) {
+      params.residence_id = residenceId;
+    }
+
+    const search = this.searchTerm().trim();
+    if (search) {
+      params.search = search;
+    }
+
+    try {
+      const response = (await firstValueFrom(this.structureService.listFloorsStructureFloorsGet(params))) as PaginatedResponse;
+      const floors = (response.items ?? []).map((item: Record<string, any>) => ({
+        id: item['id'],
+        name: item['name'],
+        residence_id: item['residence_id'],
+        residence_name: item['residence_name'] ?? 'Desconocida',
+        created_at: item['created_at'] ?? new Date().toISOString(),
+        updated_at: item['updated_at'] ?? null
+      })) as FloorWithDetails[];
+
+      this.dataSource.data = floors;
+      this.pagination.update(current => ({ ...current, total: response.total ?? floors.length }));
+    } catch (error: any) {
+      this.notificationService.handleApiError(error, 'Error al cargar los pisos');
+    } finally {
+      this.isLoadingData.set(false);
+    }
+  }
+
+  private async loadResidences(): Promise<void> {
+    this.isLoadingResidences.set(true);
+    try {
+      const response = (await firstValueFrom(
+        this.residencesService.listResidencesResidencesGet({ size: 100 })
+      )) as PaginatedResponse;
+      const items = (response.items ?? []).map((item: Record<string, any>) => ({
+        id: item['id'],
+        name: item['name']
+      }));
+      this.residences.set(items);
+    } catch (error: any) {
+      this.notificationService.handleApiError(error, 'Error al cargar las residencias');
+    } finally {
+      this.isLoadingResidences.set(false);
+    }
+  }
+
 }

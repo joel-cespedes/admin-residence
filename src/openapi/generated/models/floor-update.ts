@@ -8,7 +8,9 @@
  *
  * Attributes:
  *     name (Optional[str]): Nuevo nombre del piso
+ *     residence_id (Optional[str]): Nueva residencia asignada
  */
 export interface FloorUpdate {
   name?: (string | null);
+  residence_id?: (string | null);
 }

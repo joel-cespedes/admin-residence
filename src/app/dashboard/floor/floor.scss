@@ -17,7 +17,6 @@
 }
 .selector-header-title {
   margin-bottom: 1em;
-  font-weight: 500;
 }
 .btn_rounded {
   border-radius: 50%;
@@ -27,26 +26,8 @@
   align-items: center;
   justify-content: center;
 }
-
-mat-button-toggle-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-
-  mat-button-toggle {
-    width: 18%;
-    background-color: rgba(105, 108, 255, 0.1);
-    border: 1px solid rgba(105, 108, 255, 0.2) !important;
-    color: var(--sneat-primary);
-    border-radius: 26px;
-    margin-bottom: 1em;
-    padding: 4px 16px;
-    transition: all 0.3s ease;
-    &:hover {
-      background-color: var(--sneat-primary);
-      color: var(--sneat-bg-primary);
-    }
-  }
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+  padding: 0 16px;
 }
 
 // Establecer ancho fijo para la columna de acciones

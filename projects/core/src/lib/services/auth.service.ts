@@ -168,13 +168,5 @@ export class AuthService {
     }
   }
 
-  setRedirectUrl(url: string): void {
-    localStorage.setItem('redirect_url', url);
-  }
-
-  getRedirectUrl(): string | null {
-    const url = localStorage.getItem('redirect_url');
-    localStorage.removeItem('redirect_url');
-    return url;
-  }
+  // Redirect URL handling removed - everything depends on roles
 }

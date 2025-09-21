@@ -14,6 +14,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  authService.setRedirectUrl(state.url);
+  // Removed redirect URL dependency - everything works based on roles
   return router.parseUrl('/login');
 };

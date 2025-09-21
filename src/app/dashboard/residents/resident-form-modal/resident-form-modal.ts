@@ -80,8 +80,7 @@ export class ResidentFormModal {
     this.residentForm = this.fb.group({
       full_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       birth_date: ['', Validators.required],
-      sex: [''],
-      gender: [''],
+      sex: ['', Validators.required],
       comments: [''],
       status: ['active', Validators.required],
       residence_id: ['', Validators.required],
@@ -96,7 +95,6 @@ export class ResidentFormModal {
         full_name: this.resident.full_name,
         birth_date: this.resident.birth_date,
         sex: this.resident.sex || '',
-        gender: this.resident.gender || '',
         comments: this.resident.comments || '',
         status: this.resident.status,
         residence_id: this.resident.residence_id,
@@ -207,41 +205,39 @@ export class ResidentFormModal {
 
   private loadFloorsForResidence(residenceId: string) {
     this.isLoadingFloors.set(true);
-    this.structureService
-      .floorsSimpleStructureFloorsResidenceIdSimpleGet({ residence_id: residenceId })
-      .subscribe({
-        next: (response) => {
-          this.floors.set(
-            (response || []).map(
-              (item: Record<string, any>) =>
-                ({
-                  id: item['id'],
-                  name: item['name'],
-                  residence_id: item['residence_id'],
-                  residence_name: item['residence_name'],
-                  created_at: item['created_at'] || new Date().toISOString(),
-                  updated_at: item['updated_at'] || null
-                }) as FloorWithDetails
-            )
-          );
+    this.structureService.floorsSimpleStructureFloorsResidenceIdSimpleGet({ residence_id: residenceId }).subscribe({
+      next: response => {
+        this.floors.set(
+          (response || []).map(
+            (item: Record<string, any>) =>
+              ({
+                id: item['id'],
+                name: item['name'],
+                residence_id: item['residence_id'],
+                residence_name: item['residence_name'],
+                created_at: item['created_at'] || new Date().toISOString(),
+                updated_at: item['updated_at'] || null
+              }) as FloorWithDetails
+          )
+        );
 
-          // If editing, the floor selection will be handled after we get bed details
-          if (this.resident && this.resident.bed_id) {
-            // The floor will be selected in loadBedDetailsForEdit method
-          }
-
-          this.isLoadingFloors.set(false);
-        },
-        error: () => {
-          this.isLoadingFloors.set(false);
+        // If editing, the floor selection will be handled after we get bed details
+        if (this.resident && this.resident.bed_id) {
+          // The floor will be selected in loadBedDetailsForEdit method
         }
-      });
+
+        this.isLoadingFloors.set(false);
+      },
+      error: () => {
+        this.isLoadingFloors.set(false);
+      }
+    });
   }
 
   private loadRoomsForFloor(floorId: string) {
     this.isLoadingRooms.set(true);
     this.structureService.roomsSimpleStructureRoomsFloorIdSimpleGet({ floor_id: floorId }).subscribe({
-      next: (response) => {
+      next: response => {
         this.rooms.set(
           (response || []).map(
             (item: Record<string, any>) =>
@@ -269,18 +265,16 @@ export class ResidentFormModal {
   private loadBedsForRoom(roomId: string) {
     this.isLoadingBeds.set(true);
     this.structureService.bedsSimpleStructureBedsRoomIdSimpleGet({ room_id: roomId }).subscribe({
-      next: (response) => {
+      next: response => {
         this.beds.set(
-          (response || []).map(
-            (item: Record<string, any>) => ({
-              id: item['id'],
-              name: item['name'],
-              room_id: item['room_id'],
-              resident_name: item['resident_name'] || 'Sin asignar',
-              created_at: item['created_at'] || new Date().toISOString(),
-              updated_at: item['updated_at'] || null
-            })
-          )
+          (response || []).map((item: Record<string, any>) => ({
+            id: item['id'],
+            name: item['name'],
+            room_id: item['room_id'],
+            resident_name: item['resident_name'] || 'Sin asignar',
+            created_at: item['created_at'] || new Date().toISOString(),
+            updated_at: item['updated_at'] || null
+          }))
         );
 
         // If editing, set the bed selection
@@ -300,43 +294,62 @@ export class ResidentFormModal {
   private loadBedDetailsForEdit() {
     if (!this.resident || !this.resident.bed_id) return;
 
-    // Get bed details to find the room_id and floor_id
+    // Get bed details to find the room_id
     this.structureService.getBedStructureBedsIdGet({ id: this.resident.bed_id }).subscribe({
       next: (bedData: Record<string, any>) => {
         const roomId = bedData['room_id'];
         if (roomId) {
-          // Wait for rooms to load, then load beds
-          const checkRoomsLoaded = () => {
-            if (this.rooms().length > 0) {
-              const room = this.rooms().find(r => r.id === roomId);
-              if (room) {
-                this.selectedRoomId.set(room.id);
-                this.residentForm.patchValue({ room_id: room.id });
-                this.loadBedsForRoom(room.id);
+          // Get room details to find the floor_id
+          this.structureService.getRoomStructureRoomsIdGet({ id: roomId }).subscribe({
+            next: (roomData: Record<string, any>) => {
+              const floorId = roomData['floor_id'];
+              if (floorId) {
+                const checkFloorsLoaded = () => {
+                  if (this.floors().length > 0) {
+                    const floor = this.floors().find(f => f.id === floorId);
+                    if (floor) {
+                      this.selectedFloorId.set(floor.id);
+                      this.residentForm.patchValue({ floor_id: floor.id });
+                    }
+                  } else {
+                    setTimeout(checkFloorsLoaded, 100);
+                  }
+                };
+                checkFloorsLoaded();
               }
-            } else {
-              // If rooms not loaded yet, check again after a short delay
-              setTimeout(checkRoomsLoaded, 100);
-            }
-          };
-          checkRoomsLoaded();
 
-          // Also get floor info
-          const floorId = bedData['floor_id'];
-          if (floorId) {
-            const checkFloorsLoaded = () => {
-              if (this.floors().length > 0) {
-                const floor = this.floors().find(f => f.id === floorId);
-                if (floor) {
-                  this.selectedFloorId.set(floor.id);
-                  this.residentForm.patchValue({ floor_id: floor.id });
+              // Wait for rooms to load, then load beds
+              const checkRoomsLoaded = () => {
+                if (this.rooms().length > 0) {
+                  const room = this.rooms().find(r => r.id === roomId);
+                  if (room) {
+                    this.selectedRoomId.set(room.id);
+                    this.residentForm.patchValue({ room_id: room.id });
+                    this.loadBedsForRoom(room.id);
+                  }
+                } else {
+                  setTimeout(checkRoomsLoaded, 100);
                 }
-              } else {
-                setTimeout(checkFloorsLoaded, 100);
-              }
-            };
-            checkFloorsLoaded();
-          }
+              };
+              checkRoomsLoaded();
+            },
+            error: () => {
+              // Handle error silently - still try to set room selection
+              const checkRoomsLoaded = () => {
+                if (this.rooms().length > 0) {
+                  const room = this.rooms().find(r => r.id === roomId);
+                  if (room) {
+                    this.selectedRoomId.set(room.id);
+                    this.residentForm.patchValue({ room_id: room.id });
+                    this.loadBedsForRoom(room.id);
+                  }
+                } else {
+                  setTimeout(checkRoomsLoaded, 100);
+                }
+              };
+              checkRoomsLoaded();
+            }
+          });
         }
       },
       error: () => {
@@ -357,9 +370,8 @@ export class ResidentFormModal {
 
     const formData: ResidentFormData = {
       full_name: this.residentForm.value.full_name,
-      birth_date: this.residentForm.value.birth_date,
-      sex: this.residentForm.value.sex || null,
-      gender: this.residentForm.value.gender || null,
+      birth_date: this.residentForm.value.birth_date ? new Date(this.residentForm.value.birth_date).toISOString().split('T')[0] : this.residentForm.value.birth_date,
+      sex: this.residentForm.value.sex,
       comments: this.residentForm.value.comments || null,
       status: this.residentForm.value.status,
       residence_id: this.residentForm.value.residence_id,

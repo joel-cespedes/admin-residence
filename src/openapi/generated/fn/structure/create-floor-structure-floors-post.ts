@@ -12,14 +12,18 @@ import { FloorCreate } from '../../models/floor-create';
 import { FloorOut } from '../../models/floor-out';
 
 export interface CreateFloorStructureFloorsPost$Params {
-  'X-Residence-Id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
       body: FloorCreate
 }
 
 export function createFloorStructureFloorsPost(http: HttpClient, rootUrl: string, params: CreateFloorStructureFloorsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<FloorOut>> {
   const rb = new RequestBuilder(rootUrl, createFloorStructureFloorsPost.PATH, 'post');
   if (params) {
-    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.query('residence_id', params.residence_id, {});
     rb.body(params.body, 'application/json');
   }
 

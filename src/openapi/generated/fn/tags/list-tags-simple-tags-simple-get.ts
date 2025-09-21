@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface ListTagsSimpleTagsSimpleGet$Params {
-  'X-Residence-Id'?: (string | null);
+  residence_id?: (string | null);
 }
 
 export function listTagsSimpleTagsSimpleGet(http: HttpClient, rootUrl: string, params?: ListTagsSimpleTagsSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
@@ -18,7 +18,7 @@ export function listTagsSimpleTagsSimpleGet(http: HttpClient, rootUrl: string, p
 }>>> {
   const rb = new RequestBuilder(rootUrl, listTagsSimpleTagsSimpleGet.PATH, 'get');
   if (params) {
-    rb.query('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.query('residence_id', params.residence_id, {});
   }
 
   return http.request(

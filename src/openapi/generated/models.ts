@@ -52,5 +52,8 @@ export type { TaskTemplateCreate } from './models/task-template-create';
 export type { TaskTemplateOut } from './models/task-template-out';
 export type { TaskTemplateUpdate } from './models/task-template-update';
 export type { TokenResponse } from './models/token-response';
+export type { UserCreate } from './models/user-create';
+export type { UserOut } from './models/user-out';
+export type { UserResidenceAssignment } from './models/user-residence-assignment';
 export type { ValidationError } from './models/validation-error';
 export type { YearComparison } from './models/year-comparison';

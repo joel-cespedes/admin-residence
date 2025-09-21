@@ -12,7 +12,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
 import { ResidenceFormData } from '../model/residence.model';
-import { NotificationService } from '../../../core/services/notification.service';
+import { NotificationService } from '../../../shared/notification.service';
 
 @Component({
   selector: 'app-residence-form-modal',

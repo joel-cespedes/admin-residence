@@ -16,14 +16,14 @@ export interface GetMeasurementsStatsDashboardMeasurementsStatsGet$Params {
  * Time filter: week, month, or year
  */
   time_filter?: string;
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function getMeasurementsStatsDashboardMeasurementsStatsGet(http: HttpClient, rootUrl: string, params?: GetMeasurementsStatsDashboardMeasurementsStatsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementStats>> {
   const rb = new RequestBuilder(rootUrl, getMeasurementsStatsDashboardMeasurementsStatsGet.PATH, 'get');
   if (params) {
     rb.query('time_filter', params.time_filter, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

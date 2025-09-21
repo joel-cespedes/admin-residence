@@ -1,30 +1,19 @@
-import { Component, inject, signal, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { ResidenceWithContact } from '../../residence/model/residence.model';
+import { StructureService } from '../../../../openapi/generated/services/structure.service';
 import { FloorWithDetails } from '../../floor/model/floor.model';
+import { ResidenceWithContact } from '../../residence/model/residence.model';
 import { RoomWithDetails } from '../../room/model/room.model';
 import { BedFormData, BedWithDetails } from '../model/bed.model';
-import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
-import { StructureService } from '../../../../openapi/generated/services/structure.service';
-
-interface BedFormModalData {
-  bed?: BedWithDetails;
-  residences: ResidenceWithContact[];
-  selectedResidenceId?: string;
-  selectedFloorId?: string;
-  selectedRoomId?: string;
-  floors?: FloorWithDetails[];
-  rooms?: RoomWithDetails[];
-}
 
 @Component({
   selector: 'app-bed-form-modal',
@@ -56,14 +45,12 @@ export class BedFormModal {
 
   bedForm: FormGroup;
 
-  private residencesService = inject(ResidencesService);
   private structureService = inject(StructureService);
   private fb = inject(FormBuilder);
+  data = inject(MAT_DIALOG_DATA);
+  private dialogRef = inject(MatDialogRef<BedFormModal>);
 
-  constructor(
-    public dialogRef: MatDialogRef<BedFormModal>,
-    @Inject(MAT_DIALOG_DATA) public data: BedFormModalData
-  ) {
+  constructor() {
     this.bed = this.data.bed || null;
     this.residences = this.data.residences;
 
@@ -161,41 +148,39 @@ export class BedFormModal {
 
   private loadFloorsForResidence(residenceId: string) {
     this.isLoadingFloors.set(true);
-    this.structureService
-      .floorsSimpleStructureFloorsResidenceIdSimpleGet({ residence_id: residenceId })
-      .subscribe({
-        next: (response) => {
-          this.floors.set(
-            (response || []).map(
-              (item: Record<string, any>) =>
-                ({
-                  id: item['id'],
-                  name: item['name'],
-                  residence_id: item['residence_id'],
-                  residence_name: item['residence_name'],
-                  created_at: item['created_at'] || new Date().toISOString(),
-                  updated_at: item['updated_at'] || null
-                }) as FloorWithDetails
-            )
-          );
+    this.structureService.floorsSimpleStructureFloorsResidenceIdSimpleGet({ residence_id: residenceId }).subscribe({
+      next: response => {
+        this.floors.set(
+          (response || []).map(
+            (item: Record<string, any>) =>
+              ({
+                id: item['id'],
+                name: item['name'],
+                residence_id: item['residence_id'],
+                residence_name: item['residence_name'],
+                created_at: item['created_at'] || new Date().toISOString(),
+                updated_at: item['updated_at'] || null
+              }) as FloorWithDetails
+          )
+        );
 
-          // If editing, the floor selection will be handled after we get room details
-          if (this.bed) {
-            // The floor will be selected in loadRoomDetailsForEdit method
-          }
-
-          this.isLoadingFloors.set(false);
-        },
-        error: () => {
-          this.isLoadingFloors.set(false);
+        // If editing, the floor selection will be handled after we get room details
+        if (this.bed) {
+          // The floor will be selected in loadRoomDetailsForEdit method
         }
-      });
+
+        this.isLoadingFloors.set(false);
+      },
+      error: () => {
+        this.isLoadingFloors.set(false);
+      }
+    });
   }
 
   private loadRoomsForFloor(floorId: string) {
     this.isLoadingRooms.set(true);
     this.structureService.roomsSimpleStructureRoomsFloorIdSimpleGet({ floor_id: floorId }).subscribe({
-      next: (response) => {
+      next: response => {
         this.rooms.set(
           (response || []).map(
             (item: Record<string, any>) =>

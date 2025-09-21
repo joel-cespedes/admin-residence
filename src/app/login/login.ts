@@ -34,7 +34,7 @@ export class Login {
   private snackBar = inject(MatSnackBar);
 
   // Form signals
-  emailOrUsername = signal('superadmin');
+  emailOrUsername = signal('admin');
   password = signal('admin123');
   hidePassword = signal(true);
   isLoading = signal(false);

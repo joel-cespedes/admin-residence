@@ -4,6 +4,7 @@
 
 export { AuthService } from './services/auth.service';
 export { ResidencesService } from './services/residences.service';
+export { UsersService } from './services/users.service';
 export { StructureService } from './services/structure.service';
 export { ResidentsService } from './services/residents.service';
 export { TagsService } from './services/tags.service';

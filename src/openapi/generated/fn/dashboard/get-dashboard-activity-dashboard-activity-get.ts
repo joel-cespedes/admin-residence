@@ -15,7 +15,7 @@ export interface GetDashboardActivityDashboardActivityGet$Params {
  * Number of days to look back
  */
   days?: number;
-  'X-Residence-Id'?: (string | null);
+  'residence-id'?: (string | null);
 }
 
 export function getDashboardActivityDashboardActivityGet(http: HttpClient, rootUrl: string, params?: GetDashboardActivityDashboardActivityGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
@@ -24,7 +24,7 @@ export function getDashboardActivityDashboardActivityGet(http: HttpClient, rootU
   const rb = new RequestBuilder(rootUrl, getDashboardActivityDashboardActivityGet.PATH, 'get');
   if (params) {
     rb.query('days', params.days, {});
-    rb.header('X-Residence-Id', params['X-Residence-Id'], {});
+    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

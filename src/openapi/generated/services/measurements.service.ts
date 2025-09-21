@@ -42,7 +42,7 @@ export class MeasurementsService extends BaseService {
   /**
    * Create Measurement.
    *
-   * Crea una medición. Si el header X-Residence-Id no llega, se intenta inferir
+   * Crea una medición. Si el header residence_id no llega, se intenta inferir
    * a partir de resident_id o device_id. Valida pertenencia y coherencia de datos.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -57,7 +57,7 @@ export class MeasurementsService extends BaseService {
   /**
    * Create Measurement.
    *
-   * Crea una medición. Si el header X-Residence-Id no llega, se intenta inferir
+   * Crea una medición. Si el header residence_id no llega, se intenta inferir
    * a partir de resident_id o device_id. Valida pertenencia y coherencia de datos.
    *
    * This method provides access only to the response body.

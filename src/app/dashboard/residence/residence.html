@@ -6,7 +6,7 @@
   </button>
 </div>
 <div class="filter-field">
-  <input matInput (keyup)="applyFilter($event)" placeholder="Buscar residencia..." #input />
+  <input matInput (keyup)="onSearchChange($event.target.value)" placeholder="Buscar residencia..." #input />
 </div>
 
 <div class="mat-elevation-z8">
@@ -55,12 +55,12 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
 
     @if (dataSource.data.length === 0) {
       <tr class="mat-row">
-        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+        <td class="mat-cell" [attr.colspan]="columns.length">
           No se encontraron residencias
         </td>
       </tr>
@@ -68,7 +68,7 @@
   </table>
 
   <mat-paginator
-      [length]="totalItems()"
+      [length]="pagination().total"
       [pageSizeOptions]="[10, 20, 50, 100]"
       aria-label="Seleccionar página de residencias"></mat-paginator>
 </div>
