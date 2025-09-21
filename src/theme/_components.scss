@@ -67,6 +67,10 @@
     border-radius: var(--sneat-border-radius) !important;
   }
 
+  .mdc-text-field--disabled {
+    background-color: rgba(235, 235, 235, 0.694) !important;
+  }
+
   // Label personalizado
   .mat-mdc-form-field-label {
     color: var(--sneat-gray-600) !important;
@@ -535,9 +539,7 @@ mat-form-field.style_select {
   margin-bottom: 0.5em;
   text-align: center;
 }
-.mat-form-field-disabled {
-  background-color: rgba(235, 235, 235, 0.694) !important;
-}
+
 mat-button-toggle-group {
   display: grid !important;
   gap: 1em;

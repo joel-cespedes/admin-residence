@@ -90,7 +90,11 @@
           <div class="form-field">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Residencia</mat-label>
-              <mat-select formControlName="residence_id" (selectionChange)="onResidenceChange($event.value)">
+              <mat-select
+                formControlName="residence_id"
+                (selectionChange)="onResidenceChange($event.value)"
+                [disabled]="resident !== null"
+                [attr.aria-disabled]="resident !== null ? 'true' : null">
                 <mat-option value="">Seleccionar residencia</mat-option>
                 @for (residence of residences; track residence.id) {
                   <mat-option [value]="residence.id">{{ residence.name }}</mat-option>

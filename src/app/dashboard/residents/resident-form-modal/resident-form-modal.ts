@@ -1,34 +1,23 @@
-import { Component, inject, signal, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatRadioModule } from '@angular/material/radio';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { ResidenceWithContact } from '../../residence/model/residence.model';
-import { FloorWithDetails } from '../../floor/model/floor.model';
-import { RoomWithDetails } from '../../room/model/room.model';
-import { ResidentWithDetails, ResidentFormData } from '../model/resident.model';
 import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
 import { StructureService } from '../../../../openapi/generated/services/structure.service';
-
-interface ResidentFormModalData {
-  resident?: ResidentWithDetails;
-  residences: ResidenceWithContact[];
-  selectedResidenceId?: string;
-  selectedFloorId?: string;
-  selectedRoomId?: string;
-  selectedBedId?: string;
-  floors?: FloorWithDetails[];
-  rooms?: RoomWithDetails[];
-}
+import { FloorWithDetails } from '../../floor/model/floor.model';
+import { ResidenceWithContact } from '../../residence/model/residence.model';
+import { RoomWithDetails } from '../../room/model/room.model';
+import { ResidentFormData, ResidentWithDetails } from '../model/resident.model';
 
 @Component({
   selector: 'app-resident-form-modal',
@@ -70,10 +59,9 @@ export class ResidentFormModal {
   private structureService = inject(StructureService);
   private fb = inject(FormBuilder);
 
-  constructor(
-    public dialogRef: MatDialogRef<ResidentFormModal>,
-    @Inject(MAT_DIALOG_DATA) public data: ResidentFormModalData
-  ) {
+  data = inject(MAT_DIALOG_DATA);
+  private dialogRef = inject(MatDialogRef<ResidentFormModal>);
+  constructor() {
     this.resident = this.data.resident || null;
     this.residences = this.data.residences;
 
@@ -100,6 +88,9 @@ export class ResidentFormModal {
         residence_id: this.resident.residence_id,
         bed_id: this.resident.bed_id || ''
       });
+
+      // Disable residence_id control in edit mode
+      this.residentForm.get('residence_id')?.disable();
 
       // Set initial selections and load data
       this.selectedResidenceId.set(this.resident.residence_id);
@@ -370,7 +361,9 @@ export class ResidentFormModal {
 
     const formData: ResidentFormData = {
       full_name: this.residentForm.value.full_name,
-      birth_date: this.residentForm.value.birth_date ? new Date(this.residentForm.value.birth_date).toISOString().split('T')[0] : this.residentForm.value.birth_date,
+      birth_date: this.residentForm.value.birth_date
+        ? new Date(this.residentForm.value.birth_date).toISOString().split('T')[0]
+        : this.residentForm.value.birth_date,
       sex: this.residentForm.value.sex,
       comments: this.residentForm.value.comments || null,
       status: this.residentForm.value.status,
