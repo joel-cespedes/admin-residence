@@ -20,6 +20,8 @@
           formControlName="residence_id"
           (selectionChange)="onResidenceChange($event.value)"
           placeholder="Selecciona una residencia"
+          [disabled]="isEditing()"
+          [attr.aria-disabled]="isEditing() ? 'true' : null"
           required>
           @for (residence of residences(); track residence.id) {
             <mat-option [value]="residence.id">
@@ -70,9 +72,12 @@
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onClose()" [disabled]="isLoading()">Cancelar</button>
+  <button mat-button (click)="onClose()" [disabled]="isSubmitting()">Cancelar</button>
 
-  <button class="btn_color_free btn_darkblue" (click)="onSubmit()" [disabled]="!roomForm.valid">
-    {{ isEditing() ? 'Actualizar' : 'Guardar' }}
+  <button class="btn_color_free btn_darkblue" (click)="onSubmit()" [disabled]="!roomForm.valid || isSubmitting()">
+    @if (isSubmitting()) {
+      <mat-spinner diameter="16" style="display: inline-block; margin-right: 8px"></mat-spinner>
+    }
+    {{ isSubmitting() ? 'Guardando...' : isEditing() ? 'Actualizar' : 'Guardar' }}
   </button>
 </div>

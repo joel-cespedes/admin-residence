@@ -14,10 +14,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NotificationService } from '@core';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { RoomCreate } from '../../../../openapi/generated/models/room-create';
+import { RoomUpdate } from '../../../../openapi/generated/models/room-update';
+import { StructureService } from '../../../../openapi/generated/services/structure.service';
 import { FloorWithDetails } from '../../floor/model/floor.model';
 import { ResidenceWithContact } from '../../residence/model/residence.model';
-import { RoomFormData } from '../model/room.model';
+import { RoomWithDetails } from '../model/room.model';
 
 @Component({
   selector: 'app-room-form-modal',
@@ -45,14 +49,16 @@ export class RoomFormModal {
   residences = signal<ResidenceWithContact[]>([]);
   floors = signal<FloorWithDetails[]>([]);
   isLoading = signal(false);
+  isSubmitting = signal(false);
   isEditing = signal(false);
 
   private http = inject(HttpClient);
+  private structureService = inject(StructureService);
   private notificationService = inject(NotificationService);
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<RoomFormModal>);
   data = inject(MAT_DIALOG_DATA) as {
-    room?: RoomFormData;
+    room?: RoomWithDetails;
     residences: ResidenceWithContact[];
     floors?: FloorWithDetails[];
     preselectedResidenceId?: string;
@@ -89,6 +95,11 @@ export class RoomFormModal {
     if (this.data.room) {
       this.roomForm.patchValue(this.data.room);
       this.loadFloors(this.data.room.residence_id);
+
+      // Disable residence field when editing
+      if (this.isEditing()) {
+        this.roomForm.get('residence_id')?.disable();
+      }
     }
   }
 
@@ -102,33 +113,77 @@ export class RoomFormModal {
 
   private loadFloors(residenceId: string): void {
     this.isLoading.set(true);
-    this.http.get(`${environment.apiUrl}/structure/floors/${residenceId}/simple`).subscribe(
-      (response: any) => {
+    this.http.get<Record<string, unknown>[]>(`${environment.apiUrl}/structure/floors/${residenceId}/simple`).subscribe({
+      next: response => {
         this.floors.set(
           (response || []).map(
-            (item: any) =>
+            item =>
               ({
-                id: item['id'],
-                name: item['name'],
-                residence_id: item['residence_id'],
-                residence_name: item['residence_name'],
-                created_at: item['created_at'] || new Date().toISOString(),
-                updated_at: item['updated_at'] || null
+                id: item['id'] as string,
+                name: item['name'] as string,
+                residence_id: item['residence_id'] as string,
+                residence_name: item['residence_name'] as string,
+                created_at: (item['created_at'] as string) || new Date().toISOString(),
+                updated_at: (item['updated_at'] as string) || null
               }) as FloorWithDetails
           )
         );
         this.isLoading.set(false);
       },
-      (error: any) => {
+      error: (error: unknown) => {
         this.notificationService.handleApiError(error, 'Error al cargar los pisos');
         this.isLoading.set(false);
       }
-    );
+    });
   }
 
-  onSubmit(): void {
-    if (this.roomForm.valid) {
-      this.dialogRef.close(this.roomForm.value);
+  async onSubmit(): Promise<void> {
+    if (this.roomForm.valid && !this.isSubmitting()) {
+      this.isSubmitting.set(true);
+
+      try {
+        const formValue = this.roomForm.value;
+
+        if (this.isEditing()) {
+          // Update existing room
+          const roomUpdate = {
+            name: formValue.name,
+            floor_id: formValue.floor_id
+          };
+
+          await firstValueFrom(
+            this.structureService.updateRoomStructureRoomsIdPut({
+              id: this.data.room!.id,
+              body: roomUpdate as RoomUpdate
+            })
+          );
+
+          this.notificationService.success('Habitación actualizada exitosamente');
+        } else {
+          // Create new room
+          const roomCreate: RoomCreate = {
+            name: formValue.name,
+            floor_id: formValue.floor_id
+          };
+
+          await firstValueFrom(
+            this.structureService.createRoomStructureRoomsPost({
+              body: roomCreate
+            })
+          );
+
+          this.notificationService.success('Habitación creada exitosamente');
+        }
+
+        this.dialogRef.close(true);
+      } catch (error: unknown) {
+        this.notificationService.handleApiError(
+          error,
+          this.isEditing() ? 'Error al actualizar la habitación' : 'Error al crear la habitación'
+        );
+      } finally {
+        this.isSubmitting.set(false);
+      }
     }
   }
 

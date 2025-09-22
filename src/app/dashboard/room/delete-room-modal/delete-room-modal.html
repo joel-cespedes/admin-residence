@@ -28,6 +28,11 @@
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onClose()">Cancelar</button>
-  <button class="btn_color_free btn_red" (click)="onDelete()">Eliminar</button>
+  <button mat-button (click)="onClose()" [disabled]="isDeleting()">Cancelar</button>
+  <button class="btn_color_free btn_red" (click)="onDelete()" [disabled]="isDeleting()">
+    @if (isDeleting()) {
+      <mat-spinner diameter="16" style="display: inline-block; margin-right: 8px"></mat-spinner>
+    }
+    {{ isDeleting() ? 'Eliminando...' : 'Eliminar' }}
+  </button>
 </div>

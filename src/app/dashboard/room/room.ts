@@ -202,7 +202,7 @@ export class Room implements OnInit, AfterViewInit {
         maxWidth: '90vw'
       })
       .afterClosed()
-      .subscribe(result => {
+      .subscribe((result: boolean) => {
         if (result) {
           this.loadRooms();
         }
@@ -237,7 +237,7 @@ export class Room implements OnInit, AfterViewInit {
         maxWidth: '90vw'
       })
       .afterClosed()
-      .subscribe(result => {
+      .subscribe((result: boolean) => {
         if (result) {
           this.loadRooms();
         }
