@@ -1,0 +1,39 @@
+.action-buttons {
+  display: flex;
+  button {
+    margin-left: 14px;
+    cursor: pointer;
+  }
+}
+
+.add-table-button {
+  margin-top: 1em;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+  button {
+    cursor: pointer;
+  }
+}
+.selector-header-title {
+  margin-bottom: 1em;
+}
+.btn_rounded {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+  padding: 0 16px;
+}
+
+// Establecer ancho fijo para la columna de acciones
+.mat-mdc-cell.mat-column-actions,
+.mat-mdc-header-cell.mat-column-actions {
+  width: 190px;
+  min-width: 190px;
+  max-width: 190px;
+}

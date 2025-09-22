@@ -1,0 +1,54 @@
+<div class="title_modal">{{ isEditMode() ? 'Editar Categoría' : 'Crear Nueva Categoría' }}</div>
+<div mat-dialog-content>
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando...</p>
+    </div>
+  } @else {
+    <form [formGroup]="form" class="form_modal">
+      <mat-form-field appearance="outline" class="full-width custom-field">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" placeholder="Nombre de la categoría" />
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>El nombre es obligatorio</mat-error>
+        }
+        @if (form.get('name')?.hasError('minlength')) {
+          <mat-error>El nombre debe tener al menos 2 caracteres</mat-error>
+        }
+        @if (form.get('name')?.hasError('maxlength')) {
+          <mat-error>El nombre no puede superar los 100 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Residencia</mat-label>
+        <mat-select formControlName="residence_id" placeholder="Selecciona una residencia">
+          @for (residence of data.residences; track residence.id) {
+            <mat-option [value]="residence.id">
+              {{ residence.name }}
+            </mat-option>
+          }
+          @if (data.residences.length === 0) {
+            <mat-option disabled>No hay residencias disponibles</mat-option>
+          }
+        </mat-select>
+        @if (form.get('residence_id')?.hasError('required')) {
+          <mat-error>Debe seleccionar una residencia</mat-error>
+        }
+      </mat-form-field>
+    </form>
+  }
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+  <button class="btn_color_free btn_darkblue" (click)="onSubmit()" [disabled]="form.invalid || isLoading()">
+    @if (!isLoading()) {
+      <span>{{ isEditMode() ? 'Actualizar' : 'Crear' }}</span>
+    }
+    @if (isLoading()) {
+      <span>Guardando...</span>
+    }
+  </button>
+</div>

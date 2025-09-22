@@ -344,18 +344,4 @@ export class Managers implements OnInit, AfterViewInit {
       this.notificationService.handleApiError(error, 'Error al actualizar gestor');
     }
   }
-
-  private async deleteManagerById(id: string): Promise<void> {
-    try {
-      await firstValueFrom(
-        this.usersService.deleteUserUsersUserIdDelete({
-          user_id: id
-        })
-      );
-      this.notificationService.success('Gestor eliminado exitosamente');
-      this.loadManagers();
-    } catch (error) {
-      this.notificationService.handleApiError(error, 'Error al eliminar gestor');
-    }
-  }
 }

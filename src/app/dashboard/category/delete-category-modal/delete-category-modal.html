@@ -1,0 +1,25 @@
+<div mat-dialog-content>
+  <div class="title-modal">
+    ¿Estás seguro de que quieres eliminar la categoría
+    <strong>"{{ category.name }}"</strong>
+    ?
+  </div>
+  <p>¡Esta acción no se puede deshacer!</p>
+
+  <div class="warning-box">
+    <mat-icon class="warning-icon">warning</mat-icon>
+    <p>Al eliminar esta categoría, también se eliminarán todas las tareas asociadas a ella.</p>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+  <button class="btn_color_free btn_red" (click)="onDelete()">
+    @if (!isLoading()) {
+      <span>Eliminar</span>
+    }
+    @if (isLoading()) {
+      <span>Eliminando...</span>
+    }
+  </button>
+</div>

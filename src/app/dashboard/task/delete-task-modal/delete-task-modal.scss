@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  background-color: var(--sneat-bg-primary);
+  padding: 20px 10px !important;
+  font-size: 15px;
+}
+
+p {
+  margin: 1rem 0;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+strong {
+  color: rgba(255, 3, 3, 1);
+}
+
+button {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.warning-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 15px 0;
+
+  p {
+    margin: 0;
+    font-weight: normal;
+    font-size: 14px;
+    color: #856404;
+  }
+}
+
+.warning-icon {
+  color: #856404;
+  font-size: 20px;
+}

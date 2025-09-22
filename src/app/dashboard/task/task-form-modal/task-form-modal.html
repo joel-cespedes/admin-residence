@@ -1,0 +1,114 @@
+<div class="title_modal">{{ isEditMode() ? 'Editar Task' : 'Crear Nuevo Task' }}</div>
+<div mat-dialog-content>
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando...</p>
+    </div>
+  } @else {
+    <form [formGroup]="form" class="form_modal">
+      <mat-form-field appearance="outline" class="full-width custom-field">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" placeholder="Nombre del task" />
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>El nombre es obligatorio</mat-error>
+        }
+        @if (form.get('name')?.hasError('minlength')) {
+          <mat-error>El nombre debe tener al menos 2 caracteres</mat-error>
+        }
+        @if (form.get('name')?.hasError('maxlength')) {
+          <mat-error>El nombre no puede superar los 100 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Residencia</mat-label>
+        <mat-select formControlName="residence_id" placeholder="Selecciona una residencia">
+          @for (residence of data.residences; track residence.id) {
+            <mat-option [value]="residence.id">
+              {{ residence.name }}
+            </mat-option>
+          }
+          @if (data.residences.length === 0) {
+            <mat-option disabled>No hay residencias disponibles</mat-option>
+          }
+        </mat-select>
+        @if (form.get('residence_id')?.hasError('required')) {
+          <mat-error>Debe seleccionar una residencia</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Categoría</mat-label>
+        <mat-select formControlName="task_category_id" placeholder="Selecciona una categoría">
+          @for (category of data.categories; track category.id) {
+            <mat-option [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          }
+          @if (data.categories.length === 0) {
+            <mat-option disabled>No hay categorías disponibles</mat-option>
+          }
+        </mat-select>
+        @if (form.get('task_category_id')?.hasError('required')) {
+          <mat-error>Debe seleccionar una categoría</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Frase de Audio</mat-label>
+        <input matInput formControlName="audio_phrase" placeholder="Frase para comando de voz" />
+      </mat-form-field>
+
+      <div class="checkbox-field">
+        <mat-checkbox formControlName="is_block">Bloquear Task</mat-checkbox>
+      </div>
+
+      <div class="statuses-section">
+        <h3>Textos de Status</h3>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status 1</mat-label>
+          <input matInput formControlName="status1" placeholder="Texto para status 1" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status 2</mat-label>
+          <input matInput formControlName="status2" placeholder="Texto para status 2" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status 3</mat-label>
+          <input matInput formControlName="status3" placeholder="Texto para status 3" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status 4</mat-label>
+          <input matInput formControlName="status4" placeholder="Texto para status 4" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status 5</mat-label>
+          <input matInput formControlName="status5" placeholder="Texto para status 5" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status 6</mat-label>
+          <input matInput formControlName="status6" placeholder="Texto para status 6" />
+        </mat-form-field>
+      </div>
+    </form>
+  }
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+  <button class="btn_color_free btn_darkblue" (click)="onSubmit()" [disabled]="form.invalid || isLoading()">
+    @if (!isLoading()) {
+      <span>{{ isEditMode() ? 'Actualizar' : 'Crear' }}</span>
+    }
+    @if (isLoading()) {
+      <span>Guardando...</span>
+    }
+  </button>
+</div>

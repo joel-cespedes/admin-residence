@@ -1,0 +1,47 @@
+<div class="title_modal">{{ category.name }}</div>
+<div mat-dialog-content>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Nombre:</div>
+      <div class="info-value">{{ category.name }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Residencia:</div>
+      <div class="info-value">{{ category.residence_name || 'Unknown' }}</div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Creado por:</div>
+      <div class="info-value">
+        {{ category.created_by_info?.name || 'Unknown' }}
+        @if (category.created_by_info?.alias) {
+          <span class="created-by-alias">@{{ category.created_by_info?.alias }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">Fecha de Creación:</div>
+      <div class="info-value">{{ category.created_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+
+    @if (category.updated_at !== category.created_at) {
+      <div class="info-item">
+        <div class="info-label">Última Actualización:</div>
+        <div class="info-value">{{ category.updated_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    }
+
+    @if (category.deleted_at) {
+      <div class="info-item deleted">
+        <div class="info-label">Fecha de Eliminación:</div>
+        <div class="info-value">{{ category.deleted_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    }
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button class="btn_color_free btn_darkblue" (click)="onClose()">Cerrar</button>
+</div>
