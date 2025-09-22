@@ -17,7 +17,8 @@
       class="residence-toggles"
       [disabled]="isLoadingResidences()"
       [value]="selectedResidence()"
-      (selectionChange)="onResidenceChange($event)">
+      (change)="onResidenceChange($event.value)">
+      <mat-button-toggle value="">Todas las residencias</mat-button-toggle>
       @for (residence of residences(); track residence.id) {
         <mat-button-toggle [value]="residence.id">{{ residence.name }}</mat-button-toggle>
       }
@@ -33,7 +34,7 @@
   <mat-button-toggle-group
     class="category-toggles"
     [value]="selectedCategory()"
-    (selectionChange)="onCategoryChange($event)">
+    (change)="onCategoryChange($event.value)">
     <mat-button-toggle value="">Todas las Categorías</mat-button-toggle>
     @for (category of categories(); track category.id) {
       <mat-button-toggle [value]="category.id">{{ category.name }}</mat-button-toggle>

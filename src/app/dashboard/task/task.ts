@@ -122,23 +122,30 @@ export class Task implements OnInit, AfterViewInit {
 
   loadTasks(): void {
     this.isLoadingData.set(true);
+    const residenceId = this.selectedResidence();
+    const categoryId = this.selectedCategory();
+    const search = this.searchTerm();
+
     const params: any = {
       page: this.pagination().pageIndex + 1,
       size: this.pagination().pageSize,
       sort: `${this.pagination().sortBy}:${this.pagination().sortOrder}`
     };
 
-    if (this.selectedResidence()) {
-      params.residence_id = this.selectedResidence();
+    if (residenceId && residenceId.trim() !== '') {
+      params.residence_id = residenceId;
     }
 
-    if (this.selectedCategory()) {
-      params.task_category_id = this.selectedCategory();
+    if (categoryId && categoryId.trim() !== '') {
+      params.category_id = categoryId;
     }
 
-    if (this.searchTerm()) {
-      params.search = this.searchTerm();
+    if (search && search.trim() !== '') {
+      params.search = search;
     }
+
+    console.log('🔥 TASK FILTERS - residenceId:', residenceId, 'categoryId:', categoryId);
+    console.log('🔥 TASK PARAMS:', JSON.stringify(params, null, 2));
 
     this.tasksService.listTemplatesTasksTemplatesGet(params).subscribe({
       next: response => {
@@ -176,16 +183,14 @@ export class Task implements OnInit, AfterViewInit {
     }, 300);
   }
 
-  onResidenceChange(event: any): void {
-    const residenceId = event.value;
-    this.selectedResidence.set(residenceId);
+  onResidenceChange(residenceId: string): void {
+    this.selectedResidence.set(residenceId || '');
     this.pagination.update(p => ({ ...p, pageIndex: 0 }));
     this.loadTasks();
   }
 
-  onCategoryChange(event: any): void {
-    const categoryId = event.value;
-    this.selectedCategory.set(categoryId);
+  onCategoryChange(categoryId: string): void {
+    this.selectedCategory.set(categoryId || '');
     this.pagination.update(p => ({ ...p, pageIndex: 0 }));
     this.loadTasks();
   }

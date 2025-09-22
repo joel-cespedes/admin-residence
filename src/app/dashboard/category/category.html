@@ -18,6 +18,7 @@
       [disabled]="isLoadingResidences()"
       [value]="selectedResidence()"
       (change)="onResidenceChange($event.value)">
+      <mat-button-toggle value="">Todas las residencias</mat-button-toggle>
       @for (residence of residences(); track residence.id) {
         <mat-button-toggle [value]="residence.id">{{ residence.name }}</mat-button-toggle>
       }

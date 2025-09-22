@@ -105,19 +105,23 @@ export class Category implements OnInit, AfterViewInit {
   }
 
   loadCategories(): void {
+    if (this.isLoadingData()) return;
+
     this.isLoadingData.set(true);
+    const residenceId = this.selectedResidence();
+    const search = this.searchTerm().trim();
+
     const params: any = {
       page: this.pagination().pageIndex + 1,
       size: this.pagination().pageSize,
-      sort: `${this.pagination().sortBy}:${this.pagination().sortOrder}`
+      sort_by: this.pagination().sortBy,
+      sort_order: this.pagination().sortOrder
     };
 
-    const residenceId = this.selectedResidence();
-    if (residenceId) {
+    if (residenceId && residenceId.trim() !== '') {
       params.residence_id = residenceId;
     }
 
-    const search = this.searchTerm();
     if (search) {
       params.search = search;
     }
@@ -135,7 +139,7 @@ export class Category implements OnInit, AfterViewInit {
         this.pagination.update(p => ({ ...p, total: response.total }));
         this.isLoadingData.set(false);
       },
-      error: (error: any) => {
+      error: () => {
         this.notificationService.error('Error loading categories');
         this.isLoadingData.set(false);
       }
@@ -157,7 +161,7 @@ export class Category implements OnInit, AfterViewInit {
   }
 
   onResidenceChange(residenceId: string): void {
-    this.selectedResidence.set(residenceId);
+    this.selectedResidence.set(residenceId || '');
     this.pagination.update(p => ({ ...p, pageIndex: 0 }));
     this.loadCategories();
   }
