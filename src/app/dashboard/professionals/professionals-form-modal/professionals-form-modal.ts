@@ -20,7 +20,7 @@ import { firstValueFrom } from 'rxjs';
 
 type ResidenceOption = Pick<ResidenceWithContact, 'id' | 'name'>;
 
-interface ManagerFormData {
+interface ProfessionalFormData {
   alias: string;
   name: string;
   password?: string;
@@ -28,7 +28,7 @@ interface ManagerFormData {
 }
 
 @Component({
-  selector: 'app-manager-form-modal',
+  selector: 'app-professional-form-modal',
   standalone: true,
   imports: [
     CommonModule,
@@ -45,11 +45,11 @@ interface ManagerFormData {
     MatProgressSpinnerModule,
     MatCheckboxModule
   ],
-  templateUrl: './managers-form-modal.html',
-  styleUrl: './managers-form-modal.scss'
+  templateUrl: './professionals-form-modal.html',
+  styleUrl: './professionals-form-modal.scss'
 })
-export class ManagerFormModal {
-  managerForm: FormGroup;
+export class ProfessionalFormModal {
+  professionalForm: FormGroup;
   isEditMode = signal(false);
   isLoading = signal(false);
   residences = signal<ResidenceOption[]>([]);
@@ -57,14 +57,14 @@ export class ManagerFormModal {
 
   private fb = inject(FormBuilder);
   private residencesService = inject(ResidencesService);
-  private dialogRef = inject(MatDialogRef<ManagerFormModal>);
+  private dialogRef = inject(MatDialogRef<ProfessionalFormModal>);
   private data = inject(MAT_DIALOG_DATA);
   private notificationService = inject(NotificationService);
 
   constructor() {
-    this.isEditMode.set(!!this.data?.manager?.id);
+    this.isEditMode.set(!!this.data?.professional?.id);
 
-    this.managerForm = this.fb.group({
+    this.professionalForm = this.fb.group({
       alias: ['', [Validators.required]],
       name: ['', [Validators.required]],
       password: ['', this.isEditMode() ? [Validators.minLength(6)] : [Validators.required, Validators.minLength(6)]],
@@ -78,11 +78,11 @@ export class ManagerFormModal {
       this.loadResidences();
     }
 
-    if (this.isEditMode() && this.data?.manager) {
-      this.managerForm.patchValue({
-        alias: this.data.manager.alias,
-        name: this.data.manager.name || this.data.manager.alias,
-        residences: this.data.manager.residences.map((r: any) => r.id)
+    if (this.isEditMode() && this.data?.professional) {
+      this.professionalForm.patchValue({
+        alias: this.data.professional.alias,
+        name: this.data.professional.name || this.data.professional.alias,
+        residences: this.data.professional.residences.map((r: any) => r.id)
       });
     }
   }
@@ -107,7 +107,7 @@ export class ManagerFormModal {
   }
 
   get title() {
-    return this.isEditMode() ? 'Editar Gestor' : 'Agregar Gestor';
+    return this.isEditMode() ? 'Editar Profesional' : 'Agregar Profesional';
   }
 
   onCancel(): void {
@@ -115,26 +115,26 @@ export class ManagerFormModal {
   }
 
   async onSubmit(): Promise<void> {
-    if (this.managerForm.invalid || this.isLoading()) {
+    if (this.professionalForm.invalid || this.isLoading()) {
       return;
     }
 
     this.isLoading.set(true);
     try {
-      const formData: ManagerFormData = {
-        alias: this.managerForm.value.alias,
-        name: this.managerForm.value.name,
-        residence_ids: this.managerForm.value.residences || []
+      const formData: ProfessionalFormData = {
+        alias: this.professionalForm.value.alias,
+        name: this.professionalForm.value.name,
+        residence_ids: this.professionalForm.value.residences || []
       };
 
       // Solo incluir contraseña si se proporcionó
-      if (this.managerForm.value.password) {
-        formData.password = this.managerForm.value.password;
+      if (this.professionalForm.value.password) {
+        formData.password = this.professionalForm.value.password;
       }
 
       this.dialogRef.close(formData);
     } catch (error) {
-      this.notificationService.handleApiError(error, 'Error al guardar gestor');
+      this.notificationService.handleApiError(error, 'Error al guardar profesional');
     } finally {
       this.isLoading.set(false);
     }

@@ -10,30 +10,31 @@ import { MatCardModule } from '@angular/material/card';
 import { UsersService } from '../../../../openapi/generated/services/users.service';
 import { NotificationService } from '../../../shared/notification.service';
 
-interface ManagerWithDetails {
+interface ProfessionalWithDetails {
   id: string;
   alias: string;
+  name: string;
   role: 'superadmin' | 'manager' | 'professional';
   created_at: string;
-  residences: Array<{ id: string; name?: string }>;
+  residences: { id: string; name?: string }[];
   residence_names: string[];
   residence_count: number;
 }
 
 @Component({
-  selector: 'app-delete-manager-modal',
+  selector: 'app-delete-professional-modal',
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatSnackBarModule, MatCardModule],
-  templateUrl: './delete-manager-modal.html',
-  styleUrl: './delete-manager-modal.scss'
+  templateUrl: './delete-professional-modal.html',
+  styleUrl: '../../floor/delete-floor-modal/delete-floor-modal.scss'
 })
-export class DeleteManagerModal {
+export class DeleteProfessionalModal {
   isLoading = signal(false);
 
   private usersService = inject(UsersService);
-  private dialogRef = inject(MatDialogRef<DeleteManagerModal>);
+  private dialogRef = inject(MatDialogRef<DeleteProfessionalModal>);
   private notificationService = inject(NotificationService);
-  data: { manager: ManagerWithDetails } = inject(MAT_DIALOG_DATA);
+  data: { professional: ProfessionalWithDetails } = inject(MAT_DIALOG_DATA);
 
   onDelete(): void {
     if (this.isLoading()) {
@@ -41,19 +42,17 @@ export class DeleteManagerModal {
     }
     this.isLoading.set(true);
 
-    this.usersService
-      .deleteUserUsersUserIdDelete({ user_id: this.data.manager.id })
-      .subscribe({
-        next: () => {
-          this.notificationService.success('Gestor eliminado correctamente');
-          this.dialogRef.close(true); // Cerrar con true para indicar que se eliminó
-        },
-        error: (error: any) => {
-          this.notificationService.handleApiError(error, 'Error al eliminar gestor');
-          this.isLoading.set(false);
-          this.dialogRef.close(false); // Cerrar con false para indicar error
-        }
-      });
+    this.usersService.deleteUserUsersUserIdDelete({ user_id: this.data.professional.id }).subscribe({
+      next: () => {
+        this.notificationService.success('Profesional eliminado correctamente');
+        this.dialogRef.close(true); // Cerrar con true para indicar que se eliminó
+      },
+      error: (error: any) => {
+        this.notificationService.handleApiError(error, 'Error al eliminar profesional');
+        this.isLoading.set(false);
+        this.dialogRef.close(false); // Cerrar con false para indicar error
+      }
+    });
   }
 
   onCancel(): void {

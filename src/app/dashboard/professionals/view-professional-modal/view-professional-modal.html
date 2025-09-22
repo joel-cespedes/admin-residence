@@ -1,25 +1,25 @@
-<div class="title_modal">{{ data.manager.alias }}</div>
+<div class="title_modal">{{ data.professional.alias }}</div>
 <div mat-dialog-content>
   <div class="info-grid">
     <div class="info-item">
       <div class="info-label">Usuario:</div>
-      <div class="info-value">{{ data.manager.alias }}</div>
+      <div class="info-value">{{ data.professional.alias }}</div>
     </div>
 
     <div class="info-item">
       <div class="info-label">Nombre Completo:</div>
-      <div class="info-value">{{ data.manager.name }}</div>
+      <div class="info-value">{{ data.professional.name }}</div>
     </div>
 
     <div class="info-item">
       <div class="info-label">Rol:</div>
       <div class="info-value">
-        @if (data.manager.role === 'manager') {
+        @if (data.professional.role === 'manager') {
           <span class="role-badge manager">Gestor</span>
-        } @else if (data.manager.role === 'professional') {
+        } @else if (data.professional.role === 'professional') {
           <span class="role-badge professional">Profesional</span>
         } @else {
-          <span class="role-badge">{{ data.manager.role }}</span>
+          <span class="role-badge">{{ data.professional.role }}</span>
         }
       </div>
     </div>
@@ -27,9 +27,9 @@
     <div class="info-item">
       <div class="info-label">Residencias Asignadas:</div>
       <div class="info-value">
-        @if (data.manager.residence_names && data.manager.residence_names.length > 0) {
+        @if (data.professional.residence_names && data.professional.residence_names.length > 0) {
           <div class="residence-list">
-            @for (residence of data.manager.residence_names; track $index) {
+            @for (residence of data.professional.residence_names; track $index) {
               <span class="residence-chip">{{ residence }}</span>
             }
           </div>
@@ -41,12 +41,12 @@
 
     <div class="info-item">
       <div class="info-label">Total de Residencias:</div>
-      <div class="info-value">{{ data.manager.residence_count }}</div>
+      <div class="info-value">{{ data.professional.residence_count }}</div>
     </div>
 
     <div class="info-item">
       <div class="info-label">Fecha de Creación:</div>
-      <div class="info-value">{{ data.manager.created_at | date: 'dd/MM/yyyy HH:mm' }}</div>
+      <div class="info-value">{{ data.professional.created_at | date: 'dd/MM/yyyy HH:mm' }}</div>
     </div>
   </div>
 </div>

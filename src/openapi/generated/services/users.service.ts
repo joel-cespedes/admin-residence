@@ -69,7 +69,7 @@ export class UsersService extends BaseService {
   /**
    * Create User.
    *
-   *
+   * Create a new user with proper audit trail
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createUserUsersPost()` instead.
@@ -83,7 +83,7 @@ export class UsersService extends BaseService {
   /**
    * Create User.
    *
-   *
+   * Create a new user with proper audit trail
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createUserUsersPost$Response()` instead.

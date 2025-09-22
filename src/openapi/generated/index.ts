@@ -62,8 +62,8 @@ export type { UserResidenceAssignment } from './models/user-residence-assignment
 export type { ValidationError } from './models/validation-error';
 export type { YearComparison } from './models/year-comparison';
 export { AuthService } from './services/auth.service';
-export { ResidencesService } from './services/residences.service';
 export { UsersService } from './services/users.service';
+export { ResidencesService } from './services/residences.service';
 export { StructureService } from './services/structure.service';
 export { ResidentsService } from './services/residents.service';
 export { TagsService } from './services/tags.service';

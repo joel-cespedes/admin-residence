@@ -47,7 +47,7 @@ export const dashboardRoutes: Routes = [
   },
   {
     path: 'professionals',
-    loadComponent: () => import('./professional/professional').then(m => m.Professional)
+    loadComponent: () => import('./professionals/professionals').then(m => m.Professionals)
   },
   {
     path: 'managers',

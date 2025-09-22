@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-view-manager-modal',
+  selector: 'app-view-professional-modal',
   standalone: true,
   imports: [
     CommonModule,
@@ -20,11 +20,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDividerModule,
     DatePipe
   ],
-  templateUrl: './view-manager-modal.html',
-  styleUrl: './view-manager-modal.scss'
+  templateUrl: './view-professional-modal.html',
+  styleUrl: '../../floor/view-floor-modal/view-floor-modal.scss'
 })
-export class ViewManagerModal {
-  private dialogRef = inject(MatDialogRef<ViewManagerModal>);
+export class ViewProfessionalModal {
+  private dialogRef = inject(MatDialogRef<ViewProfessionalModal>);
   data = inject(MAT_DIALOG_DATA);
 
   onClose(): void {

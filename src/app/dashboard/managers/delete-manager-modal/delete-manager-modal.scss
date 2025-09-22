@@ -1,204 +1,44 @@
 :host {
-  font-size: 15px !important;
+  display: block;
+  background-color: var(--sneat-bg-primary);
+  padding: 20px 10px !important;
+  font-size: 15px;
 }
 
-.delete-manager-content {
-  min-width: 450px;
-  max-width: 550px;
+p {
+  margin: 1rem 0;
+  font-weight: 600;
+  font-size: 15px;
 }
 
-.warning-section {
+strong {
+  color: rgba(255, 3, 3, 1);
+}
+
+button {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.warning-box {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.warning-text {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #333;
-
-  strong {
-    color: #d32f2f;
-    font-weight: 600;
-  }
-}
-
-.manager-details {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #e9ecef;
-}
-
-.detail-item {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #e9ecef;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.detail-label {
-  font-weight: 500;
-  color: #666;
-  font-size: 0.875rem;
-}
-
-.detail-value {
-  font-weight: 500;
-  color: #333;
-  font-size: 0.875rem;
-}
-
-// Status badges
-.status-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-align: center;
-  min-width: 70px;
-  display: inline-block;
-}
-
-.status-active {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-
-.status-inactive {
-  background-color: #fff3e0;
-  color: #f57c00;
-}
-
-.status-suspended {
-  background-color: #ffebee;
-  color: #c62828;
-}
-
-// Warning messages
-.warning-message {
-  display: flex;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: 10px;
   background-color: #fff3cd;
   border: 1px solid #ffeaa7;
-  border-radius: 8px;
-  color: #856404;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 15px 0;
 
-  .warning-icon {
+  p {
+    margin: 0;
+    font-weight: normal;
+    font-size: 14px;
     color: #856404;
-    font-size: 1.2rem;
-    height: 1.2rem;
-    width: 1.2rem;
-    flex-shrink: 0;
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.875rem;
-    line-height: 1.4;
   }
 }
 
-.additional-warning {
-  display: flex;
-  gap: 0.75rem;
-  padding: 1rem;
-  background-color: #ffebee;
-  border: 1px solid #ffcdd2;
-  border-radius: 8px;
-  color: #c62828;
-
-  .warning-icon {
-    color: #c62828;
-    font-size: 1.2rem;
-    height: 1.2rem;
-    width: 1.2rem;
-    flex-shrink: 0;
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.875rem;
-    line-height: 1.4;
-
-    strong {
-      font-weight: 600;
-    }
-  }
-}
-
-.final-confirmation {
-  margin-top: 0.5rem;
-
-  ::ng-deep .mat-mdc-checkbox {
-    .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background,
-    .mdc-checkbox__native-control:enabled:indeterminate ~ .mdc-checkbox__background {
-      background-color: #d32f2f !important;
-      border-color: #d32f2f !important;
-    }
-
-    .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background .mdc-checkbox__checkmark,
-    .mdc-checkbox__native-control:enabled:indeterminate ~ .mdc-checkbox__background .mdc-checkbox__checkmark {
-      color: white !important;
-    }
-
-    .mdc-form-field-label {
-      color: #666 !important;
-    }
-  }
-}
-
-// Dialog title styling
-::ng-deep .mat-mdc-dialog-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #d32f2f;
-
-  .warning-icon {
-    color: #d32f2f;
-  }
-}
-
-// Dialog actions
-.mat-mdc-dialog-actions {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #e9ecef;
-
-  .mat-mdc-button {
-    min-width: 100px;
-  }
-}
-
-// Responsive adjustments
-@media (max-width: 600px) {
-  .delete-manager-content {
-    min-width: auto;
-    width: 90vw;
-    padding: 0 1rem;
-  }
-
-  .detail-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
-  .warning-message,
-  .additional-warning {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .final-confirmation {
-    text-align: center;
-  }
+.warning-icon {
+  color: #856404;
+  font-size: 20px;
 }

@@ -17,9 +17,9 @@ import { Header } from '../shared/header/header';
 import { UsersService } from '../../../openapi/generated/services/users.service';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 import { NotificationService } from '../../shared/notification.service';
-import { ViewManagerModal } from './view-manager-modal/view-manager-modal';
-import { ManagerFormModal } from './managers-form-modal/managers-form-modal';
-import { DeleteManagerModal } from './delete-manager-modal/delete-manager-modal';
+import { ViewProfessionalModal } from './view-professional-modal/view-professional-modal';
+import { ProfessionalFormModal } from './professionals-form-modal/professionals-form-modal';
+import { DeleteProfessionalModal } from './delete-professional-modal/delete-professional-modal';
 import { firstValueFrom } from 'rxjs';
 
 interface ResidenceOption {
@@ -27,7 +27,7 @@ interface ResidenceOption {
   name: string;
 }
 
-interface ManagerWithDetails {
+interface ProfessionalWithDetails {
   id: string;
   alias: string;
   name: string;
@@ -44,7 +44,7 @@ interface ManagerWithDetails {
 }
 
 @Component({
-  selector: 'app-managers',
+  selector: 'app-professionals',
   standalone: true,
   imports: [
     MatTableModule,
@@ -61,10 +61,10 @@ interface ManagerWithDetails {
     DatePipe,
     Header
   ],
-  templateUrl: './managers.html',
-  styleUrl: './managers.scss'
+  templateUrl: './professionals.html',
+  styleUrl: '../managers/managers.scss'
 })
-export class Managers implements OnInit, AfterViewInit {
+export class Professionals implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -73,7 +73,7 @@ export class Managers implements OnInit, AfterViewInit {
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
 
-  readonly dataSource = new MatTableDataSource<ManagerWithDetails>([]);
+  readonly dataSource = new MatTableDataSource<ProfessionalWithDetails>([]);
   readonly isLoadingData = signal(false);
   readonly pagination = signal({
     pageIndex: 0,
@@ -94,7 +94,7 @@ export class Managers implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadResidences();
-    this.loadManagers();
+    this.loadProfessionals();
   }
 
   ngAfterViewInit(): void {
@@ -119,7 +119,7 @@ export class Managers implements OnInit, AfterViewInit {
           sortOrder: sortDirection
         }));
 
-        this.loadManagers();
+        this.loadProfessionals();
       });
     }
   }
@@ -141,7 +141,7 @@ export class Managers implements OnInit, AfterViewInit {
     }
   }
 
-  private async loadManagers(): Promise<void> {
+  private async loadProfessionals(): Promise<void> {
     this.isLoadingData.set(true);
     try {
       const params: any = {
@@ -151,8 +151,8 @@ export class Managers implements OnInit, AfterViewInit {
         sort_order: this.pagination().sortOrder
       };
 
-      // Add role filter to get only managers and professionals
-      params['role'] = 'manager';
+      // Add role filter to get only professionals
+      params['role'] = 'professional';
 
       // Add search term if exists
       if (this.searchTerm().trim()) {
@@ -160,26 +160,26 @@ export class Managers implements OnInit, AfterViewInit {
       }
 
       // Note: residence_id filter is not available in users endpoint
-      // We'll filter by residence on the frontend after getting all managers
+      // We'll filter by residence on the frontend after getting all professionals
 
       const response = await firstValueFrom(this.usersService.listUsersUsersGet(params));
 
-      // Process managers data
-      const managers = await this.processManagersData(response.items || []);
+      // Process professionals data
+      const professionals = await this.processProfessionalsData(response.items || []);
 
-      this.dataSource.data = managers;
+      this.dataSource.data = professionals;
       this.pagination.update(current => ({
         ...current,
-        total: response.total || managers.length
+        total: response.total || professionals.length
       }));
     } catch (error) {
-      this.notificationService.handleApiError(error, 'Error al cargar gestores');
+      this.notificationService.handleApiError(error, 'Error al cargar profesionales');
     } finally {
       this.isLoadingData.set(false);
     }
   }
 
-  private async processManagersData(users: any[]): Promise<ManagerWithDetails[]> {
+  private async processProfessionalsData(users: any[]): Promise<ProfessionalWithDetails[]> {
     // Get all residence IDs to fetch names
     const allResidenceIds = new Set<string>();
     users.forEach(user => {
@@ -199,9 +199,11 @@ export class Managers implements OnInit, AfterViewInit {
       }
     }
 
-    // Map users to manager format and filter by selected residence
+    // Map users to professional format and filter by selected residence
     const filteredUsers = this.selectedResidence()
-      ? users.filter(user => (user.residences || []).some((res: any) => res.id === this.selectedResidence()))
+      ? users.filter(user =>
+          (user.residences || []).some((res: any) => res.id === this.selectedResidence())
+        )
       : users;
 
     return filteredUsers.map(user => ({
@@ -220,7 +222,7 @@ export class Managers implements OnInit, AfterViewInit {
   onResidenceChange(residenceId: string): void {
     this.selectedResidence.set(residenceId);
     this.pagination.update(current => ({ ...current, pageIndex: 0 }));
-    this.loadManagers();
+    this.loadProfessionals();
   }
 
   applyFilter(event: Event): void {
@@ -234,7 +236,7 @@ export class Managers implements OnInit, AfterViewInit {
 
     this.searchDebounce = setTimeout(() => {
       this.pagination.update(current => ({ ...current, pageIndex: 0 }));
-      this.loadManagers();
+      this.loadProfessionals();
     }, 300);
   }
 
@@ -244,12 +246,12 @@ export class Managers implements OnInit, AfterViewInit {
       pageIndex: event.pageIndex,
       pageSize: event.pageSize
     }));
-    this.loadManagers();
+    this.loadProfessionals();
   }
 
-  addManager(): void {
-    const dialogRef = this.dialog.open(ManagerFormModal, {
-      width: '80%',
+  addProfessional(): void {
+    const dialogRef = this.dialog.open(ProfessionalFormModal, {
+      width: '600px',
       data: {
         residences: this.residences()
       }
@@ -257,49 +259,49 @@ export class Managers implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
       if (result) {
-        await this.createManager(result);
+        await this.createProfessional(result);
       }
     });
   }
 
-  viewManager(manager: ManagerWithDetails): void {
-    this.dialog.open(ViewManagerModal, {
-      width: '80%',
-      data: { manager }
+  viewProfessional(professional: ProfessionalWithDetails): void {
+    this.dialog.open(ViewProfessionalModal, {
+      width: '500px',
+      data: { professional }
     });
   }
 
-  editManager(manager: ManagerWithDetails): void {
-    const dialogRef = this.dialog.open(ManagerFormModal, {
-      width: '80%',
+  editProfessional(professional: ProfessionalWithDetails): void {
+    const dialogRef = this.dialog.open(ProfessionalFormModal, {
+      width: '600px',
       data: {
-        manager,
+        professional,
         residences: this.residences()
       }
     });
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
       if (result) {
-        await this.updateManager(manager.id, result);
+        await this.updateProfessional(professional.id, result);
       }
     });
   }
 
-  deleteManager(manager: ManagerWithDetails): void {
-    const dialogRef = this.dialog.open(DeleteManagerModal, {
-      width: '80%',
-      data: { manager }
+  deleteProfessional(professional: ProfessionalWithDetails): void {
+    const dialogRef = this.dialog.open(DeleteProfessionalModal, {
+      width: '400px',
+      data: { professional }
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         // La modal ya manejó la eliminación, solo recargar la lista
-        this.loadManagers();
+        this.loadProfessionals();
       }
     });
   }
 
-  private async createManager(data: any): Promise<void> {
+  private async createProfessional(data: any): Promise<void> {
     try {
       await firstValueFrom(
         this.usersService.createUserUsersPost({
@@ -308,18 +310,18 @@ export class Managers implements OnInit, AfterViewInit {
             name: data.name,
             password: data.password || 'default123',
             residence_ids: data.residence_ids,
-            role: 'manager'
+            role: 'professional'
           }
         })
       );
-      this.notificationService.success('Gestor creado exitosamente');
-      this.loadManagers();
+      this.notificationService.success('Profesional creado exitosamente');
+      this.loadProfessionals();
     } catch (error) {
-      this.notificationService.handleApiError(error, 'Error al crear gestor');
+      this.notificationService.handleApiError(error, 'Error al crear profesional');
     }
   }
 
-  private async updateManager(id: string, data: any): Promise<void> {
+  private async updateProfessional(id: string, data: any): Promise<void> {
     try {
       const updateBody: any = {
         alias: data.alias,
@@ -338,24 +340,24 @@ export class Managers implements OnInit, AfterViewInit {
           body: updateBody
         })
       );
-      this.notificationService.success('Gestor actualizado exitosamente');
-      this.loadManagers();
+      this.notificationService.success('Profesional actualizado exitosamente');
+      this.loadProfessionals();
     } catch (error) {
-      this.notificationService.handleApiError(error, 'Error al actualizar gestor');
+      this.notificationService.handleApiError(error, 'Error al actualizar profesional');
     }
   }
 
-  private async deleteManagerById(id: string): Promise<void> {
+  private async deleteProfessionalById(id: string): Promise<void> {
     try {
       await firstValueFrom(
         this.usersService.deleteUserUsersUserIdDelete({
           user_id: id
         })
       );
-      this.notificationService.success('Gestor eliminado exitosamente');
-      this.loadManagers();
+      this.notificationService.success('Profesional eliminado exitosamente');
+      this.loadProfessionals();
     } catch (error) {
-      this.notificationService.handleApiError(error, 'Error al eliminar gestor');
+      this.notificationService.handleApiError(error, 'Error al eliminar profesional');
     }
   }
 }

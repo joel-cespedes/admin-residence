@@ -1,15 +1,18 @@
 <div mat-dialog-content>
   <div class="title-modal">
-    ¿Estás seguro de que quieres eliminar al gestor
-    <strong>"{{ data.manager.alias }}"</strong>
+    ¿Estás seguro de que quieres eliminar al profesional
+    <strong>"{{ data.professional.alias }}"</strong>
     ?
   </div>
   <p>¡Esta acción no se puede deshacer!</p>
 
-  @if (data.manager.residence_count > 0) {
+  @if (data.professional.residence_count > 0) {
     <div class="warning-box">
       <mat-icon class="warning-icon">warning</mat-icon>
-      <p>Este gestor está asignado a {{ data.manager.residence_count }} residencia(s). Al eliminarlo, perderá todo el acceso asignado.</p>
+      <p>
+        Este profesional está asignado a {{ data.professional.residence_count }} residencia(s). Al eliminarlo, perderá todo el
+        acceso asignado.
+      </p>
     </div>
   }
 </div>

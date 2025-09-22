@@ -14,6 +14,11 @@ export interface UserCreate {
   alias: string;
 
   /**
+   * Nombre completo del usuario
+   */
+  name: string;
+
+  /**
    * Contraseña definida por el creador
    */
   password: string;
