@@ -10,12 +10,16 @@
  *     id (str): Identificador único de la categoría
  *     residence_id (str): ID de la residencia a la que pertenece
  *     name (str): Nombre de la categoría
+ *     created_by_info (Optional[Dict[str, Any]]): Información del usuario que creó la categoría
  *     created_at (datetime): Fecha de creación del registro
  *     updated_at (datetime): Fecha de última actualización
  *     deleted_at (Optional[datetime]): Fecha de eliminación (soft delete)
  */
 export interface TaskCategoryOut {
   created_at: string;
+  created_by_info?: ({
+[key: string]: any;
+} | null);
   deleted_at?: (string | null);
   id: string;
   name: string;

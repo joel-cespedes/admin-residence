@@ -11,6 +11,11 @@ import { RequestBuilder } from '../../request-builder';
 import { PaginatedResponse } from '../../models/paginated-response';
 
 export interface ListMeasurementsMeasurementsGet$Params {
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
   resident_id?: (string | null);
   page?: number;
   size?: number;
@@ -21,12 +26,12 @@ export interface ListMeasurementsMeasurementsGet$Params {
   date_to?: (string | null);
   status?: (string | null);
   type?: (string | null);
-  'residence-id'?: (string | null);
 }
 
 export function listMeasurementsMeasurementsGet(http: HttpClient, rootUrl: string, params?: ListMeasurementsMeasurementsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
   const rb = new RequestBuilder(rootUrl, listMeasurementsMeasurementsGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('resident_id', params.resident_id, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
@@ -37,7 +42,6 @@ export function listMeasurementsMeasurementsGet(http: HttpClient, rootUrl: strin
     rb.query('date_to', params.date_to, {});
     rb.query('status', params.status, {});
     rb.query('type', params.type, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

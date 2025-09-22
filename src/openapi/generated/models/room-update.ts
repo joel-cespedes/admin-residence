@@ -8,7 +8,9 @@
  *
  * Attributes:
  *     name (Optional[str]): Nuevo nombre de la habitación
+ *     floor_id (Optional[str]): Nuevo piso de la habitación
  */
 export interface RoomUpdate {
+  floor_id?: (string | null);
   name?: (string | null);
 }

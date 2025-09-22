@@ -1,1 +1,112 @@
-<movsa-header />
+<movsa-header title="Dispositivos" />
+
+<div class="devices-section">
+  <div class="table-header">
+    <div class="filter-field">
+      <input matInput type="search" [value]="searchTerm()" (keyup)="onSearch($event)" placeholder="Buscar dispositivo..." />
+    </div>
+  </div>
+
+  <div class="table-container">
+    @if (isLoadingData()) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando dispositivos...</p>
+      </div>
+    }
+
+    <div class="mat-elevation-z8">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        [matSortActive]="pagination().sortBy"
+        [matSortDirection]="pagination().sortOrder"
+        matSortDisableClear>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let device">{{ device.name }}</td>
+        </ng-container>
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+          <td mat-cell *matCellDef="let device">
+            <span class="device-type-badge" [class]="'type-' + device.type">
+              {{ getDeviceTypeLabel(device.type) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- MAC Column -->
+        <ng-container matColumnDef="mac">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>MAC</th>
+          <td mat-cell *matCellDef="let device">{{ device.mac }}</td>
+        </ng-container>
+
+        <!-- Battery Column -->
+        <ng-container matColumnDef="battery_percent">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Batería</th>
+          <td mat-cell *matCellDef="let device">
+            @if (device.battery_percent !== null && device.battery_percent !== undefined) {
+              <div class="battery-indicator">
+                <span class="battery-percent">{{ device.battery_percent }}%</span>
+                <div class="battery-bar">
+                  <div
+                    class="battery-fill"
+                    [style.width.%]="device.battery_percent"
+                    [class]="getBatteryClass(device.battery_percent)"></div>
+                </div>
+              </div>
+            } @else {
+              <span class="no-data">N/A</span>
+            }
+          </td>
+        </ng-container>
+
+        <!-- Residence Column -->
+        <ng-container matColumnDef="residence_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Residencia</th>
+          <td mat-cell *matCellDef="let device">{{ device.residence_name }}</td>
+        </ng-container>
+
+        <!-- Created By Column -->
+        <ng-container matColumnDef="created_by_name">
+          <th mat-header-cell *matHeaderCellDef>Creado por</th>
+          <td mat-cell *matCellDef="let device">{{ device.created_by_name }}</td>
+        </ng-container>
+
+        <!-- Created At Column -->
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creación</th>
+          <td mat-cell *matCellDef="let device">{{ device.created_at | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- Row shown when there is no matching data. -->
+        @if (!isLoadingData() && dataSource.data.length === 0) {
+          <tr class="mat-row">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              @if (searchTerm().trim()) {
+                No se encontraron dispositivos que coincidan con "{{ searchTerm().trim() }}"
+              } @else {
+                No hay dispositivos registrados todavía
+              }
+            </td>
+          </tr>
+        }
+      </table>
+
+      <mat-paginator
+        [length]="totalItems()"
+        [pageIndex]="pagination().pageIndex"
+        [pageSize]="pagination().pageSize"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        aria-label="Seleccionar página de dispositivos"
+        (page)="onPageChange($event)"></mat-paginator>
+    </div>
+  </div>
+</div>

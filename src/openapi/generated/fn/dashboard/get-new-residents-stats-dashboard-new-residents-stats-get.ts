@@ -11,13 +11,17 @@ import { RequestBuilder } from '../../request-builder';
 import { NewResidentStats } from '../../models/new-resident-stats';
 
 export interface GetNewResidentsStatsDashboardNewResidentsStatsGet$Params {
-  'residence-id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
 }
 
 export function getNewResidentsStatsDashboardNewResidentsStatsGet(http: HttpClient, rootUrl: string, params?: GetNewResidentsStatsDashboardNewResidentsStatsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<NewResidentStats>> {
   const rb = new RequestBuilder(rootUrl, getNewResidentsStatsDashboardNewResidentsStatsGet.PATH, 'get');
   if (params) {
-    rb.header('residence-id', params['residence-id'], {});
+    rb.query('residence_id', params.residence_id, {});
   }
 
   return http.request(

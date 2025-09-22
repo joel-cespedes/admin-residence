@@ -11,6 +11,11 @@ import { RequestBuilder } from '../../request-builder';
 import { MeasurementOut } from '../../models/measurement-out';
 
 export interface ListMeasurementsSimpleMeasurementsSimpleGet$Params {
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
   resident_id?: (string | null);
 
 /**
@@ -28,18 +33,17 @@ export interface ListMeasurementsSimpleMeasurementsSimpleGet$Params {
  */
   until?: (string | null);
   limit?: number;
-  'residence-id'?: (string | null);
 }
 
 export function listMeasurementsSimpleMeasurementsSimpleGet(http: HttpClient, rootUrl: string, params?: ListMeasurementsSimpleMeasurementsSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MeasurementOut>>> {
   const rb = new RequestBuilder(rootUrl, listMeasurementsSimpleMeasurementsSimpleGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('resident_id', params.resident_id, {});
     rb.query('type', params.type, {});
     rb.query('since', params.since, {});
     rb.query('until', params.until, {});
     rb.query('limit', params.limit, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

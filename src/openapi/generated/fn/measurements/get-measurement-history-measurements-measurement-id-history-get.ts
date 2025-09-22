@@ -11,7 +11,11 @@ import { RequestBuilder } from '../../request-builder';
 
 export interface GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params {
   measurement_id: string;
-  'residence-id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
 }
 
 export function getMeasurementHistoryMeasurementsMeasurementIdHistoryGet(http: HttpClient, rootUrl: string, params: GetMeasurementHistoryMeasurementsMeasurementIdHistoryGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
@@ -20,7 +24,7 @@ export function getMeasurementHistoryMeasurementsMeasurementIdHistoryGet(http: H
   const rb = new RequestBuilder(rootUrl, getMeasurementHistoryMeasurementsMeasurementIdHistoryGet.PATH, 'get');
   if (params) {
     rb.path('measurement_id', params.measurement_id, {});
-    rb.header('residence-id', params['residence-id'], {});
+    rb.query('residence_id', params.residence_id, {});
   }
 
   return http.request(

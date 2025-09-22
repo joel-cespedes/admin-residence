@@ -11,13 +11,17 @@ import { RequestBuilder } from '../../request-builder';
 import { TaskCategoryWithCount } from '../../models/task-category-with-count';
 
 export interface GetTaskCategoriesWithCountsDashboardTaskCategoriesGet$Params {
-  'residence-id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
 }
 
 export function getTaskCategoriesWithCountsDashboardTaskCategoriesGet(http: HttpClient, rootUrl: string, params?: GetTaskCategoriesWithCountsDashboardTaskCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TaskCategoryWithCount>>> {
   const rb = new RequestBuilder(rootUrl, getTaskCategoriesWithCountsDashboardTaskCategoriesGet.PATH, 'get');
   if (params) {
-    rb.header('residence-id', params['residence-id'], {});
+    rb.query('residence_id', params.residence_id, {});
   }
 
   return http.request(

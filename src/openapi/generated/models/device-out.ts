@@ -9,10 +9,12 @@
  * Attributes:
  *     id (str): Identificador único del dispositivo
  *     residence_id (str): ID de la residencia a la que pertenece
+ *     residence_info (Optional[Dict[str, Any]]): Información de la residencia
  *     type (DeviceType): Tipo de dispositivo
  *     name (str): Nombre del dispositivo
  *     mac (str): Dirección MAC del dispositivo
  *     battery_percent (Optional[int]): Porcentaje actual de batería
+ *     created_by_info (Optional[Dict[str, Any]]): Información del usuario que creó el dispositivo
  *     created_at (datetime): Fecha de creación del registro
  *     updated_at (datetime): Fecha de última actualización
  *     deleted_at (Optional[datetime]): Fecha de eliminación (soft delete)
@@ -20,11 +22,17 @@
 export interface DeviceOut {
   battery_percent?: (number | null);
   created_at: string;
+  created_by_info?: ({
+[key: string]: any;
+} | null);
   deleted_at?: (string | null);
   id: string;
   mac: string;
   name: string;
   residence_id: string;
+  residence_info?: ({
+[key: string]: any;
+} | null);
   type: 'blood_pressure' | 'pulse_oximeter' | 'scale' | 'thermometer';
   updated_at: string;
 }

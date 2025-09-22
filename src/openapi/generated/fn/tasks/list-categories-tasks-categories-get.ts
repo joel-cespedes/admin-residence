@@ -11,26 +11,26 @@ import { RequestBuilder } from '../../request-builder';
 import { PaginatedResponse } from '../../models/paginated-response';
 
 export interface ListCategoriesTasksCategoriesGet$Params {
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
   page?: number;
   size?: number;
-  search?: string | null;
-  sort_by?: string | null;
-  sort_order?: 'asc' | 'desc' | null;
-  date_from?: string | null;
-  date_to?: string | null;
-  status?: string | null;
-  type?: string | null;
-  residence_id?: string | null;
+  search?: (string | null);
+  sort_by?: (string | null);
+  sort_order?: ('asc' | 'desc' | null);
+  date_from?: (string | null);
+  date_to?: (string | null);
+  status?: (string | null);
+  type?: (string | null);
 }
 
-export function listCategoriesTasksCategoriesGet(
-  http: HttpClient,
-  rootUrl: string,
-  params?: ListCategoriesTasksCategoriesGet$Params,
-  context?: HttpContext
-): Observable<StrictHttpResponse<PaginatedResponse>> {
+export function listCategoriesTasksCategoriesGet(http: HttpClient, rootUrl: string, params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
   const rb = new RequestBuilder(rootUrl, listCategoriesTasksCategoriesGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
     rb.query('search', params.search, {});
@@ -40,10 +40,11 @@ export function listCategoriesTasksCategoriesGet(
     rb.query('date_to', params.date_to, {});
     rb.query('status', params.status, {});
     rb.query('type', params.type, {});
-    rb.query('residence_id', params.residence_id, {});
   }
 
-  return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<PaginatedResponse>;

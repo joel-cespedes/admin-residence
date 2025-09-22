@@ -11,19 +11,37 @@ import { RequestBuilder } from '../../request-builder';
 import { TaskApplicationOut } from '../../models/task-application-out';
 
 export interface ListApplicationsSimpleTasksApplicationsSimpleGet$Params {
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
+
+/**
+ * Filter by resident ID
+ */
   resident_id?: (string | null);
+
+/**
+ * Filter by template ID
+ */
   template_id?: (string | null);
+
+/**
+ * Filter by category ID
+ */
+  category_id?: (string | null);
   limit?: number;
-  'residence-id'?: (string | null);
 }
 
 export function listApplicationsSimpleTasksApplicationsSimpleGet(http: HttpClient, rootUrl: string, params?: ListApplicationsSimpleTasksApplicationsSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TaskApplicationOut>>> {
   const rb = new RequestBuilder(rootUrl, listApplicationsSimpleTasksApplicationsSimpleGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('resident_id', params.resident_id, {});
     rb.query('template_id', params.template_id, {});
+    rb.query('category_id', params.category_id, {});
     rb.query('limit', params.limit, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

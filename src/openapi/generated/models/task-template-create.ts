@@ -7,6 +7,7 @@
  * Esquema para la creación de una nueva plantilla de tarea.
  *
  * Attributes:
+ *     residence_id (str): ID de la residencia a la que pertenece
  *     task_category_id (str): ID de la categoría a la que pertenece
  *     name (str): Nombre de la plantilla de tarea
  *     status1 (Optional[str]): Texto para estado 1
@@ -22,6 +23,7 @@ export interface TaskTemplateCreate {
   audio_phrase?: (string | null);
   is_block?: (boolean | null);
   name: string;
+  residence_id: string;
   status1?: (string | null);
   status2?: (string | null);
   status3?: (string | null);

@@ -12,14 +12,18 @@ import { MeasurementOut } from '../../models/measurement-out';
 
 export interface GetMeasurementMeasurementsMeasurementIdGet$Params {
   measurement_id: string;
-  'residence-id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
 }
 
 export function getMeasurementMeasurementsMeasurementIdGet(http: HttpClient, rootUrl: string, params: GetMeasurementMeasurementsMeasurementIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
   const rb = new RequestBuilder(rootUrl, getMeasurementMeasurementsMeasurementIdGet.PATH, 'get');
   if (params) {
     rb.path('measurement_id', params.measurement_id, {});
-    rb.header('residence-id', params['residence-id'], {});
+    rb.query('residence_id', params.residence_id, {});
   }
 
   return http.request(

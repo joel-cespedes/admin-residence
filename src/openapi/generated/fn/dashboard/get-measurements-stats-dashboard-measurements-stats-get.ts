@@ -13,17 +13,21 @@ import { MeasurementStats } from '../../models/measurement-stats';
 export interface GetMeasurementsStatsDashboardMeasurementsStatsGet$Params {
 
 /**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
+
+/**
  * Time filter: week, month, or year
  */
   time_filter?: string;
-  'residence-id'?: (string | null);
 }
 
 export function getMeasurementsStatsDashboardMeasurementsStatsGet(http: HttpClient, rootUrl: string, params?: GetMeasurementsStatsDashboardMeasurementsStatsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementStats>> {
   const rb = new RequestBuilder(rootUrl, getMeasurementsStatsDashboardMeasurementsStatsGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('time_filter', params.time_filter, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

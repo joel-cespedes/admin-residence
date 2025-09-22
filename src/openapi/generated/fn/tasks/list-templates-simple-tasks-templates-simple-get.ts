@@ -11,15 +11,19 @@ import { RequestBuilder } from '../../request-builder';
 import { TaskTemplateOut } from '../../models/task-template-out';
 
 export interface ListTemplatesSimpleTasksTemplatesSimpleGet$Params {
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
   category_id?: (string | null);
-  'residence-id'?: (string | null);
 }
 
 export function listTemplatesSimpleTasksTemplatesSimpleGet(http: HttpClient, rootUrl: string, params?: ListTemplatesSimpleTasksTemplatesSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TaskTemplateOut>>> {
   const rb = new RequestBuilder(rootUrl, listTemplatesSimpleTasksTemplatesSimpleGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('category_id', params.category_id, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

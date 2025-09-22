@@ -12,10 +12,14 @@ import { RequestBuilder } from '../../request-builder';
 export interface GetDashboardActivityDashboardActivityGet$Params {
 
 /**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
+
+/**
  * Number of days to look back
  */
   days?: number;
-  'residence-id'?: (string | null);
 }
 
 export function getDashboardActivityDashboardActivityGet(http: HttpClient, rootUrl: string, params?: GetDashboardActivityDashboardActivityGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
@@ -23,8 +27,8 @@ export function getDashboardActivityDashboardActivityGet(http: HttpClient, rootU
 }>>> {
   const rb = new RequestBuilder(rootUrl, getDashboardActivityDashboardActivityGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('days', params.days, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

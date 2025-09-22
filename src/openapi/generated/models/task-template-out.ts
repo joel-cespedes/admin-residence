@@ -14,6 +14,7 @@
  *     status1-6 (Optional[str]): Textos para estados
  *     audio_phrase (Optional[str]): Frase de audio asociada
  *     is_block (Optional[bool]): Estado de bloqueo
+ *     created_by_info (Optional[Dict[str, Any]]): Información del usuario que creó la plantilla
  *     created_at (datetime): Fecha de creación del registro
  *     updated_at (datetime): Fecha de última actualización
  *     deleted_at (Optional[datetime]): Fecha de eliminación (soft delete)
@@ -21,6 +22,9 @@
 export interface TaskTemplateOut {
   audio_phrase?: (string | null);
   created_at: string;
+  created_by_info?: ({
+[key: string]: any;
+} | null);
   deleted_at?: (string | null);
   id: string;
   is_block?: (boolean | null);

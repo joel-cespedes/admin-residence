@@ -13,17 +13,21 @@ import { TaskStats } from '../../models/task-stats';
 export interface GetTasksStatsDashboardTasksStatsGet$Params {
 
 /**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
+
+/**
  * Time filter: week, month, or year
  */
   time_filter?: string;
-  'residence-id'?: (string | null);
 }
 
 export function getTasksStatsDashboardTasksStatsGet(http: HttpClient, rootUrl: string, params?: GetTasksStatsDashboardTasksStatsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskStats>> {
   const rb = new RequestBuilder(rootUrl, getTasksStatsDashboardTasksStatsGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('time_filter', params.time_filter, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

@@ -77,6 +77,7 @@ export class Task implements OnInit, AfterViewInit {
   readonly residences = signal<ResidenceOut[]>([]);
   readonly categories = signal<TaskCategoryOut[]>([]);
   readonly isLoadingResidences = signal(false);
+  readonly isLoadingCategories = signal(false);
   readonly selectedResidence = signal<string>('');
   readonly selectedCategory = signal<string>('');
   readonly searchTerm = signal<string>('');
@@ -87,7 +88,6 @@ export class Task implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadResidences();
-    this.loadCategories();
     this.loadTasks();
   }
 
@@ -109,13 +109,21 @@ export class Task implements OnInit, AfterViewInit {
     });
   }
 
-  loadCategories(): void {
-    this.tasksService.listCategoriesSimpleTasksCategoriesSimpleGet().subscribe({
-      next: categories => {
-        this.categories.set(categories);
+  loadCategoriesForResidence(residenceId: string): void {
+    this.isLoadingCategories.set(true);
+    const params: any = { size: 100 };
+    if (residenceId) {
+      params.residence_id = residenceId;
+    }
+
+    this.tasksService.listCategoriesTasksCategoriesGet(params).subscribe({
+      next: (categories: any) => {
+        this.categories.set(categories.items || []);
+        this.isLoadingCategories.set(false);
       },
       error: () => {
         this.notificationService.error('Error loading categories');
+        this.isLoadingCategories.set(false);
       }
     });
   }
@@ -150,11 +158,10 @@ export class Task implements OnInit, AfterViewInit {
     this.tasksService.listTemplatesTasksTemplatesGet(params).subscribe({
       next: response => {
         const tasksWithDetails = response.items.map(task => {
-          const category = this.categories().find(c => c.id === task['task_category_id']);
           const residence = this.residences().find(r => r.id === task['residence_id']);
           return {
             ...task,
-            category_name: category?.name || 'Unknown',
+            category_name: task['category_name'] || 'Unknown',
             residence_name: residence?.name || 'Unknown'
           };
         });
@@ -185,6 +192,13 @@ export class Task implements OnInit, AfterViewInit {
 
   onResidenceChange(residenceId: string): void {
     this.selectedResidence.set(residenceId || '');
+    this.selectedCategory.set(''); // Reset category when residence changes
+    this.categories.set([]); // Clear categories
+
+    if (residenceId) {
+      this.loadCategoriesForResidence(residenceId);
+    }
+
     this.pagination.update(p => ({ ...p, pageIndex: 0 }));
     this.loadTasks();
   }

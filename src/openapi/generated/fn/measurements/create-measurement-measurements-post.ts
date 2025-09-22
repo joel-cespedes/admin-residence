@@ -12,14 +12,18 @@ import { MeasurementCreate } from '../../models/measurement-create';
 import { MeasurementOut } from '../../models/measurement-out';
 
 export interface CreateMeasurementMeasurementsPost$Params {
-  'residence-id'?: (string | null);
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
       body: MeasurementCreate
 }
 
 export function createMeasurementMeasurementsPost(http: HttpClient, rootUrl: string, params: CreateMeasurementMeasurementsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<MeasurementOut>> {
   const rb = new RequestBuilder(rootUrl, createMeasurementMeasurementsPost.PATH, 'post');
   if (params) {
-    rb.header('residence-id', params['residence-id'], {});
+    rb.query('residence_id', params.residence_id, {});
     rb.body(params.body, 'application/json');
   }
 

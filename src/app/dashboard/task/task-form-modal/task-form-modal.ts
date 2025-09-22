@@ -1,6 +1,13 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose
+} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -67,9 +74,15 @@ export class TaskFormModal implements OnInit {
   });
 
   readonly isLoading = signal(false);
+  readonly isLoadingCategories = signal(false);
+  readonly categories = signal<TaskCategoryOut[]>([]);
   readonly isEditMode = computed(() => this.data.mode === 'edit');
 
   ngOnInit(): void {
+    // Initialize with existing categories if provided
+    if (this.data.categories) {
+      this.categories.set(this.data.categories);
+    }
 
     if (this.data.task) {
       this.form.patchValue({
@@ -85,7 +98,50 @@ export class TaskFormModal implements OnInit {
         status5: this.data.task.status5 || '',
         status6: this.data.task.status6 || ''
       });
+
+      // Load categories for the task's residence
+      if (this.data.task.residence_id) {
+        this.loadCategoriesForResidence(this.data.task.residence_id);
+      }
+
+      // Disable residence field when editing
+      if (this.isEditMode()) {
+        this.form.get('residence_id')?.disable();
+      }
     }
+  }
+
+  onResidenceChange(residenceId: string): void {
+    // Only allow residence change in create mode
+    if (this.isEditMode()) {
+      return;
+    }
+
+    this.form.patchValue({ task_category_id: '' }); // Reset category selection
+    this.categories.set([]); // Clear categories
+
+    if (residenceId) {
+      this.loadCategoriesForResidence(residenceId);
+    }
+  }
+
+  private loadCategoriesForResidence(residenceId: string): void {
+    this.isLoadingCategories.set(true);
+    const params: any = { size: 100 };
+    if (residenceId) {
+      params.residence_id = residenceId;
+    }
+
+    this.tasksService.listCategoriesTasksCategoriesGet(params).subscribe({
+      next: (categories: any) => {
+        this.categories.set(categories.items || []);
+        this.isLoadingCategories.set(false);
+      },
+      error: () => {
+        this.notificationService.error('Error loading categories');
+        this.isLoadingCategories.set(false);
+      }
+    });
   }
 
   onSubmit(): void {
@@ -98,32 +154,36 @@ export class TaskFormModal implements OnInit {
     const formData = this.form.value;
 
     if (this.isEditMode()) {
-      this.tasksService.updateTemplateTasksTemplatesTemplateIdPatch({
-        template_id: this.data.task!.id,
-        body: formData
-      }).subscribe({
-        next: () => {
-          this.notificationService.success('Task updated successfully');
-          this.dialogRef.close(true);
-        },
-        error: (error) => {
-          this.notificationService.error('Error updating task');
-          this.isLoading.set(false);
-        }
-      });
+      this.tasksService
+        .updateTemplateTasksTemplatesTemplateIdPatch({
+          template_id: this.data.task!.id,
+          body: formData
+        })
+        .subscribe({
+          next: () => {
+            this.notificationService.success('Task updated successfully');
+            this.dialogRef.close(true);
+          },
+          error: () => {
+            this.notificationService.error('Error updating task');
+            this.isLoading.set(false);
+          }
+        });
     } else {
-      this.tasksService.createTemplateTasksTemplatesPost({
-        body: formData
-      }).subscribe({
-        next: () => {
-          this.notificationService.success('Task created successfully');
-          this.dialogRef.close(true);
-        },
-        error: (error) => {
-          this.notificationService.error('Error creating task');
-          this.isLoading.set(false);
-        }
-      });
+      this.tasksService
+        .createTemplateTasksTemplatesPost({
+          body: formData
+        })
+        .subscribe({
+          next: () => {
+            this.notificationService.success('Task created successfully');
+            this.dialogRef.close(true);
+          },
+          error: () => {
+            this.notificationService.error('Error creating task');
+            this.isLoading.set(false);
+          }
+        });
     }
   }
 

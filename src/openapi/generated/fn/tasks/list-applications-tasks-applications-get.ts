@@ -11,8 +11,26 @@ import { RequestBuilder } from '../../request-builder';
 import { PaginatedResponse } from '../../models/paginated-response';
 
 export interface ListApplicationsTasksApplicationsGet$Params {
+
+/**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
+
+/**
+ * Filter by resident ID
+ */
   resident_id?: (string | null);
+
+/**
+ * Filter by template ID
+ */
   template_id?: (string | null);
+
+/**
+ * Filter by category ID
+ */
+  category_id?: (string | null);
   page?: number;
   size?: number;
   search?: (string | null);
@@ -22,14 +40,15 @@ export interface ListApplicationsTasksApplicationsGet$Params {
   date_to?: (string | null);
   status?: (string | null);
   type?: (string | null);
-  'residence-id'?: (string | null);
 }
 
 export function listApplicationsTasksApplicationsGet(http: HttpClient, rootUrl: string, params?: ListApplicationsTasksApplicationsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
   const rb = new RequestBuilder(rootUrl, listApplicationsTasksApplicationsGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('resident_id', params.resident_id, {});
     rb.query('template_id', params.template_id, {});
+    rb.query('category_id', params.category_id, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
     rb.query('search', params.search, {});
@@ -39,7 +58,6 @@ export function listApplicationsTasksApplicationsGet(http: HttpClient, rootUrl: 
     rb.query('date_to', params.date_to, {});
     rb.query('status', params.status, {});
     rb.query('type', params.type, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

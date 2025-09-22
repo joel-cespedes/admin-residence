@@ -8,7 +8,9 @@
  *
  * Attributes:
  *     name (str): Nombre de la categoría de tareas
+ *     residence_id (str): ID de la residencia a la que pertenece
  */
 export interface TaskCategoryCreate {
   name: string;
+  residence_id: string;
 }

@@ -13,17 +13,21 @@ import { DeviceStats } from '../../models/device-stats';
 export interface GetDevicesStatsDashboardDevicesStatsGet$Params {
 
 /**
+ * Filter by residence ID
+ */
+  residence_id?: (string | null);
+
+/**
  * Time filter: week, month, or year
  */
   time_filter?: string;
-  'residence-id'?: (string | null);
 }
 
 export function getDevicesStatsDashboardDevicesStatsGet(http: HttpClient, rootUrl: string, params?: GetDevicesStatsDashboardDevicesStatsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<DeviceStats>> {
   const rb = new RequestBuilder(rootUrl, getDevicesStatsDashboardDevicesStatsGet.PATH, 'get');
   if (params) {
+    rb.query('residence_id', params.residence_id, {});
     rb.query('time_filter', params.time_filter, {});
-    rb.header('residence-id', params['residence-id'], {});
   }
 
   return http.request(

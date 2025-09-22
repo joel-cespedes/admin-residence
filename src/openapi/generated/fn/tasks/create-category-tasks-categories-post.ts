@@ -12,14 +12,12 @@ import { TaskCategoryCreate } from '../../models/task-category-create';
 import { TaskCategoryOut } from '../../models/task-category-out';
 
 export interface CreateCategoryTasksCategoriesPost$Params {
-  'residence-id'?: (string | null);
       body: TaskCategoryCreate
 }
 
 export function createCategoryTasksCategoriesPost(http: HttpClient, rootUrl: string, params: CreateCategoryTasksCategoriesPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskCategoryOut>> {
   const rb = new RequestBuilder(rootUrl, createCategoryTasksCategoriesPost.PATH, 'post');
   if (params) {
-    rb.header('residence-id', params['residence-id'], {});
     rb.body(params.body, 'application/json');
   }
 
