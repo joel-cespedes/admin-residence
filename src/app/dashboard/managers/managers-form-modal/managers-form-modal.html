@@ -1,0 +1,135 @@
+<h2 mat-dialog-title>
+  {{ manager ? 'Editar Gestor' : 'Agregar Nuevo Gestor' }}
+</h2>
+
+<div mat-dialog-content>
+  <div class="manager-form">
+    <!-- Username Field -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Usuario</mat-label>
+        <input
+          matInput
+          [value]="username()"
+          (input)="username.set($event.target.value)"
+          (blur)="markAsTouched('username')"
+          placeholder="Nombre de usuario para inicio de sesión"
+        />
+        @if (showUsernameError()) {
+          <mat-error>{{ usernameError() }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Email Field -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          [value]="email()"
+          (input)="email.set($event.target.value)"
+          (blur)="markAsTouched('email')"
+          placeholder="Correo electrónico"
+        />
+        @if (showEmailError()) {
+          <mat-error>{{ emailError() }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Full Name Field -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre Completo</mat-label>
+        <input
+          matInput
+          [value]="fullName()"
+          (input)="fullName.set($event.target.value)"
+          (blur)="markAsTouched('fullName')"
+          placeholder="Nombre completo del gestor"
+        />
+        @if (showFullNameError()) {
+          <mat-error>{{ fullNameError() }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Phone Field -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Teléfono</mat-label>
+        <input
+          matInput
+          [value]="phone()"
+          (input)="phone.set($event.target.value)"
+          placeholder="Número de teléfono (opcional)"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- Password Field (only for create or when changing password) -->
+    @if (!manager) {
+      <div class="form-field">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            type="password"
+            [value]="password()"
+            (input)="password.set($event.target.value)"
+            (blur)="markAsTouched('password')"
+            placeholder="Contraseña de acceso"
+          />
+          @if (showPasswordError()) {
+            <mat-error>{{ passwordError() }}</mat-error>
+          }
+          <mat-hint>Mínimo 6 caracteres</mat-hint>
+        </mat-form-field>
+      </div>
+    }
+
+    <!-- Status Field -->
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Estado</mat-label>
+        <mat-select [value]="status()" (selectionChange)="status.set($event.value)">
+          <mat-option value="active">Activo</mat-option>
+          <mat-option value="inactive">Inactivo</mat-option>
+          <mat-option value="suspended">Suspendido</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Residences Selection -->
+    <div class="form-section">
+      <h3>Residencias Asignadas</h3>
+      <div class="residences-grid">
+        @for (residence of residences; track residence.id) {
+          <div class="residence-checkbox">
+            <mat-checkbox
+              [checked]="isResidenceSelected(residence.id)"
+              (change)="onResidenceChange(residence.id, $event.checked)">
+              {{ residence.name }}
+            </mat-checkbox>
+          </div>
+        }
+      </div>
+
+      @if (showResidenceIdsError()) {
+        <div class="error-message">
+          <mat-icon color="warn">warning</mat-icon>
+          {{ residenceIdsError() }}
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="!isFormValid() || isSubmitting()">
+    {{ manager ? 'Actualizar' : 'Crear' }}
+  </button>
+</div>

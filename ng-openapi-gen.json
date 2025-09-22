@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
-  "input": "http://127.0.0.1:8001/openapi.json",
+  "input": "http://127.0.0.1:8000/openapi.json",
   "output": "src/openapi/generated",
   "module": false,
   "services": true,

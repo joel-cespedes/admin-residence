@@ -1,86 +1,23 @@
-.filters {
+.action-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  button {
+    margin-left: 14px;
+    cursor: pointer;
+  }
 }
 
-.filters__row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: flex-end;
-}
-
-.filters__residence {
-  min-width: 240px;
-  position: relative;
-}
-
-.filters__spinner {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-}
-
-.filters__search {
-  flex: 1 1 260px;
-}
-
-.filters__floors {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.filters__floors-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-}
-
-.filters__floors-empty {
-  margin: 0;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.filters__floor-toggles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.table-wrapper {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.table-header {
+.add-table-button {
+  margin-top: 1em;
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 12px;
+  button {
+    cursor: pointer;
+  }
 }
-
-.table-container {
-  position: relative;
+.selector-header-title {
+  margin-bottom: 1em;
 }
-
-.loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 32px 0;
-}
-
-.actions {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-
 .btn_rounded {
   border-radius: 50%;
   width: 50px;
@@ -89,7 +26,11 @@
   align-items: center;
   justify-content: center;
 }
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+  padding: 0 16px;
+}
 
+// Establecer ancho fijo para la columna de acciones
 .mat-mdc-cell.mat-column-actions,
 .mat-mdc-header-cell.mat-column-actions {
   width: 190px;

@@ -1,0 +1,97 @@
+<h2 mat-dialog-title>Detalles del Gestor</h2>
+
+<div mat-dialog-content class="view-manager-content">
+  <!-- Basic Information -->
+  <div class="info-section">
+    <h3>Información Básica</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Usuario</div>
+        <div class="info-value">{{ manager.username }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Nombre Completo</div>
+        <div class="info-value">{{ manager.full_name }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Email</div>
+        <div class="info-value">{{ manager.email }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Teléfono</div>
+        <div class="info-value">{{ manager.phone || 'No especificado' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Information -->
+  <div class="info-section">
+    <h3>Información de Cuenta</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Rol</div>
+        <div class="info-value">{{ roleText() }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Estado</div>
+        <div class="info-value">
+          <span class="status-badge {{ statusClass() }}">
+            {{ statusText() }}
+          </span>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Último Inicio de Sesión</div>
+        <div class="info-value">
+          {{ manager.last_login ? (manager.last_login | dateFormat: 'full') : 'Nunca ha iniciado sesión' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Residence Information -->
+  <div class="info-section">
+    <h3>Residencias Asignadas</h3>
+    @if (manager.residence_names && manager.residence_names.length > 0) {
+      <div class="residence-badges">
+        @for (residence of manager.residence_names; track $index) {
+          <span class="residence-badge">{{ residence }}</span>
+        }
+      </div>
+      <div class="info-item">
+        <div class="info-label">Cantidad de Residencias</div>
+        <div class="info-value">{{ manager.residence_count || manager.residence_names.length }}</div>
+      </div>
+    } @else {
+      <div class="no-residences">
+        <mat-icon>business</mat-icon>
+        <p>El gestor no tiene residencias asignadas</p>
+      </div>
+    }
+  </div>
+
+  <!-- System Information -->
+  <div class="info-section">
+    <h3>Información del Sistema</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Fecha de Creación</div>
+        <div class="info-value">{{ manager.created_at | dateFormat: 'full' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Última Actualización</div>
+        <div class="info-value">{{ manager.updated_at ? (manager.updated_at | dateFormat: 'full') : 'No actualizado' }}</div>
+      </div>
+      @if (manager.created_by_name) {
+        <div class="info-item">
+          <div class="info-label">Creado por</div>
+          <div class="info-value">{{ manager.created_by_name }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="close()">Cerrar</button>
+</div>

@@ -25,7 +25,7 @@ export interface EntityType {
   providedIn: 'root'
 })
 export class StructureFilterService {
-  private baseUrl = 'http://127.0.0.1:8001';
+  private baseUrl = 'http://127.0.0.1:8000';
 
   // Entity configurations
   private entities: Record<string, EntityType> = {

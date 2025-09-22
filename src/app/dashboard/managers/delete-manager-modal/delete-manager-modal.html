@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>
+  <span class="mat-icon warning-icon">warning</span>
+  Confirmar Eliminación
+</h2>
+
+<div mat-dialog-content class="delete-manager-content">
+  <div class="warning-section">
+    <p class="warning-text">
+      ¿Estás seguro que deseas eliminar al gestor <strong>"{{ manager.full_name }}"</strong>?
+    </p>
+
+    <!-- Manager Details -->
+    <div class="manager-details">
+      <div class="detail-item">
+        <span class="detail-label">Usuario:</span>
+        <span class="detail-value">{{ manager.username }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Email:</span>
+        <span class="detail-value">{{ manager.email }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Estado:</span>
+        <span class="detail-value">
+          <span class="status-badge {{ manager.status === 'active' ? 'status-active' : manager.status === 'inactive' ? 'status-inactive' : 'status-suspended' }}">
+            {{ statusText() }}
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Warning Message -->
+    <div class="warning-message">
+      <mat-icon class="warning-icon">info</mat-icon>
+      <p>{{ warningMessage() }}</p>
+    </div>
+
+    <!-- Additional Warning for Active Managers -->
+    @if (shouldShowAdditionalWarning()) {
+      <div class="additional-warning">
+        <mat-icon class="warning-icon">priority_high</mat-icon>
+        <p>
+          <strong>¡Advertencia importante!</strong> Este gestor está actualmente activo y tiene residencias asignadas.
+          Considera desactivar el gestor en lugar de eliminarlo si solo quieres revocar temporalmente su acceso.
+        </p>
+      </div>
+    }
+
+    <!-- Final Confirmation -->
+    <div class="final-confirmation">
+      <mat-checkbox #confirmCheckbox>
+        Entiendo las consecuencias y deseo proceder con la eliminación
+      </mat-checkbox>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancelar</button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="confirm()"
+    [disabled]="!confirmCheckbox.checked">
+    Eliminar Gestor
+  </button>
+</div>
