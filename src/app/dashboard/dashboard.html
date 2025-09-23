@@ -12,17 +12,19 @@
 
       <div class="sidebar__content">
         <ul class="nav">
-          <li class="nav__item">
-            <a
-              href="#"
-              class="nav__link"
-              routerLink="/dashboard"
-              routerLinkActive="nav__link--active"
-              [routerLinkActiveOptions]="{ exact: true }">
-              <span class="mat-icon">dashboard</span>
-              <span class="nav__title">Dashboard</span>
-            </a>
-          </li>
+          @if (canViewHome()) {
+            <li class="nav__item">
+              <a
+                href="#"
+                class="nav__link"
+                routerLink="/dashboard"
+                routerLinkActive="nav__link--active"
+                [routerLinkActiveOptions]="{ exact: true }">
+                <span class="mat-icon">dashboard</span>
+                <span class="nav__title">Dashboard</span>
+              </a>
+            </li>
+          }
 
           <li class="nav__section-title">Residencias</li>
 

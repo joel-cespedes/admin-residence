@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { RouterModule, RouterLinkActive } from '@angular/router';
 // Removed ResidenceService dependency - backend filters by user role
 import { ApiService } from '../../openapi/generated/services/api.service';
 import { DashboardService } from '../../openapi/generated/services/dashboard.service';
+import { AuthService } from '@core';
 
 @Component({
   selector: 'movsa-dashboard',
@@ -14,8 +15,10 @@ export class Dashboard implements OnInit {
   // Removed ResidenceService dependency
   private apiService = inject(ApiService);
   private dashboardService = inject(DashboardService);
+  private authService = inject(AuthService);
 
   sidebarCollapsed = signal(false);
+  readonly canViewHome = this.authService.isSuperAdmin;
 
   // Contadores para el menú
   residencesCount = signal(0);

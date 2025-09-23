@@ -43,7 +43,7 @@
 
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
-  <button class="btn_color_free btn_darkblue" (click)="onSubmit()" [disabled]="form.invalid || isLoading()">
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid || isLoading()">
     @if (!isLoading()) {
       <span>{{ isEditMode() ? 'Actualizar' : 'Crear' }}</span>
     }
