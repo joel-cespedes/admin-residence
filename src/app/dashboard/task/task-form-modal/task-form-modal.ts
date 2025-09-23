@@ -1,27 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogClose
-} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { CommonModule } from '@angular/common';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
+import { ResidenceOut } from '../../../../openapi/generated/models/residence-out';
+import { TaskCategoryOut } from '../../../../openapi/generated/models/task-category-out';
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { NotificationService } from '../../../shared/notification.service';
 import { TaskWithDetails } from '../task';
-import { ResidenceOut } from '../../../../openapi/generated/models/residence-out';
-import { TaskCategoryOut } from '../../../../openapi/generated/models/task-category-out';
 
 export interface FormData {
   task?: TaskWithDetails;

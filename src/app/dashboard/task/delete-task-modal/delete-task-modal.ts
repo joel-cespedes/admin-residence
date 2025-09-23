@@ -1,15 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogClose
-} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { NotificationService } from '../../../shared/notification.service';
@@ -50,7 +43,7 @@ export class DeleteTaskModal {
           this.notificationService.success('Task deleted successfully');
           this.dialogRef.close(true);
         },
-        error: error => {
+        error: () => {
           this.notificationService.error('Error deleting task');
           this.isLoading.set(false);
         }

@@ -1,5 +1,4 @@
 import { BedOut } from '../../../../openapi/generated/models/bed-out';
-import { RoomWithDetails } from '../../room/model/room.model';
 
 export interface BedWithDetails extends BedOut {
   room_name?: string;
@@ -15,4 +14,26 @@ export interface BedFormData {
   residence_id: string;
   floor_id: string;
   room_id: string;
+}
+
+export interface ResidenceOption {
+  id: string;
+  name: string;
+}
+
+export interface FloorOption {
+  id: string;
+  name: string;
+}
+
+export interface RoomOption {
+  id: string;
+  name: string;
+}
+
+export interface BedFilters {
+  residence_id: string;
+  floor_id: string;
+  room_id: string;
+  search: string;
 }

@@ -49,9 +49,9 @@ export class ResidenceFormModal {
     this.isEditMode.set(!!(this.data && this.data.id));
 
     this.residenceForm = this.fb.group({
-      name: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      phone: ['', [Validators.pattern(/^\+?[\d\s\-()]+$/)]],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      address: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      phone: ['', [Validators.pattern(/^\+?[\d\s\-()]+$/), Validators.minLength(6), Validators.maxLength(20)]],
       email: ['', [Validators.email]]
     });
 

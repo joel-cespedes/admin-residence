@@ -17,35 +17,13 @@ import { Header } from '../shared/header/header';
 import { StructureService } from '../../../openapi/generated/services/structure.service';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 import { NotificationService } from '../../shared/notification.service';
-import { BedFormData, BedWithDetails } from './model/bed.model';
+import { BedFilters, BedFormData, BedWithDetails, FloorOption, ResidenceOption, RoomOption } from './model/bed.model';
 import { DeleteBedModal } from './delete-bed-modal/delete-bed-modal';
 import { BedFormModal } from './bed-form-modal/bed-form-modal';
 import { ViewBedModal } from './view-bed-modal/view-bed-modal';
 import { firstValueFrom } from 'rxjs';
 import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
 import { ListBedsStructureBedsGet$Params } from '../../../openapi/generated/fn/structure/list-beds-structure-beds-get';
-
-interface ResidenceOption {
-  id: string;
-  name: string;
-}
-
-interface FloorOption {
-  id: string;
-  name: string;
-}
-
-interface RoomOption {
-  id: string;
-  name: string;
-}
-
-interface BedFilters {
-  residence_id: string;
-  floor_id: string;
-  room_id: string;
-  search: string;
-}
 
 @Component({
   selector: 'app-beds',
@@ -308,7 +286,7 @@ export class Beds implements OnInit, AfterViewInit {
               }
             })
             .subscribe({
-              next: (response) => {
+              next: response => {
                 console.log('Respuesta de actualización:', response);
                 this.notificationService.success('Cama actualizada exitosamente');
                 this.reloadBeds();

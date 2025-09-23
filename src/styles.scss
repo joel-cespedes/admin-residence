@@ -25,6 +25,18 @@ html {
   --mat-sys-primary-container: #e8f2ff;
   --mat-sys-on-primary-container: rgba(0, 0, 0, 0.87);
 
+  // Colores secundarios (secondary/accent)
+  --mat-sys-secondary: #8592a3;
+  --mat-sys-on-secondary: white;
+  --mat-sys-secondary-container: #e0f2fe;
+  --mat-sys-on-secondary-container: rgba(0, 0, 0, 0.87);
+
+  // Colores de error (warn/error)
+  --mat-sys-error: #ff3e1d;
+  --mat-sys-on-error: white;
+  --mat-sys-error-container: #fee2e2;
+  --mat-sys-on-error-container: rgba(0, 0, 0, 0.87);
+
   // Forzar estilos para botones con color primary
   .mat-mdc-raised-button.mat-primary {
     background-color: var(--mat-sys-primary) !important;
@@ -58,6 +70,96 @@ html {
     &:disabled {
       background-color: rgb(196, 195, 252) !important;
       color: var(--mat-sys-on-primary) !important;
+      cursor: default !important;
+      box-shadow: none !important;
+    }
+  }
+
+  // Botones secondary
+  .mat-mdc-raised-button.mat-accent,
+  .mat-mdc-raised-button[color='secondary'],
+  .mat-mdc-button.mat-accent,
+  .mat-mdc-button[color='secondary'] {
+    background-color: var(--mat-sys-secondary) !important;
+    color: var(--mat-sys-on-secondary) !important;
+    border: none !important;
+    padding: 0 24px !important;
+    height: 40px !important;
+
+    font-family: var(--mat-sys-label-large-font) !important;
+    font-size: var(--mat-sys-label-large-size) !important;
+    font-weight: var(--mat-sys-label-large-weight) !important;
+    text-transform: var(--mat-sys-label-large-transform) !important;
+    letter-spacing: var(--mat-sys-label-large-tracking) !important;
+    line-height: 1.25 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 64px !important;
+    outline: none !important;
+    cursor: pointer !important;
+    transition: background-color 280ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    box-shadow: none !important;
+
+    &:hover {
+      background-color: #7a869a !important;
+      box-shadow: none !important;
+    }
+
+    &:disabled {
+      background-color: rgba(0, 0, 0, 0.12) !important;
+      color: rgba(0, 0, 0, 0.26) !important;
+      cursor: default !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .mat-mdc-button {
+    border-radius: 8px !important;
+  }
+
+  // Botones warn/error
+  .mat-mdc-raised-button.mat-warn,
+  .mat-mdc-raised-button[color='warn'],
+  .mat-mdc-raised-button[color='error'],
+  .mat-mdc-button.mat-warn,
+  .mat-mdc-button[color='warn'],
+  .mat-mdc-button[color='error'] {
+    background-color: rgba(255, 62, 29, 0.1);
+    border: 1px solid rgb(255, 3, 3);
+    color: rgba(255, 3, 3, 1);
+
+    padding: 0 24px !important;
+    height: 40px !important;
+
+    font-family: var(--mat-sys-label-large-font) !important;
+    font-size: var(--mat-sys-label-large-size) !important;
+    font-weight: var(--mat-sys-label-large-weight) !important;
+    text-transform: var(--mat-sys-label-large-transform) !important;
+    letter-spacing: var(--mat-sys-label-large-tracking) !important;
+    line-height: 1.25 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 64px !important;
+    outline: none !important;
+    cursor: pointer !important;
+    transition: background-color 380ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    box-shadow: none !important;
+
+    &:hover {
+      background-color: #e5381a !important;
+      box-shadow: none !important;
+      color: var(--mat-sys-on-primary) !important;
+    }
+
+    &:disabled {
+      background-color: rgba(0, 0, 0, 0.12) !important;
+      color: rgba(0, 0, 0, 0.26) !important;
       cursor: default !important;
       box-shadow: none !important;
     }

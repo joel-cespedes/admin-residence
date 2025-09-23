@@ -32,6 +32,12 @@
   background-color: var(--sneat-bg-primary) !important;
 }
 
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: var(--mat-sys-on-primary) !important;
+}
+.mat-button-toggle-group-appearance-standard {
+  border: none !important;
+}
 // ===========================
 // MATERIAL BUTTONS
 // ===========================

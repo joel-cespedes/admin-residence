@@ -12,7 +12,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
 import { StructureService } from '../../../../openapi/generated/services/structure.service';
 import { FloorWithDetails } from '../../floor/model/floor.model';
 import { ResidenceWithContact } from '../../residence/model/residence.model';
@@ -53,8 +52,6 @@ export class ResidentFormModal {
   isLoadingBeds = signal(false);
 
   residentForm: FormGroup;
-
-  private residencesService = inject(ResidencesService);
   private structureService = inject(StructureService);
   private fb = inject(FormBuilder);
 

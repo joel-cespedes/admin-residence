@@ -82,7 +82,7 @@ export class CategoryFormModal implements OnInit {
             this.notificationService.success('Category updated successfully');
             this.dialogRef.close(true);
           },
-          error: error => {
+          error: () => {
             this.notificationService.error('Error updating category');
             this.isLoading.set(false);
           }
@@ -97,7 +97,7 @@ export class CategoryFormModal implements OnInit {
             this.notificationService.success('Category created successfully');
             this.dialogRef.close(true);
           },
-          error: error => {
+          error: () => {
             this.notificationService.error('Error creating category');
             this.isLoading.set(false);
           }
