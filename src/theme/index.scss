@@ -1,13 +1,33 @@
 @use '@angular/material' as mat;
-
 @use './variables';
 @use './grids';
 @use './components';
 
-// Exportar las paletas para que puedan ser usadas en styles.scss
-$custom-primary-palette: variables.$custom-primary-palette !default;
-$custom-accent-palette: variables.$custom-accent-palette !default;
-$custom-warn-palette: variables.$custom-warn-palette !default;
+// Convertir las paletas personalizadas al formato de Angular Material 20
+@function create-custom-palette($palette-map) {
+  @return (
+    50: map-get($palette-map, 50),
+    100: map-get($palette-map, 100),
+    200: map-get($palette-map, 200),
+    300: map-get($palette-map, 300),
+    400: map-get($palette-map, 400),
+    500: map-get($palette-map, 500),
+    600: map-get($palette-map, 600),
+    700: map-get($palette-map, 700),
+    800: map-get($palette-map, 800),
+    900: map-get($palette-map, 900),
+    A100: map-get($palette-map, A100),
+    A200: map-get($palette-map, A200),
+    A400: map-get($palette-map, A400),
+    A700: map-get($palette-map, A700),
+    contrast: map-get($palette-map, contrast)
+  );
+}
+
+// Crear las paletas personalizadas
+$custom-primary-palette: create-custom-palette(variables.$custom-primary-palette);
+$custom-accent-palette: create-custom-palette(variables.$custom-accent-palette);
+$custom-warn-palette: create-custom-palette(variables.$custom-warn-palette);
 @font-face {
   font-family: 'Material Icons Sharp';
   font-weight: normal;

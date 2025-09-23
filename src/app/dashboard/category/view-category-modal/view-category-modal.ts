@@ -1,11 +1,10 @@
-import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, DatePipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 import { CategoryWithDetails } from '../category';
-import { ResidenceOut } from '../../../../openapi/generated/models/residence-out';
 
 export interface ViewData {
   category: CategoryWithDetails;
@@ -13,16 +12,7 @@ export interface ViewData {
 
 @Component({
   selector: 'app-view-category-modal',
-  imports: [
-    CommonModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
-    MatButtonModule,
-    MatIconModule,
-    DatePipe
-  ],
+  imports: [CommonModule, MatDialogContent, MatDialogActions, MatButtonModule, MatIconModule, DatePipe],
   templateUrl: './view-category-modal.html',
   styleUrl: './view-category-modal.scss'
 })

@@ -35,29 +35,29 @@
 // ===========================
 // MATERIAL BUTTONS
 // ===========================
-.mat-mdc-button,
-.mat-mdc-raised-button,
-.mat-mdc-outlined-button {
-  border-radius: var(--sneat-border-radius) !important;
-  font-weight: 500 !important;
-  text-transform: none !important;
-  padding: 8px 16px !important;
-  font-family: inherit !important;
-}
+// .mat-mdc-button,
+// .mat-mdc-raised-button,
+// .mat-mdc-outlined-button {
+//   border-radius: var(--sneat-border-radius) !important;
+//   font-weight: 500 !important;
+//   text-transform: none !important;
+//   padding: 8px 16px !important;
+//   font-family: inherit !important;
+// }
 
-.mat-mdc-fab,
-.mat-mdc-mini-fab {
-  border-radius: var(--sneat-border-radius) !important;
-}
+// .mat-mdc-fab,
+// .mat-mdc-mini-fab {
+//   border-radius: var(--sneat-border-radius) !important;
+// }
 
-// Botón primario personalizado
-.mat-mdc-raised-button.mat-primary {
-  background: var(--sneat-lienar-gradient) !important;
-  color: white !important;
-  &:hover {
-    background-color: var(--sneat-primary-dark) !important;
-  }
-}
+// // Botón primario personalizado
+// .mat-mdc-raised-button.mat-primary {
+//   background: var(--sneat-lienar-gradient) !important;
+//   color: white !important;
+//   &:hover {
+//     background-color: var(--sneat-primary-dark) !important;
+//   }
+// }
 
 // ===========================
 // FORM FIELDS

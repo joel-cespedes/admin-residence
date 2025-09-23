@@ -1,5 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose
+} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,15 +21,7 @@ export interface DeleteData {
 
 @Component({
   selector: 'app-delete-category-modal',
-  imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatIconModule
-  ],
+  imports: [MatDialogContent, MatDialogActions, MatButtonModule, MatProgressSpinnerModule, MatIconModule],
   templateUrl: './delete-category-modal.html',
   styleUrl: './delete-category-modal.scss'
 })
@@ -42,18 +41,20 @@ export class DeleteCategoryModal {
   onDelete(): void {
     this.isLoading.set(true);
 
-    this.tasksService.deleteCategoryTasksCategoriesCategoryIdDelete({
-      category_id: this.category.id
-    }).subscribe({
-      next: () => {
-        this.notificationService.success('Category deleted successfully');
-        this.dialogRef.close(true);
-      },
-      error: (error) => {
-        this.notificationService.error('Error deleting category');
-        this.isLoading.set(false);
-      }
-    });
+    this.tasksService
+      .deleteCategoryTasksCategoriesCategoryIdDelete({
+        category_id: this.category.id
+      })
+      .subscribe({
+        next: () => {
+          this.notificationService.success('Category deleted successfully');
+          this.dialogRef.close(true);
+        },
+        error: () => {
+          this.notificationService.error('Error deleting category');
+          this.isLoading.set(false);
+        }
+      });
   }
 
   onCancel(): void {

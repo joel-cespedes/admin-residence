@@ -1,5 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose
+} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,15 +21,7 @@ export interface DeleteData {
 
 @Component({
   selector: 'app-delete-task-modal',
-  imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatIconModule
-  ],
+  imports: [MatDialogContent, MatDialogActions, MatButtonModule, MatProgressSpinnerModule, MatIconModule],
   templateUrl: './delete-task-modal.html',
   styleUrl: './delete-task-modal.scss'
 })
@@ -42,18 +41,20 @@ export class DeleteTaskModal {
   onDelete(): void {
     this.isLoading.set(true);
 
-    this.tasksService.deleteTemplateTasksTemplatesTemplateIdDelete({
-      template_id: this.task.id
-    }).subscribe({
-      next: () => {
-        this.notificationService.success('Task deleted successfully');
-        this.dialogRef.close(true);
-      },
-      error: (error) => {
-        this.notificationService.error('Error deleting task');
-        this.isLoading.set(false);
-      }
-    });
+    this.tasksService
+      .deleteTemplateTasksTemplatesTemplateIdDelete({
+        template_id: this.task.id
+      })
+      .subscribe({
+        next: () => {
+          this.notificationService.success('Task deleted successfully');
+          this.dialogRef.close(true);
+        },
+        error: error => {
+          this.notificationService.error('Error deleting task');
+          this.isLoading.set(false);
+        }
+      });
   }
 
   onCancel(): void {

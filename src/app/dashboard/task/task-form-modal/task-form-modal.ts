@@ -35,10 +35,8 @@ export interface FormData {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    MatDialogClose,
     MatButtonModule,
     MatInputModule,
     MatSelectModule,

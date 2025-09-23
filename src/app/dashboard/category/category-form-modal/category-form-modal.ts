@@ -1,18 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
+import { ResidenceOut } from '../../../../openapi/generated/models/residence-out';
 import { TasksService } from '../../../../openapi/generated/services/tasks.service';
 import { NotificationService } from '../../../shared/notification.service';
 import { CategoryWithDetails } from '../category';
-import { ResidenceOut } from '../../../../openapi/generated/models/residence-out';
 
 export interface FormData {
   category?: CategoryWithDetails;
@@ -25,10 +25,8 @@ export interface FormData {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    MatDialogClose,
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
@@ -74,32 +72,36 @@ export class CategoryFormModal implements OnInit {
     const formData = this.form.value;
 
     if (this.isEditMode()) {
-      this.tasksService.updateCategoryTasksCategoriesCategoryIdPut({
-        category_id: this.data.category!.id,
-        body: formData
-      }).subscribe({
-        next: () => {
-          this.notificationService.success('Category updated successfully');
-          this.dialogRef.close(true);
-        },
-        error: (error) => {
-          this.notificationService.error('Error updating category');
-          this.isLoading.set(false);
-        }
-      });
+      this.tasksService
+        .updateCategoryTasksCategoriesCategoryIdPut({
+          category_id: this.data.category!.id,
+          body: formData
+        })
+        .subscribe({
+          next: () => {
+            this.notificationService.success('Category updated successfully');
+            this.dialogRef.close(true);
+          },
+          error: error => {
+            this.notificationService.error('Error updating category');
+            this.isLoading.set(false);
+          }
+        });
     } else {
-      this.tasksService.createCategoryTasksCategoriesPost({
-        body: formData
-      }).subscribe({
-        next: () => {
-          this.notificationService.success('Category created successfully');
-          this.dialogRef.close(true);
-        },
-        error: (error) => {
-          this.notificationService.error('Error creating category');
-          this.isLoading.set(false);
-        }
-      });
+      this.tasksService
+        .createCategoryTasksCategoriesPost({
+          body: formData
+        })
+        .subscribe({
+          next: () => {
+            this.notificationService.success('Category created successfully');
+            this.dialogRef.close(true);
+          },
+          error: error => {
+            this.notificationService.error('Error creating category');
+            this.isLoading.set(false);
+          }
+        });
     }
   }
 
