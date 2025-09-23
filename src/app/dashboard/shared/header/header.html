@@ -11,18 +11,11 @@
       <span class="mat-icon">{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</span>
     </button>
 
-    <button type="button" mat-icon-button class="navbar__btn" [matBadge]="3" matBadgeColor="warn" matBadgeSize="small">
+    <button type="button" mat-icon-button class="navbar__btn">
       <span class="mat-icon">notifications</span>
     </button>
 
-    <button
-      type="button"
-      mat-icon-button
-      class="navbar__btn"
-      [matBadge]="3"
-      matBadgeColor="warn"
-      matBadgeSize="small"
-      (click)="logout()">
+    <button type="button" mat-icon-button class="navbar__btn" (click)="logout()">
       <span class="mat-icon">logout</span>
     </button>
   </div>

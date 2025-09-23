@@ -18,8 +18,8 @@
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
-  <button class="btn_color_free btn_red" (click)="onDelete()">
+  <button matButton (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+  <button matButton color="warn" (click)="onDelete()">
     @if (!isLoading()) {
       <span>Eliminar</span>
     }

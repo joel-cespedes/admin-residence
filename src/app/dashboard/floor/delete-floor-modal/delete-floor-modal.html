@@ -2,15 +2,16 @@
   <div class="title-modal">
     ¿Estás seguro de que quieres eliminar el piso
     <strong>"{{ data.name }}"</strong>
-    de la residencia <strong>"{{ data.residence_name }}"</strong>
+    de la residencia
+    <strong>"{{ data.residence_name }}"</strong>
     ?
   </div>
   <p>¡Esta acción no se puede deshacer!</p>
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
-  <button class="btn_color_free btn_red" (click)="onDelete()">
+  <button matButton (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+  <button matButton color="warn" (click)="onDelete()">
     @if (!isLoading()) {
       <span>Eliminar</span>
     }
