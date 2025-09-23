@@ -25,7 +25,7 @@ export interface EntityType {
   providedIn: 'root'
 })
 export class StructureFilterService {
-  private baseUrl = 'https://silly-camels-cheat.loca.lt';
+  private baseUrl = 'https://back-residence.onrender.com';
 
   // Entity configurations
   private entities: Record<string, EntityType> = {
