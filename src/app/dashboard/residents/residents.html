@@ -115,11 +115,13 @@
 <!-- Residents Table - Always visible -->
 <div class="residents-section">
   <div class="table-header">
-    <div class="add-table-button">
-      <button class="btn_style btn_rounded" matTooltip="Agregar residente" (click)="addResident()">
-        <span class="mat-icon">add</span>
-      </button>
-    </div>
+    @if (canCreate()) {
+      <div class="add-table-button">
+        <button class="btn_style btn_rounded" matTooltip="Agregar residente" (click)="addResident()">
+          <span class="mat-icon">add</span>
+        </button>
+      </div>
+    }
     <div class="filter-field">
       <input matInput (keyup)="applyFilter($event)" placeholder="Buscar residente..." #input />
     </div>
@@ -200,17 +202,21 @@
                 <span class="mat-icon">visibility</span>
               </button>
 
-              <button
-                class="btn_color btn_darkblue btn_small"
-                color="accent"
-                (click)="editResident(resident)"
-                matTooltip="Editar">
-                <span class="mat-icon">edit</span>
-              </button>
+              @if (canEdit()) {
+                <button
+                  class="btn_color btn_darkblue btn_small"
+                  color="accent"
+                  (click)="editResident(resident)"
+                  matTooltip="Editar">
+                  <span class="mat-icon">edit</span>
+                </button>
+              }
 
-              <button class="btn_color btn_red btn_small" color="warn" (click)="deleteResident(resident)" matTooltip="Eliminar">
-                <span class="mat-icon">delete</span>
-              </button>
+              @if (canDelete()) {
+                <button class="btn_color btn_red btn_small" color="warn" (click)="deleteResident(resident)" matTooltip="Eliminar">
+                  <span class="mat-icon">delete</span>
+                </button>
+              }
             </div>
           </td>
         </ng-container>

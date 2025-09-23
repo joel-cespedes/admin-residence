@@ -8,7 +8,6 @@ import { BedWithDetails } from '../model/bed.model';
 
 @Component({
   selector: 'app-view-bed-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

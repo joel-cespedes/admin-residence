@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -12,17 +12,7 @@ export interface ViewData {
 
 @Component({
   selector: 'app-view-task-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
-    MatButtonModule,
-    MatIconModule,
-    DatePipe
-  ],
+  imports: [CommonModule, MatDialogContent, MatDialogActions, MatButtonModule, MatIconModule, DatePipe],
   templateUrl: './view-task-modal.html',
   styleUrl: './view-task-modal.scss'
 })

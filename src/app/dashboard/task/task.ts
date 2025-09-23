@@ -36,7 +36,6 @@ export interface TaskWithDetails extends TaskTemplateOut {
 
 @Component({
   selector: 'app-task',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,

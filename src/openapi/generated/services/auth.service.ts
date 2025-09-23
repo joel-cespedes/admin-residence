@@ -13,9 +13,6 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { loginAuthLoginPost } from '../fn/auth/login-auth-login-post';
 import { LoginAuthLoginPost$Params } from '../fn/auth/login-auth-login-post';
-import { Me } from '../models/me';
-import { meAuthMeGet } from '../fn/auth/me-auth-me-get';
-import { MeAuthMeGet$Params } from '../fn/auth/me-auth-me-get';
 import { TokenResponse } from '../models/token-response';
 
 @Injectable({ providedIn: 'root' })
@@ -54,39 +51,6 @@ export class AuthService extends BaseService {
   loginAuthLoginPost(params: LoginAuthLoginPost$Params, context?: HttpContext): Observable<TokenResponse> {
     return this.loginAuthLoginPost$Response(params, context).pipe(
       map((r: StrictHttpResponse<TokenResponse>): TokenResponse => r.body)
-    );
-  }
-
-  /** Path part for operation `meAuthMeGet()` */
-  static readonly MeAuthMeGetPath = '/auth/me';
-
-  /**
-   * Me.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `meAuthMeGet()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  meAuthMeGet$Response(params?: MeAuthMeGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Me>> {
-    return meAuthMeGet(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Me.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `meAuthMeGet$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  meAuthMeGet(params?: MeAuthMeGet$Params, context?: HttpContext): Observable<Me> {
-    return this.meAuthMeGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Me>): Me => r.body)
     );
   }
 

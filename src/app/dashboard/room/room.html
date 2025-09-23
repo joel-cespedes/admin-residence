@@ -17,7 +17,6 @@
           [value]="selectedResidenceId()"
           (selectionChange)="onResidenceChange($event.value)"
           placeholder="Todas las residencias">
-          <mat-option value="">Todas las residencias</mat-option>
           @for (residence of residences(); track residence.id) {
             <mat-option [value]="residence.id">
               {{ residence.name }}
@@ -62,19 +61,15 @@
 <!-- Rooms Table - Always visible -->
 <div class="rooms-section">
   <div class="table-header">
-    <div class="add-table-button">
-      <button class="btn_style btn_rounded" matTooltip="Agregar habitación" (click)="addRoom()">
-        <span class="mat-icon">add</span>
-      </button>
-    </div>
+    @if (canCreate()) {
+      <div class="add-table-button">
+        <button class="btn_style btn_rounded" matTooltip="Agregar habitación" (click)="addRoom()">
+          <span class="mat-icon">add</span>
+        </button>
+      </div>
+    }
     <div class="filter-field">
-      <input
-        matInput
-        type="search"
-        [value]="searchTerm()"
-        (keyup)="applyFilter($event)"
-        placeholder="Buscar habitación..."
-      />
+      <input matInput type="search" [value]="searchTerm()" (keyup)="applyFilter($event)" placeholder="Buscar habitación..." />
     </div>
   </div>
 
@@ -127,13 +122,17 @@
                 <span class="mat-icon">visibility</span>
               </button>
 
-              <button class="btn_color btn_darkblue btn_small" color="accent" (click)="editRoom(room)" matTooltip="Editar">
-                <span class="mat-icon">edit</span>
-              </button>
+              @if (canEdit()) {
+                <button class="btn_color btn_darkblue btn_small" color="accent" (click)="editRoom(room)" matTooltip="Editar">
+                  <span class="mat-icon">edit</span>
+                </button>
+              }
 
-              <button class="btn_color btn_red btn_small" color="warn" (click)="deleteRoom(room)" matTooltip="Eliminar">
-                <span class="mat-icon">delete</span>
-              </button>
+              @if (canDelete()) {
+                <button class="btn_color btn_red btn_small" color="warn" (click)="deleteRoom(room)" matTooltip="Eliminar">
+                  <span class="mat-icon">delete</span>
+                </button>
+              }
             </div>
           </td>
         </ng-container>

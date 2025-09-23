@@ -11,7 +11,6 @@ import { ResidenceWithContact } from '../model/residence.model';
 
 @Component({
   selector: 'app-view-residence-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

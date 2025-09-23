@@ -29,7 +29,6 @@ interface ProfessionalFormData {
 
 @Component({
   selector: 'app-professional-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

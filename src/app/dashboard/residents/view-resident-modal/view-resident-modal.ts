@@ -9,7 +9,6 @@ import { AgePipe } from '@core';
 
 @Component({
   selector: 'app-view-resident-modal',
-  standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, DatePipe, AgePipe],
   templateUrl: './view-resident-modal.html',
   styleUrl: './view-resident-modal.scss'

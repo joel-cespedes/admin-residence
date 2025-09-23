@@ -21,7 +21,6 @@ import { ResidentFormData, ResidentWithDetails } from '../model/resident.model';
 
 @Component({
   selector: 'app-resident-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

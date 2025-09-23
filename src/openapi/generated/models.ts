@@ -16,7 +16,6 @@ export type { FloorOut } from './models/floor-out';
 export type { FloorUpdate } from './models/floor-update';
 export type { HttpValidationError } from './models/http-validation-error';
 export type { LoginRequest } from './models/login-request';
-export type { Me } from './models/me';
 export type { MeasurementCreate } from './models/measurement-create';
 export type { MeasurementOut } from './models/measurement-out';
 export type { MeasurementStats } from './models/measurement-stats';

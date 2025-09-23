@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -11,8 +12,10 @@ import { DatePipe } from '@angular/common';
 
 import { Header } from '../shared/header/header';
 import { DevicesService } from '../../../openapi/generated/services/devices.service';
+import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 import { NotificationService } from '../../shared/notification.service';
 import { DeviceOut } from '../../../openapi/generated/models/device-out';
+import { ResidenceOut } from '../../../openapi/generated/models/residence-out';
 import { firstValueFrom } from 'rxjs';
 import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
 import { ListDevicesDevicesGet$Params } from '../../../openapi/generated/fn/devices/list-devices-devices-get';
@@ -24,7 +27,6 @@ export interface DeviceWithDetails extends DeviceOut {
 
 @Component({
   selector: 'app-devices',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,
@@ -34,6 +36,7 @@ export interface DeviceWithDetails extends DeviceOut {
     MatProgressSpinnerModule,
     MatInputModule,
     MatSortModule,
+    MatButtonToggleModule,
     DatePipe,
     Header
   ],
@@ -45,6 +48,7 @@ export class Devices implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   private readonly devicesService = inject(DevicesService);
+  private readonly residencesService = inject(ResidencesService);
   private readonly notificationService = inject(NotificationService);
 
   readonly dataSource = new MatTableDataSource<DeviceWithDetails>([]);
@@ -58,6 +62,9 @@ export class Devices implements OnInit, AfterViewInit {
   });
 
   readonly searchTerm = signal<string>('');
+  readonly residences = signal<ResidenceOut[]>([]);
+  readonly isLoadingResidences = signal(false);
+  readonly selectedResidence = signal<string>('');
   readonly displayedColumns = ['name', 'type', 'mac', 'battery_percent', 'residence_name', 'created_by_name', 'created_at'];
   readonly totalItems = computed(() => this.pagination().total);
 
@@ -65,6 +72,7 @@ export class Devices implements OnInit, AfterViewInit {
   private suppressNextPageEvent = false;
 
   ngOnInit(): void {
+    this.loadResidences();
     this.loadDevices();
   }
 
@@ -122,6 +130,26 @@ export class Devices implements OnInit, AfterViewInit {
     }, 300);
   }
 
+  onResidenceChange(residenceId: string): void {
+    this.selectedResidence.set(residenceId || '');
+    this.resetToFirstPage();
+    this.loadDevices();
+  }
+
+  loadResidences(): void {
+    this.isLoadingResidences.set(true);
+    this.residencesService.listResidencesResidencesGet({ size: 100 }).subscribe({
+      next: (residences: any) => {
+        this.residences.set(residences.items || []);
+        this.isLoadingResidences.set(false);
+      },
+      error: () => {
+        this.notificationService.error('Error loading residences');
+        this.isLoadingResidences.set(false);
+      }
+    });
+  }
+
   private resetToFirstPage(): void {
     this.pagination.update(state => ({ ...state, pageIndex: 0 }));
     if (this.paginator) {
@@ -160,6 +188,11 @@ export class Devices implements OnInit, AfterViewInit {
     const search = this.searchTerm().trim();
     if (search) {
       params.search = search;
+    }
+
+    const residenceId = this.selectedResidence();
+    if (residenceId && residenceId.trim() !== '') {
+      params.residence_id = residenceId;
     }
 
     try {

@@ -9,7 +9,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-view-manager-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

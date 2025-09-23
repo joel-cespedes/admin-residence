@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,10 +17,10 @@ import { DeleteResidenceModal } from './delete-residence-modal/delete-residence-
 import { ResidenceFormModal } from './residence-form-modal/residence-form-modal';
 import { ViewResidenceModal } from './view-residence-modal/view-residence-modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { PermissionsService } from '../../shared/permissions.service';
 
 @Component({
   selector: 'app-residence',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,
@@ -37,8 +37,16 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   styleUrl: './residence.scss'
 })
 export class Residence extends BaseEntityComponent<ResidenceWithContact> {
+  private readonly permissionsService = inject(PermissionsService);
+
   // Override los inputs del componente base
   override entityType = input<EntityType>('residences');
+
+  // Role-based permissions
+  readonly permissions = this.permissionsService.residencePermissions;
+  readonly canCreate = computed(() => this.permissions().canCreate);
+  readonly canEdit = computed(() => this.permissions().canEdit);
+  readonly canDelete = computed(() => this.permissions().canDelete);
   override displayedColumns = input<string[]>(['name', 'address', 'phone', 'email', 'created_at', 'actions']);
   override title = input<string>('Residencias');
 

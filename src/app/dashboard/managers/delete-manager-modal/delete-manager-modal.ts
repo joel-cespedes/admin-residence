@@ -22,7 +22,6 @@ interface ManagerWithDetails {
 
 @Component({
   selector: 'app-delete-manager-modal',
-  standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatSnackBarModule, MatCardModule],
   templateUrl: './delete-manager-modal.html',
   styleUrl: './delete-manager-modal.scss'

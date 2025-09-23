@@ -22,7 +22,6 @@ export interface FormData {
 
 @Component({
   selector: 'app-category-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

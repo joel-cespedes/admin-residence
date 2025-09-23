@@ -45,7 +45,6 @@ interface ProfessionalWithDetails {
 
 @Component({
   selector: 'app-professionals',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,

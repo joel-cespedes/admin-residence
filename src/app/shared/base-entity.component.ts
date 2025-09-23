@@ -41,7 +41,6 @@ export type {
 
 @Component({
   selector: 'app-base-entity',
-  standalone: true,
   imports: [
     CommonModule,
     MatFormFieldModule,

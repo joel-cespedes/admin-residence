@@ -12,7 +12,6 @@ import { NotificationService } from '../../../shared/notification.service';
 
 @Component({
   selector: 'app-delete-residence-modal',
-  standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatSnackBarModule],
   templateUrl: './delete-residence-modal.html',
   styleUrl: './delete-residence-modal.scss'

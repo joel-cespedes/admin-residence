@@ -1,8 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'age',
-  standalone: true
+  name: 'age'
 })
 export class AgePipe implements PipeTransform {
   transform(birthDate: string | Date): number {

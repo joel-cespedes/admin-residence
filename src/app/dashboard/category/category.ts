@@ -34,7 +34,6 @@ export interface CategoryWithDetails extends TaskCategoryOut {
 
 @Component({
   selector: 'app-category',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,

@@ -17,6 +17,7 @@ import { Header } from '../shared/header/header';
 import { StructureService } from '../../../openapi/generated/services/structure.service';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 import { NotificationService } from '../../shared/notification.service';
+import { PermissionsService } from '../../shared/permissions.service';
 import { FloorWithDetails, ResidenceOption } from './model/floor.model';
 import { DeleteFloorModal } from './delete-floor-modal/delete-floor-modal';
 import { FloorFormModal } from './floor-form-modal/floor-form-modal';
@@ -27,7 +28,6 @@ import { PaginatedResponse } from '../../../openapi/generated/models/paginated-r
 
 @Component({
   selector: 'app-floor',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,
@@ -54,6 +54,7 @@ export class Floor implements OnInit, AfterViewInit {
   private readonly residencesService = inject(ResidencesService);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
+  private readonly permissionsService = inject(PermissionsService);
 
   readonly dataSource = new MatTableDataSource<FloorWithDetails>([]);
   readonly isLoadingData = signal(false);
@@ -71,6 +72,12 @@ export class Floor implements OnInit, AfterViewInit {
   readonly searchTerm = signal<string>('');
   readonly displayedColumns = ['name', 'residence_name', 'created_at', 'actions'];
   readonly totalItems = computed(() => this.pagination().total);
+
+  // Role-based permissions
+  readonly permissions = this.permissionsService.floorPermissions;
+  readonly canCreate = computed(() => this.permissions().canCreate);
+  readonly canEdit = computed(() => this.permissions().canEdit);
+  readonly canDelete = computed(() => this.permissions().canDelete);
 
   private searchDebounce: ReturnType<typeof setTimeout> | null = null;
   private suppressNextPageEvent = false;
@@ -264,5 +271,4 @@ export class Floor implements OnInit, AfterViewInit {
       this.isLoadingResidences.set(false);
     }
   }
-
 }

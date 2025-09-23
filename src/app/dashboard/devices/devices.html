@@ -1,7 +1,32 @@
 <movsa-header title="Dispositivos" />
 
 <div class="devices-section">
-  <div class="table-header">
+  <div class="filter-section">
+    <div class="residence-selector">
+      <div class="selector-header">
+        <div class="selector-header-title">Filtrar por Residencia</div>
+        @if (isLoadingResidences()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        }
+      </div>
+
+      @if (!isLoadingResidences() && residences().length === 0) {
+        <div class="no-residences">
+          <p>No hay residencias disponibles. Primero crea una residencia.</p>
+        </div>
+      } @else {
+        <mat-button-toggle-group
+          class="residence-toggles"
+          [disabled]="isLoadingResidences()"
+          [value]="selectedResidence()"
+          (change)="onResidenceChange($event.value)">
+          @for (residence of residences(); track residence.id) {
+            <mat-button-toggle [value]="residence.id">{{ residence.name }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      }
+    </div>
+
     <div class="filter-field">
       <input matInput type="search" [value]="searchTerm()" (keyup)="onSearch($event)" placeholder="Buscar dispositivo..." />
     </div>

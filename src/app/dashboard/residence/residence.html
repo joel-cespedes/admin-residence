@@ -1,10 +1,12 @@
 <movsa-header title="Residencias" />
 
-<div class="add-table-button">
-  <button class="btn_style btn_rounded" matTooltip="Agregar residencia" (click)="addResidence()">
-    <span class="mat-icon">add</span>
-  </button>
-</div>
+@if (canCreate()) {
+  <div class="add-table-button">
+    <button class="btn_style btn_rounded" matTooltip="Agregar residencia" (click)="addResidence()">
+      <span class="mat-icon">add</span>
+    </button>
+  </div>
+}
 <div class="filter-field">
   <input matInput (keyup)="onSearchChange($event.target.value)" placeholder="Buscar residencia..." #input />
 </div>
@@ -44,13 +46,21 @@
             <span class="mat-icon">visibility</span>
           </button>
 
-          <button class="btn_color btn_darkblue btn_small" color="accent" (click)="editResidence(residence)" matTooltip="Editar">
-            <span class="mat-icon">edit</span>
-          </button>
+          @if (canEdit()) {
+            <button
+              class="btn_color btn_darkblue btn_small"
+              color="accent"
+              (click)="editResidence(residence)"
+              matTooltip="Editar">
+              <span class="mat-icon">edit</span>
+            </button>
+          }
 
-          <button class="btn_color btn_red btn_small" color="warn" (click)="deleteResidence(residence)" matTooltip="Eliminar">
-            <span class="mat-icon">delete</span>
-          </button>
+          @if (canDelete()) {
+            <button class="btn_color btn_red btn_small" color="warn" (click)="deleteResidence(residence)" matTooltip="Eliminar">
+              <span class="mat-icon">delete</span>
+            </button>
+          }
         </div>
       </td>
     </ng-container>
@@ -60,15 +70,13 @@
 
     @if (dataSource.data.length === 0) {
       <tr class="mat-row">
-        <td class="mat-cell" [attr.colspan]="columns.length">
-          No se encontraron residencias
-        </td>
+        <td class="mat-cell" [attr.colspan]="columns.length">No se encontraron residencias</td>
       </tr>
     }
   </table>
 
   <mat-paginator
-      [length]="pagination().total"
-      [pageSizeOptions]="[10, 20, 50, 100]"
-      aria-label="Seleccionar página de residencias"></mat-paginator>
+    [length]="pagination().total"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    aria-label="Seleccionar página de residencias"></mat-paginator>
 </div>

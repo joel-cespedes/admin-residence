@@ -32,7 +32,6 @@ export interface FormData {
 
 @Component({
   selector: 'app-task-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,7 @@ import { ResidentsService as ResidentsApiService } from '../../../openapi/genera
 import { StructureService } from '../../../openapi/generated/services/structure.service';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 import { NotificationService } from '../../shared/notification.service';
+import { PermissionsService } from '../../shared/permissions.service';
 import { ResidentFormData, ResidentWithDetails } from './model/resident.model';
 import { ViewResidentModal } from './view-resident-modal/view-resident-modal';
 import { ResidentFormModal } from './resident-form-modal/resident-form-modal';
@@ -55,7 +56,6 @@ interface ResidentFilters {
 
 @Component({
   selector: 'app-residents',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,
@@ -83,6 +83,7 @@ export class Residents implements OnInit, AfterViewInit {
   private readonly structureService = inject(StructureService);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
+  private readonly permissionsService = inject(PermissionsService);
 
   readonly displayedColumns = [
     'full_name',
@@ -115,6 +116,12 @@ export class Residents implements OnInit, AfterViewInit {
   readonly isLoadingFloors = signal(false);
   readonly isLoadingRooms = signal(false);
   readonly isLoadingBeds = signal(false);
+
+  // Role-based permissions
+  readonly permissions = this.permissionsService.residentPermissions;
+  readonly canCreate = computed(() => this.permissions().canCreate);
+  readonly canEdit = computed(() => this.permissions().canEdit);
+  readonly canDelete = computed(() => this.permissions().canDelete);
 
   private searchDebounce: ReturnType<typeof setTimeout> | null = null;
 

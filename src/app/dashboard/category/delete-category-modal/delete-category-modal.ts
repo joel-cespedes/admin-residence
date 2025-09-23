@@ -14,7 +14,6 @@ export interface DeleteData {
 
 @Component({
   selector: 'app-delete-category-modal',
-  standalone: true,
   imports: [
     MatDialogTitle,
     MatDialogContent,

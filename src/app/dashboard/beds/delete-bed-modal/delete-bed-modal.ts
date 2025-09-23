@@ -6,7 +6,6 @@ import { BedWithDetails } from '../model/bed.model';
 
 @Component({
   selector: 'app-delete-bed-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

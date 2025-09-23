@@ -6,7 +6,6 @@ import { ResidentWithDetails } from '../model/resident.model';
 
 @Component({
   selector: 'app-delete-resident-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

@@ -15,7 +15,14 @@
       <span class="mat-icon">notifications</span>
     </button>
 
-    <button type="button" mat-icon-button class="navbar__btn" [matBadge]="3" matBadgeColor="warn" matBadgeSize="small">
+    <button
+      type="button"
+      mat-icon-button
+      class="navbar__btn"
+      [matBadge]="3"
+      matBadgeColor="warn"
+      matBadgeSize="small"
+      (click)="logout()">
       <span class="mat-icon">logout</span>
     </button>
   </div>

@@ -247,10 +247,10 @@ export class Home implements OnInit {
             this.forceChartResize();
           }, 0);
 
-        // Ocultar loading de gráficos después de que estén renderizados
-        setTimeout(() => {
-          this.chartsLoading.set(false);
-        }, 500);
+          // Ocultar loading de gráficos después de que estén renderizados
+          setTimeout(() => {
+            this.chartsLoading.set(false);
+          }, 500);
         }, 0);
       },
       error: () => {
@@ -1009,14 +1009,13 @@ export class Home implements OnInit {
   // Removed waitForResidences - backend filters by user role
 
   private loadUserInfo() {
-    this.apiAuthService.meAuthMeGet().subscribe({
-      next: (response: any) => {
-        this.userName.set(response.alias || 'Usuario');
-      },
-      error: () => {
-        this.userName.set('Usuario');
-      }
-    });
+    // Get user info from JWT token instead of API call
+    const user = this.authService.user();
+    if (user) {
+      this.userName.set(user.alias || 'Usuario');
+    } else {
+      this.userName.set('Usuario');
+    }
   }
 
   private loadRecentActivity() {

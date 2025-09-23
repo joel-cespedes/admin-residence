@@ -15,7 +15,6 @@ import { RoomWithDetails } from '../model/room.model';
 
 @Component({
   selector: 'app-delete-room-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

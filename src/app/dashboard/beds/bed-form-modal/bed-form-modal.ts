@@ -17,7 +17,6 @@ import { BedFormData, BedWithDetails } from '../model/bed.model';
 
 @Component({
   selector: 'app-bed-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

@@ -29,7 +29,6 @@ interface ManagerFormData {
 
 @Component({
   selector: 'app-manager-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

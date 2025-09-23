@@ -49,7 +49,6 @@ interface BedFilters {
 
 @Component({
   selector: 'app-beds',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,

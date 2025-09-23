@@ -17,6 +17,7 @@ import { Header } from '../shared/header/header';
 import { StructureService } from '../../../openapi/generated/services/structure.service';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
 import { NotificationService } from '../../shared/notification.service';
+import { PermissionsService } from '../../shared/permissions.service';
 import { RoomWithDetails } from './model/room.model';
 import { DeleteRoomModal } from './delete-room-modal/delete-room-modal';
 import { RoomFormModal } from './room-form-modal/room-form-modal';
@@ -37,7 +38,6 @@ interface FloorOption {
 
 @Component({
   selector: 'app-room',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,
@@ -64,6 +64,7 @@ export class Room implements OnInit, AfterViewInit {
   private readonly residencesService = inject(ResidencesService);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
+  private readonly permissionsService = inject(PermissionsService);
 
   readonly dataSource = new MatTableDataSource<RoomWithDetails>([]);
   readonly isLoadingData = signal(false);
@@ -86,6 +87,12 @@ export class Room implements OnInit, AfterViewInit {
   readonly searchTerm = signal<string>('');
   readonly displayedColumns = ['name', 'floor_name', 'residence_name', 'created_at', 'actions'];
   readonly totalItems = computed(() => this.pagination().total);
+
+  // Role-based permissions
+  readonly permissions = this.permissionsService.roomPermissions;
+  readonly canCreate = computed(() => this.permissions().canCreate);
+  readonly canEdit = computed(() => this.permissions().canEdit);
+  readonly canDelete = computed(() => this.permissions().canDelete);
 
   private searchDebounce: ReturnType<typeof setTimeout> | null = null;
   private suppressNextPageEvent = false;

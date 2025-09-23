@@ -13,7 +13,6 @@ export interface ViewData {
 
 @Component({
   selector: 'app-view-category-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogTitle,

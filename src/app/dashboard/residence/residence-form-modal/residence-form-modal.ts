@@ -16,7 +16,6 @@ import { NotificationService } from '../../../shared/notification.service';
 
 @Component({
   selector: 'app-residence-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,
@@ -37,6 +36,8 @@ export class ResidenceFormModal {
   isEditMode = signal(false);
   isLoading = signal(false);
 
+  title = computed(() => (this.isEditMode() ? 'Editar Residencia' : 'Agregar Residencia'));
+
   private fb = inject(FormBuilder);
   private residencesService = inject(ResidencesService);
   private dialogRef = inject(MatDialogRef<ResidenceFormModal>);
@@ -44,7 +45,8 @@ export class ResidenceFormModal {
   private notificationService = inject(NotificationService);
 
   constructor() {
-    this.isEditMode.set(!!this.data);
+    // Check if we have a residence object (edit mode) or just residences array (create mode)
+    this.isEditMode.set(!!(this.data && this.data.id));
 
     this.residenceForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -53,7 +55,7 @@ export class ResidenceFormModal {
       email: ['', [Validators.email]]
     });
 
-    if (this.isEditMode() && this.data) {
+    if (this.isEditMode() && this.data && this.data.id) {
       this.residenceForm.patchValue({
         name: this.data.name,
         address: this.data.address || '',
@@ -99,6 +101,4 @@ export class ResidenceFormModal {
   onCancel(): void {
     this.dialogRef.close();
   }
-
-  title = computed(() => this.isEditMode() ? 'Editar Residencia' : 'Agregar Nueva Residencia');
 }

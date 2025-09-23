@@ -12,7 +12,6 @@ import { NotificationService } from '../../../shared/notification.service';
 
 @Component({
   selector: 'app-delete-floor-modal',
-  standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatSnackBarModule],
   templateUrl: './delete-floor-modal.html',
   styleUrl: './delete-floor-modal.scss'

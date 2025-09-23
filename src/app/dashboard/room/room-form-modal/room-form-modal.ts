@@ -25,7 +25,6 @@ import { RoomWithDetails } from '../model/room.model';
 
 @Component({
   selector: 'app-room-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

@@ -6,7 +6,6 @@ import { DashboardService } from '../../openapi/generated/services/dashboard.ser
 
 @Component({
   selector: 'movsa-dashboard',
-  standalone: true,
   imports: [RouterModule, RouterLinkActive],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']

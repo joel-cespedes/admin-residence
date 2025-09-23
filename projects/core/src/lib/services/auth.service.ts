@@ -9,6 +9,7 @@ import { StorageService } from './storage.service';
 export interface Me {
   id: string;
   role: 'superadmin' | 'manager' | 'professional';
+  alias?: string;
 }
 
 export interface AuthState {
@@ -23,7 +24,6 @@ export interface AuthState {
 })
 export class AuthService {
   private readonly apiAuth = inject(ApiAuthService);
-  private readonly apiService = inject(ApiService);
   private readonly router = inject(Router);
   private readonly storageService = inject(StorageService);
 
@@ -73,7 +73,7 @@ export class AuthService {
     this.clearError();
 
     return this.apiAuth.loginAuthLoginPost({ body: credentials }).pipe(
-      tap((response) => {
+      tap(response => {
         this.storageService.setToken(response.access_token);
         this.loadUserProfile();
       }),
@@ -96,43 +96,59 @@ export class AuthService {
   }
 
   private loadUserProfile(): void {
-        this.apiAuth
-      .meAuthMeGet()
-      .pipe(
-        tap((user: unknown) => {
-          this._authState.update((state) => ({
-            ...state,
-            user: user as Me,
-            isAuthenticated: true,
-            isLoading: false
-          }));
-          this.storageService.setAuthenticated(true);
-        }),
-        catchError((error) => {
-
-          // Only clear auth if token is expired or invalid
-          if (this.isTokenExpired()) {
-            this.clearAuth();
-            this.storageService.setAuthenticated(false);
-          } else {
-            // If token is not expired but API call failed, keep the user logged in
-            this._authState.update((state) => ({
-              ...state,
-              isAuthenticated: true,
-              isLoading: false
-            }));
-            this.storageService.setAuthenticated(true);
-          }
-          return of();
-        })
-      )
-      .subscribe();
+    const token = this.storageService.token();
+    if (token) {
+      try {
+        const user = this.decodeJWT(token);
+        this._authState.update(state => ({
+          ...state,
+          user: user,
+          isAuthenticated: true,
+          isLoading: false
+        }));
+        this.storageService.setAuthenticated(true);
+      } catch (error) {
+        // Token is invalid, clear auth
+        this.clearAuth();
+        this.storageService.setAuthenticated(false);
+      }
+    } else {
+      this.clearAuth();
+      this.storageService.setAuthenticated(false);
+    }
   }
 
   private validateToken(): void {
-    ('Validating token...');
     this.setLoading(true);
     this.loadUserProfile();
+  }
+
+  private decodeJWT(token: string): Me {
+    try {
+      // JWT has 3 parts separated by dots: header.payload.signature
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error('Invalid JWT format');
+      }
+
+      // Decode the payload (second part)
+      const payload = parts[1];
+      // Add padding if needed for base64 decoding
+      const paddedPayload = payload + '='.repeat((4 - (payload.length % 4)) % 4);
+      const decodedPayload = atob(paddedPayload);
+      const payloadObj = JSON.parse(decodedPayload);
+
+      // Extract user information from JWT payload
+      const user: Me = {
+        id: payloadObj.sub,
+        role: payloadObj.role,
+        alias: payloadObj.alias
+      };
+
+      return user;
+    } catch (error) {
+      throw new Error('Failed to decode JWT token');
+    }
   }
 
   private clearAuth(): void {
@@ -145,15 +161,15 @@ export class AuthService {
   }
 
   private setLoading(isLoading: boolean): void {
-    this._authState.update((state) => ({ ...state, isLoading }));
+    this._authState.update(state => ({ ...state, isLoading }));
   }
 
   private setError(error: string): void {
-    this._authState.update((state) => ({ ...state, error, isLoading: false }));
+    this._authState.update(state => ({ ...state, error, isLoading: false }));
   }
 
   private clearError(): void {
-    this._authState.update((state) => ({ ...state, error: null }));
+    this._authState.update(state => ({ ...state, error: null }));
   }
 
   isTokenExpired(): boolean {
@@ -161,8 +177,15 @@ export class AuthService {
     if (!token) return true;
 
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.exp * 1000 < Date.now();
+      const parts = token.split('.');
+      if (parts.length !== 3) return true;
+
+      const payload = parts[1];
+      const paddedPayload = payload + '='.repeat((4 - (payload.length % 4)) % 4);
+      const decodedPayload = atob(paddedPayload);
+      const payloadObj = JSON.parse(decodedPayload);
+
+      return payloadObj.exp * 1000 < Date.now();
     } catch {
       return true;
     }

@@ -23,7 +23,6 @@ type ResidenceOption = Pick<ResidenceWithContact, 'id' | 'name'>;
 
 @Component({
   selector: 'app-floor-form-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

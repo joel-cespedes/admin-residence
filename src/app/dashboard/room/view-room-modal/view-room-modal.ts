@@ -11,7 +11,6 @@ import { RoomWithDetails } from '../model/room.model';
 
 @Component({
   selector: 'app-view-room-modal',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,

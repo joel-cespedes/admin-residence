@@ -23,7 +23,6 @@ interface ProfessionalWithDetails {
 
 @Component({
   selector: 'app-delete-professional-modal',
-  standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatSnackBarModule, MatCardModule],
   templateUrl: './delete-professional-modal.html',
   styleUrl: '../../floor/delete-floor-modal/delete-floor-modal.scss'

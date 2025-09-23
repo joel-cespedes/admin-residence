@@ -45,7 +45,6 @@ interface ManagerWithDetails {
 
 @Component({
   selector: 'app-managers',
-  standalone: true,
   imports: [
     MatTableModule,
     MatPaginatorModule,
