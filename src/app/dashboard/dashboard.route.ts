@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthService } from '@core';
 
 export const dashboardRoutes: Routes = [
   {
-    path: '',
+    path: 'home',
     loadComponent: () => import('./home/home').then(m => m.Home)
   },
   {
@@ -55,7 +57,10 @@ export const dashboardRoutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: () => {
+      const authService = inject(AuthService);
+      return authService.isSuperAdmin() ? 'home' : 'residences';
+    },
     pathMatch: 'full'
   }
 ];
