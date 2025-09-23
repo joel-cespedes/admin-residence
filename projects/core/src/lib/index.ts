@@ -6,3 +6,4 @@ export * from './pipes/age.pipe';
 export * from './services/auth.service';
 export * from './services/notification.service';
 export * from './services/storage.service';
+export * from './services/theme.service';

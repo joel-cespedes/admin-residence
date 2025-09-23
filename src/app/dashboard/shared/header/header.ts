@@ -1,10 +1,11 @@
-import { Component, signal, OnInit, input, inject } from '@angular/core';
+import { Component, OnInit, input, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { AuthService } from '@core';
+import { ThemeService } from '@core';
 
 @Component({
   selector: 'movsa-header',
@@ -12,22 +13,19 @@ import { AuthService } from '@core';
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
-export class Header implements OnInit {
+export class Header {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly themeService = inject(ThemeService);
 
-  isDarkTheme = signal(false);
   sidebarCollapsed = signal(false);
+  isDarkTheme = this.themeService.isDarkTheme;
+  themeIcon = this.themeService.themeIcon;
 
   title = input<string>('');
-  ngOnInit() {
-    this.isDarkTheme.set(false);
-    this.applyTheme();
-  }
 
   toggleTheme() {
-    this.isDarkTheme.update(current => !current);
-    this.applyTheme();
+    this.themeService.toggleTheme();
   }
 
   toggleSidebar() {
@@ -51,8 +49,5 @@ export class Header implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  private applyTheme() {
-    const theme = this.isDarkTheme() ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-  }
+  // Theme management is now handled by ThemeService
 }

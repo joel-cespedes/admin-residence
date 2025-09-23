@@ -17,7 +17,7 @@
 
 .info-label {
   font-weight: 600;
-  color: #555;
+  color: var(--sneat-text-primary);
   padding: 0.5rem 0;
   border-bottom: 1px solid #e0e0e0;
   font-size: 14px;
@@ -26,7 +26,7 @@
 .info-value {
   padding: 0.5rem 0;
   border-bottom: 1px solid #f0f0f0;
-  color: #333;
+  color: var(--sneat-text-primary);
   font-size: 14px;
 }
 

@@ -25,7 +25,7 @@ export interface EntityType {
   providedIn: 'root'
 })
 export class StructureFilterService {
-  private baseUrl = 'http://127.0.0.1:8000';
+  private baseUrl = 'https://silly-camels-cheat.loca.lt';
 
   // Entity configurations
   private entities: Record<string, EntityType> = {

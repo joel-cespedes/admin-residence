@@ -117,6 +117,9 @@ $custom-warn-palette: (
   --sneat-primary-light: #8789ff;
   --sneat-primary-dark: #5f63f2;
 
+  --sneat-border-custom: rgba(105, 108, 255, 0.2);
+  --sneat-background-custom: rgba(105, 108, 255, 0.1);
+
   // Colores de estado
   --sneat-success: #71dd37;
   --sneat-success-light: #83e542;
@@ -195,14 +198,29 @@ $custom-warn-palette: (
 
 [data-theme='dark'] {
   // Backgrounds - Dark Mode
-  --sneat-bg-primary: #2b2c40; // superficie de cards
-  --sneat-bg-secondary: #232333; // fondo de la página
+  --sneat-bg-primary: #2d2e4d; // superficie de cards
+  --sneat-bg-secondary: #161616; // fondo de la página
   --sneat-bg-sidebar: #2b2c40;
+  --sneat-border-custom: rgba(169, 171, 241, 0.2);
+  --sneat-background-custom: #30344d;
 
-  // Textos - Dark Mode
   --sneat-text-primary: #e6e6f1; // rgba(230, 230, 241, 1)
   --sneat-text-secondary: #e6e6f1; // rgba(230, 230, 241, 0.7)
   --sneat-text-disabled: #e6e6f1; // rgba(230, 230, 241, 0.4)
+
+  --mat-button-toggle-state-layer-color: #30344d;
+  --mat-button-toggle-background-color: #30344d;
+
+  --mat-form-field-outlined-input-text-color: #ffffff;
+  --mat-form-field-outlined-hover-label-text-color: #bcbcbc;
+
+  --mat-sys-on-surface-variant: #ffffff;
+  --mat-paginator-container-text-color: #ffffff;
+  --mat-select-enabled-trigger-text-color: #ffffff;
+  --mat-option-label-text-color: #ffffff;
+  --mat-table-header-headline-color: #ffffff;
+
+  --mat-paginator-container-background-color: #2f3349;
 
   // Sistema de grises - Dark Mode
   --sneat-gray-50: #262a3a;
@@ -217,7 +235,9 @@ $custom-warn-palette: (
   --sneat-gray-900: #e7e9f6;
 
   // Bordes - Dark Mode
-  --sneat-border-color: rgba(230, 230, 241, 0.12);
+  --sneat-border-color: rgba(128, 128, 128, 0.12);
+
+  --sneat-border-color: rgba(66, 81, 97, 2);
 
   // Sombras - Dark Mode (más intensas y con tono más oscuro)
   --sneat-shadow-xs: 0 1px 2px rgba(20, 20, 29, 0.18);

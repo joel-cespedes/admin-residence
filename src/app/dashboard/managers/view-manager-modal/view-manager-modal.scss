@@ -18,14 +18,14 @@
 
 .info-label {
   font-weight: 600;
-  color: #666;
+  color: var(--sneat-text-primary);
   font-size: 15px !important;
   border-bottom: 1px solid #eee;
 }
 
 .info-value {
   border-bottom: 1px solid #eee;
-  color: #333;
+  color: var(--sneat-text-primary);
 }
 
 mat-card {

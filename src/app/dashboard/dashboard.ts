@@ -4,6 +4,7 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
 import { ApiService } from '../../openapi/generated/services/api.service';
 import { DashboardService } from '../../openapi/generated/services/dashboard.service';
 import { AuthService } from '@core';
+import { ThemeService } from '@core';
 
 @Component({
   selector: 'movsa-dashboard',
@@ -16,9 +17,13 @@ export class Dashboard implements OnInit {
   private apiService = inject(ApiService);
   private dashboardService = inject(DashboardService);
   private authService = inject(AuthService);
+  private themeService = inject(ThemeService);
 
   sidebarCollapsed = signal(false);
   readonly canViewHome = this.authService.isSuperAdmin;
+
+  // Logo dinámico según el tema
+  readonly logoPath = this.themeService.logoPath;
 
   // Contadores para el menú
   residencesCount = signal(0);
@@ -84,6 +89,10 @@ export class Dashboard implements OnInit {
     if (sidebar) {
       sidebar.classList.toggle('layout__sidebar--open');
     }
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 
   closeSidebar() {

@@ -33,7 +33,7 @@
 }
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-  background-color: var(--mat-sys-on-primary) !important;
+  background-color: var(--sneat-bg-primary) !important;
 }
 .mat-button-toggle-group-appearance-standard {
   border: none !important;
@@ -398,6 +398,14 @@ table:not(.mat-calendar-table) {
   border-radius: var(--sneat-border-radius-lg);
   font-size: 15px;
 }
+
+.mat-mdc-row,
+.mat-sort-header {
+  color: var(--sneat-text-primary) !important;
+}
+.mat-sort-header {
+  font-weight: 600 !important;
+}
 .mat-mdc-paginator {
   margin-top: 2em;
 }
@@ -407,6 +415,7 @@ table:not(.mat-calendar-table) {
     border: none !important;
     background-color: var(--sneat-bg-primary);
     font-size: 15px;
+    color: var(--sneat-text-primary);
     line-height: 1.5rem;
     outline: none;
     padding: 16px 20px;
@@ -556,7 +565,7 @@ body mat-button-toggle-group mat-button-toggle {
   width: 100%;
   box-sizing: border-box !important;
   font-size: 15px !important;
-  background-color: rgba(105, 108, 255, 0.1) !important;
+  background-color: var(--sneat-background-custom) !important;
   border: 1px solid rgba(105, 108, 255, 0.2) !important;
   color: var(--sneat-primary) !important;
   border-radius: 26px;

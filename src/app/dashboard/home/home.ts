@@ -13,6 +13,7 @@ import { Router, RouterModule } from '@angular/router';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 import { AuthService } from '@core';
+import { ThemeService } from '@core';
 import type {
   ApexAxisChartSeries,
   ApexChart,
@@ -54,9 +55,10 @@ export class Home implements OnInit {
   private apiService = inject(ApiService);
   private authService = inject(AuthService);
   private apiAuthService = inject(ApiAuthService);
+  private readonly themeService = inject(ThemeService);
   userName = signal<string>('');
 
-  isDarkTheme = signal(false);
+  isDarkTheme = this.themeService.isDarkTheme;
   sidebarCollapsed = signal(false);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -119,8 +121,7 @@ export class Home implements OnInit {
   });
 
   ngOnInit() {
-    this.isDarkTheme.set(false);
-    this.applyTheme();
+    // Theme is automatically applied by ThemeService constructor
     this.loadUserInfo();
     this.initializeDashboard();
     this.loadRecentActivity();
@@ -908,13 +909,7 @@ export class Home implements OnInit {
   }
 
   toggleTheme() {
-    this.isDarkTheme.update(current => !current);
-    this.applyTheme();
-  }
-
-  private applyTheme() {
-    const theme = this.isDarkTheme() ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
+    this.themeService.toggleTheme();
   }
 
   toggleSidebar() {
