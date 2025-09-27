@@ -87,7 +87,7 @@ export class Task implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadResidences();
-    this.loadTasks();
+    // loadTasks() will be called automatically when residence is selected
   }
 
   ngAfterViewInit(): void {
@@ -100,6 +100,14 @@ export class Task implements OnInit, AfterViewInit {
       next: (residences: any) => {
         this.residences.set(residences.items || []);
         this.isLoadingResidences.set(false);
+
+        // Auto-select the first residence if available
+        if (residences.items && residences.items.length > 0) {
+          const firstResidenceId = residences.items[0].id;
+          this.selectedResidence.set(firstResidenceId);
+          this.loadCategoriesForResidence(firstResidenceId);
+          this.loadTasks(); // Load tasks for the selected residence
+        }
       },
       error: y => {
         this.notificationService.error('Error loading residences');
