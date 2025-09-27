@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
-import { ResidenceWithContact } from '../../residence/model/residence.model';
-import { NotificationService } from '../../../shared/notification.service';
 import { firstValueFrom } from 'rxjs';
+import { ResidencesService } from '../../../../openapi/generated/services/residences.service';
+import { NotificationService } from '../../../shared/notification.service';
+import { ResidenceWithContact } from '../../residence/model/residence.model';
 
 type ResidenceOption = Pick<ResidenceWithContact, 'id' | 'name'>;
 

@@ -18,6 +18,8 @@
  *     status_changed_at (Optional[datetime]): Fecha del último cambio de estado
  *     deleted_at (Optional[datetime]): Fecha de eliminación (soft delete)
  *     bed_id (Optional[str]): ID de la cama asignada
+ *     room_id (Optional[str]): ID de la habitación asignada
+ *     floor_id (Optional[str]): ID del piso asignado
  *     created_at (datetime): Fecha de creación del registro
  *     updated_at (datetime): Fecha de última actualización
  */
@@ -27,10 +29,12 @@ export interface ResidentOut {
   comments?: (string | null);
   created_at: string;
   deleted_at?: (string | null);
+  floor_id?: (string | null);
   full_name: string;
   gender?: (string | null);
   id: string;
   residence_id: string;
+  room_id?: (string | null);
   sex?: (string | null);
   status: 'active' | 'discharged' | 'deceased';
   status_changed_at?: (string | null);

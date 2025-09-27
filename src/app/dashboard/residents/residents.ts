@@ -25,6 +25,7 @@ import { ViewResidentModal } from './view-resident-modal/view-resident-modal';
 import { ResidentFormModal } from './resident-form-modal/resident-form-modal';
 import { DeleteResidentModal } from './delete-resident-modal/delete-resident-modal';
 import { firstValueFrom } from 'rxjs';
+import { JsonPipe } from '@angular/common';
 
 interface ResidenceOption {
   id: string;
@@ -69,7 +70,8 @@ interface ResidentFilters {
     MatSortModule,
     MatButtonToggleModule,
     DateFormatPipe,
-    Header
+    Header,
+    JsonPipe
   ],
   templateUrl: './residents.html',
   styleUrl: './residents.scss'
@@ -379,8 +381,8 @@ export class Residents implements OnInit, AfterViewInit {
         status_changed_at: item.status_changed_at,
         residence_id: item.residence_id,
         residence_name: item.residence_name || 'Desconocida',
-        floor_name: item.floor_name || 'Desconocido',
-        room_name: item.room_name || 'Desconocida',
+        floor_name: item.floor_name || 'Sin asignar',
+        room_name: item.room_name || 'Sin asignar',
         bed_name: item.bed_name || 'Sin asignar',
         bed_id: item.bed_id,
         created_at: item.created_at,

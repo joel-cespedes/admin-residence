@@ -38,7 +38,7 @@ html {
   --mat-sys-on-error-container: rgba(0, 0, 0, 0.87);
 
   // Forzar estilos para botones con color primary
-  .mat-mdc-raised-button.mat-primary {
+  .mat-mdc-raised-button.mat-primary:not(.mat-datepicker-close-button) {
     background-color: var(--mat-sys-primary) !important;
     color: var(--mat-sys-on-primary) !important;
     border: none !important;

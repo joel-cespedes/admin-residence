@@ -47,7 +47,7 @@
             [value]="filters().floor_id"
             (selectionChange)="onFloorChange($event.value)"
             [disabled]="!filters().residence_id"
-            placeholder="Todos los pisos">
+            placeholder="Los pisos">
             <mat-option value="">Todos los pisos</mat-option>
             @for (floor of floors(); track floor.id) {
               <mat-option [value]="floor.id">

@@ -109,8 +109,8 @@ export class Beds implements OnInit, AfterViewInit {
     return this.filters().search;
   }
 
-  ngOnInit(): void {
-    this.loadResidences();
+  async ngOnInit(): Promise<void> {
+    await this.loadResidences();
     this.reloadBeds();
   }
 
@@ -539,6 +539,13 @@ export class Beds implements OnInit, AfterViewInit {
         name: item['name']
       }));
       this.residences.set(items);
+
+      // Seleccionar automáticamente la primera residencia si existe
+      if (items.length > 0 && !this.filters().residence_id) {
+        this.filters.update(current => ({ ...current, residence_id: items[0].id }));
+        // También cargar los pisos y habitaciones para la residencia seleccionada
+        await this.loadFloorsForResidence(items[0].id);
+      }
     } catch (error: any) {
       this.notificationService.handleApiError(error, 'Error al cargar las residencias');
     } finally {

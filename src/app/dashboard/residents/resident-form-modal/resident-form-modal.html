@@ -127,7 +127,7 @@
         </div>
       </div>
       <div class="colum-two">
-        @if (selectedFloorId()) {
+        @if (residentForm.get('floor_id')?.value) {
           <div class="form-row">
             <div class="form-field">
               <mat-form-field appearance="outline" class="full-width">
@@ -149,7 +149,7 @@
           </div>
         }
 
-        @if (selectedRoomId()) {
+        @if (residentForm.get('room_id')?.value) {
           <div class="form-row">
             <div class="form-field">
               <mat-form-field appearance="outline" class="full-width">
@@ -162,10 +162,15 @@
                   <mat-select formControlName="bed_id" (selectionChange)="onBedChange($event.value)">
                     <mat-option value="">Seleccionar cama</mat-option>
                     @for (bed of beds(); track bed.id) {
-                      <mat-option [value]="bed.id" [disabled]="bed.resident_name !== 'Sin asignar'">
+                      <mat-option
+                        [value]="bed.id"
+                        [disabled]="bed.resident_name !== 'Sin asignar' && bed.id !== resident?.bed_id">
                         {{ bed.name }}
-                        @if (bed.resident_name !== 'Sin asignar') {
+                        @if (bed.resident_name !== 'Sin asignar' && bed.id !== resident?.bed_id) {
                           <span class="occupied-info">(Ocupada por {{ bed.resident_name }})</span>
+                        }
+                        @if (bed.id === resident?.bed_id) {
+                          <span class="current-bed">(Cama actual)</span>
                         }
                       </mat-option>
                     }

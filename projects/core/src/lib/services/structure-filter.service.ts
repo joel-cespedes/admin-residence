@@ -1,5 +1,6 @@
+import { environment } from './../../../../../src/environments/environment.development';
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export interface FilterOptions {
   residence_id?: string;
@@ -25,7 +26,7 @@ export interface EntityType {
   providedIn: 'root'
 })
 export class StructureFilterService {
-  private baseUrl = 'https://back-residence.onrender.com';
+  private baseUrl = environment.apiUrl;
 
   // Entity configurations
   private entities: Record<string, EntityType> = {
@@ -74,8 +75,6 @@ export class StructureFilterService {
     beds: { page: 1, size: 10 },
     residents: { page: 1, size: 10 }
   });
-
-  constructor(private http: HttpClient) {}
 
   // Get auth headers
   private getAuthHeaders(): HttpHeaders {
