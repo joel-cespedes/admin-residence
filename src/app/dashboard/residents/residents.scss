@@ -38,6 +38,9 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1em;
   min-width: 400px;
+  @media (max-width: 1279px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 // Status styles

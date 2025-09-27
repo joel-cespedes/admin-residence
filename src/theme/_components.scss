@@ -392,6 +392,7 @@ img {
 }
 
 table:not(.mat-calendar-table) {
+  border: none !important;
   box-shadow:
     0 3px 8px rgba(34, 48, 62, 0.1),
     0 0 transparent,
