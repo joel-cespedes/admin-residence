@@ -112,7 +112,7 @@ export class BaseEntityComponent<
   // Pagination state
   protected pagination = signal<PaginationState>({
     page: 1,
-    size: 10,
+    size: 15,
     total: 0
   });
 

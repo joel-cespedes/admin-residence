@@ -45,12 +45,11 @@
         <div class="form-row">
           <div class="form-field">
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Sexo</mat-label>
+              <mat-label>Género</mat-label>
               <mat-select formControlName="sex">
                 <mat-option value="">Seleccionar sexo</mat-option>
                 <mat-option value="M">Masculino</mat-option>
                 <mat-option value="F">Femenino</mat-option>
-                <mat-option value="O">Otro</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -204,7 +203,7 @@
 
   <div class="modal-actions">
     <button mat-button type="button" (click)="close()">Cancelar</button>
-    <button color="primary" type="submit" [disabled]="residentForm.invalid">
+    <button mat-raised-button color="primary" type="submit" [disabled]="residentForm.invalid">
       {{ resident ? 'Actualizar' : 'Crear' }}
     </button>
   </div>

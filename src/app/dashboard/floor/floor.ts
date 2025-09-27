@@ -60,7 +60,7 @@ export class Floor implements OnInit, AfterViewInit {
   readonly isLoadingData = signal(false);
   readonly pagination = signal({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 15,
     total: 0,
     sortBy: 'created_at',
     sortOrder: 'desc' as 'asc' | 'desc'

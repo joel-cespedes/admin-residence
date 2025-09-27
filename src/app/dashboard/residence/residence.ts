@@ -12,7 +12,6 @@ import { DatePipe } from '@angular/common';
 import { BaseEntityComponent, ResidenceWithContact, EntityType } from '../../shared/base-entity.component';
 import { Header } from '../shared/header/header';
 import { ResidencesService } from '../../../openapi/generated/services/residences.service';
-import { ResidenceFormData } from './model/residence.model';
 import { DeleteResidenceModal } from './delete-residence-modal/delete-residence-modal';
 import { ResidenceFormModal } from './residence-form-modal/residence-form-modal';
 import { ViewResidenceModal } from './view-residence-modal/view-residence-modal';
@@ -97,27 +96,15 @@ export class Residence extends BaseEntityComponent<ResidenceWithContact> {
 
   editResidence(residence: ResidenceWithContact) {
     const dialogRef = this.dialog.open(ResidenceFormModal, {
-      data: { residence },
+      data: residence,
       width: '60%',
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe((result: ResidenceFormData | null) => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        this.residencesService
-          .updateResidenceResidencesIdPut({
-            id: residence.id,
-            body: result
-          })
-          .subscribe({
-            next: () => {
-              this.notificationService.success('Residencia actualizada exitosamente');
-              this.loadData();
-            },
-            error: (error: any) => {
-              this.notificationService.handleApiError(error, 'Error al actualizar la residencia');
-            }
-          });
+        // Solo recargar los datos, la modal ya manejó la actualización
+        this.loadData();
       }
     });
   }
@@ -151,21 +138,10 @@ export class Residence extends BaseEntityComponent<ResidenceWithContact> {
       maxWidth: '90vw'
     });
 
-    dialogRef.afterClosed().subscribe((result: ResidenceFormData | null) => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        this.residencesService
-          .createResidenceResidencesPost({
-            body: result
-          })
-          .subscribe({
-            next: () => {
-              this.notificationService.success('Residencia creada exitosamente');
-              this.loadData();
-            },
-            error: (error: any) => {
-              this.notificationService.handleApiError(error, 'Error al crear la residencia');
-            }
-          });
+        // Solo recargar los datos, la modal ya manejó la creación
+        this.loadData();
       }
     });
   }

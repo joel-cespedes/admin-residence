@@ -65,16 +65,17 @@
 //   }
 // }
 
-// ===========================
-// FORM FIELDS
-// ===========================
+.mdc-text-field--outlined.mdc-text-field--disabled .mdc-floating-label {
+  color: var(--mat-select-enabled-trigger-text-color) !important;
+}
 .mat-mdc-form-field {
   .mat-mdc-text-field-wrapper {
     border-radius: var(--sneat-border-radius) !important;
   }
 
   .mdc-text-field--disabled {
-    background-color: rgba(235, 235, 235, 0.694) !important;
+    background-color: var(--sneat-bg-primary) !important;
+    color: var(--mat-select-enabled-trigger-text-color) !important;
   }
 
   // Label personalizado

@@ -42,7 +42,10 @@
       @if (!isEditMode()) {
         <mat-form-field appearance="outline" class="full-width custom-field">
           <mat-label>Contraseña</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="Contraseña" />
+          <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" placeholder="Contraseña" />
+          <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+            <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
           @if (professionalForm.get('password')?.hasError('required')) {
             <mat-error>La contraseña es obligatoria</mat-error>
           }
@@ -50,7 +53,14 @@
       } @else {
         <mat-form-field appearance="outline" class="full-width custom-field">
           <mat-label>Nueva Contraseña (opcional)</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="Dejar en blanco para mantener la actual" />
+          <input
+            matInput
+            [type]="hidePassword() ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Dejar en blanco para mantener la actual" />
+          <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+            <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
           @if (professionalForm.get('password')?.hasError('minlength')) {
             <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
           }

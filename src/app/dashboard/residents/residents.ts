@@ -100,7 +100,7 @@ export class Residents implements OnInit, AfterViewInit {
   readonly filters = signal<ResidentFilters>({ residence_id: '', floor_id: '', room_id: '', bed_id: '', search: '' });
   readonly pagination = signal({
     page: 1,
-    size: 10,
+    size: 15,
     total: 0,
     sortBy: 'created_at',
     sortOrder: 'desc' as 'asc' | 'desc'

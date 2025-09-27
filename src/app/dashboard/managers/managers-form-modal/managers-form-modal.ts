@@ -53,6 +53,7 @@ export class ManagerFormModal {
   isLoading = signal(false);
   residences = signal<ResidenceOption[]>([]);
   isLoadingResidences = signal(false);
+  hidePassword = signal(true);
 
   private fb = inject(FormBuilder);
   private residencesService = inject(ResidencesService);
@@ -89,9 +90,7 @@ export class ManagerFormModal {
   private async loadResidences(): Promise<void> {
     this.isLoadingResidences.set(true);
     try {
-      const response = await firstValueFrom(
-        this.residencesService.listResidencesResidencesGet({ size: 100 })
-      );
+      const response = await firstValueFrom(this.residencesService.listResidencesResidencesGet({ size: 100 }));
       this.residences.set(
         (response.items || []).map((item: any) => ({
           id: item.id,
@@ -107,6 +106,10 @@ export class ManagerFormModal {
 
   get title() {
     return this.isEditMode() ? 'Editar Gestor' : 'Agregar Gestor';
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword.set(!this.hidePassword());
   }
 
   onCancel(): void {
