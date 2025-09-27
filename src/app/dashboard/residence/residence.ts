@@ -118,15 +118,8 @@ export class Residence extends BaseEntityComponent<ResidenceWithContact> {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.residencesService.deleteResidenceResidencesIdDelete({ id: residence.id }).subscribe({
-          next: () => {
-            this.notificationService.success('Residencia eliminada exitosamente');
-            this.loadData();
-          },
-          error: (error: any) => {
-            this.notificationService.handleApiError(error, 'Error al eliminar la residencia');
-          }
-        });
+        // Solo recargar los datos, la modal ya manejó la eliminación
+        this.loadData();
       }
     });
   }

@@ -18,7 +18,6 @@
             [value]="filters().residence_id"
             (selectionChange)="onResidenceChange($event.value)"
             placeholder="Todas las residencias">
-            <mat-option value="">Todas las residencias</mat-option>
             @for (residence of residences(); track residence.id) {
               <mat-option [value]="residence.id">
                 {{ residence.name }}

@@ -82,8 +82,8 @@ export class Floor implements OnInit, AfterViewInit {
   private searchDebounce: ReturnType<typeof setTimeout> | null = null;
   private suppressNextPageEvent = false;
 
-  ngOnInit(): void {
-    this.loadResidences();
+  async ngOnInit(): Promise<void> {
+    await this.loadResidences();
     this.loadFloors();
   }
 
@@ -265,6 +265,11 @@ export class Floor implements OnInit, AfterViewInit {
         name: item['name']
       }));
       this.residences.set(items);
+
+      // Seleccionar automáticamente la primera residencia si existe
+      if (items.length > 0 && !this.selectedResidence()) {
+        this.selectedResidence.set(items[0].id);
+      }
     } catch (error: any) {
       this.notificationService.handleApiError(error, 'Error al cargar las residencias');
     } finally {

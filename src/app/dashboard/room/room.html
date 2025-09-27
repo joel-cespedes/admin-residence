@@ -46,7 +46,6 @@
         </div>
       } @else {
         <mat-button-toggle-group [value]="selectedFloorId()" (change)="onFloorChange($event.value)" class="residence-toggles">
-          <mat-button-toggle value="">Todos los pisos</mat-button-toggle>
           @for (floor of floors(); track floor.id) {
             <mat-button-toggle [value]="floor.id">
               {{ floor.name }}
