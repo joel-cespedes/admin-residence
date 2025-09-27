@@ -625,6 +625,10 @@ mat-calendar,
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  box-shadow:
+    0 3px 6px rgba(34, 48, 62, 0.1),
+    0 0 transparent,
+    0 0 transparent;
 
   .mat-table {
     width: 100%;
@@ -632,8 +636,6 @@ mat-calendar,
   }
 
   @media (max-width: 768px) {
-    box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.1);
-
     &::-webkit-scrollbar {
       height: 6px;
     }
