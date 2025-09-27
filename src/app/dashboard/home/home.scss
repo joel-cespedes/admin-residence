@@ -94,7 +94,6 @@
   width: 100%;
   display: grid;
   gap: 22px;
-
   grid-template-columns: repeat(6, 1fr);
   grid-template-areas:
     'd1 d1 d1 d1 d1 d1'
@@ -102,17 +101,27 @@
     'd7 d7 d7 d7 d5 d6'
     'd7 d7 d7 d7 d8 d8'
     'd9 d9 d10 d10 d11 d11';
-  @media (max-width: 768px) {
+
+  @media (max-width: 1279px) {
     padding: 16px;
-  }
-}
-.sub_dashboard {
-  display: flex;
-  & > .chart-card {
-    width: 60%;
-  }
-  & > .growth-card {
-    width: 40%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      'd1 d1'
+      'd3 d4'
+      'd5 d6'
+      'd8 d8'
+      'm9 m9'
+      'd11 d11';
+
+    & > .dashboard__section:nth-child(9) {
+      grid-area: m9 !important;
+    }
+
+    & > .dashboard__section:nth-child(2),
+    & > .dashboard__section:nth-child(7),
+    & > .dashboard__section:nth-child(10) {
+      display: none !important;
+    }
   }
 }
 
@@ -150,9 +159,16 @@
   grid-area: d11;
 }
 
-// ===========================
-// WELCOME CARD - BEM
-// ===========================
+.sub_dashboard {
+  display: flex;
+  & > .chart-card {
+    width: 60%;
+  }
+  & > .growth-card {
+    width: 40%;
+  }
+}
+
 .welcome-card {
   color: white;
   border: none !important;
