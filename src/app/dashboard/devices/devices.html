@@ -40,7 +40,7 @@
       </div>
     }
 
-    <div class="mat-elevation-z8">
+    <div class="table-wrapper">
       <table
         mat-table
         [dataSource]="dataSource"
@@ -124,14 +124,13 @@
           </tr>
         }
       </table>
-
-      <mat-paginator
-        [length]="totalItems()"
-        [pageIndex]="pagination().pageIndex"
-        [pageSize]="pagination().pageSize"
-        [pageSizeOptions]="[10, 20, 50, 100]"
-        aria-label="Seleccionar página de dispositivos"
-        (page)="onPageChange($event)"></mat-paginator>
     </div>
+    <mat-paginator
+      [length]="totalItems()"
+      [pageIndex]="pagination().pageIndex"
+      [pageSize]="pagination().pageSize"
+      [pageSizeOptions]="[10, 20, 50, 100]"
+      aria-label="Seleccionar página de dispositivos"
+      (page)="onPageChange($event)"></mat-paginator>
   </div>
 </div>

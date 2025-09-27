@@ -11,7 +11,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-// import { DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { DateFormatPipe } from '../../shared/pipes/date-format-pipe';
 
 import { Header } from '../shared/header/header';
@@ -70,6 +70,7 @@ interface ResidentFilters {
     MatSortModule,
     MatButtonToggleModule,
     DateFormatPipe,
+    DatePipe,
     Header,
     JsonPipe
   ],

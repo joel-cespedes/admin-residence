@@ -11,7 +11,7 @@
   <input matInput (keyup)="onSearchChange($event.target.value)" placeholder="Buscar residencia..." #input />
 </div>
 
-<div class="mat-elevation-z8">
+<div class="table-wrapper">
   <table mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
@@ -74,9 +74,8 @@
       </tr>
     }
   </table>
-
-  <mat-paginator
-    [length]="pagination().total"
-    [pageSizeOptions]="[15, 25, 50, 100]"
-    aria-label="Seleccionar página de residencias"></mat-paginator>
 </div>
+<mat-paginator
+  [length]="pagination().total"
+  [pageSizeOptions]="[15, 25, 50, 100]"
+  aria-label="Seleccionar página de residencias"></mat-paginator>

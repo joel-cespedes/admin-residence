@@ -78,7 +78,7 @@
       </div>
     }
 
-    <div class="mat-elevation-z8">
+    <div class="table-wrapper">
       <table
         mat-table
         [dataSource]="dataSource"
@@ -151,6 +151,7 @@
         }
       </table>
 
+    </div>
       <mat-paginator
         [length]="totalItems()"
         [pageIndex]="pagination().pageIndex"
@@ -159,5 +160,4 @@
         aria-label="Seleccionar página de tasks"
         (page)="onPageChange($event)"></mat-paginator>
     </div>
-  </div>
 </div>

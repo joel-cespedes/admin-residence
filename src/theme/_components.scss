@@ -619,3 +619,35 @@ mat-calendar,
     color: var(--sneat-text-primary);
   }
 }
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  .mat-table {
+    width: 100%;
+    min-width: 700px;
+  }
+
+  @media (max-width: 768px) {
+    box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.1);
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 3px;
+    }
+  }
+}
+
+// .mat-paginator {
+//   overflow-x: auto;
+// }
