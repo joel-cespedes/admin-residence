@@ -4,7 +4,7 @@
     <div class="sidebar">
       <div class="sidebar__header">
         <div class="sidebar__logo">
-          <a href="#" routerLink="/dashboard">
+          <a href="#" routerLink="/dashboard" (click)="closeSidebar()">
             <img [src]="logoPath()" alt="Logo" class="sidebar__logo-img" />
           </a>
         </div>
@@ -22,7 +22,8 @@
                 class="nav__link"
                 routerLink="/dashboard"
                 routerLinkActive="nav__link--active"
-                [routerLinkActiveOptions]="{ exact: true }">
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="closeSidebar()">
                 <span class="mat-icon">dashboard</span>
                 <span class="nav__title">Dashboard</span>
               </a>
@@ -32,14 +33,24 @@
           <li class="nav__section-title">Residencias</li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/residences" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/residences"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">maps_home_work</span>
               <span class="nav__title">Residencias</span>
               <span class="nav__badge-text">{{ residencesCount() }}</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/floors" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/floors"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">splitscreen</span>
               <span class="nav__title">Plantas/ pisos</span>
               <span class="nav__badge-text">{{ floorsCount() }}</span>
@@ -47,21 +58,36 @@
           </li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/rooms" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/rooms"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">bedroom_child</span>
               <span class="nav__title">Habitaciones</span>
               <span class="nav__badge-text">{{ roomsCount() }}</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/beds" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/beds"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">bed</span>
               <span class="nav__title">Camas</span>
               <span class="nav__badge-text">{{ bedsCount() }}</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/residents" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/residents"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">diversity_1</span>
               <span class="nav__title">Residentes</span>
               <span class="nav__badge-text">{{ residentsCount() }}</span>
@@ -71,7 +97,12 @@
           <li class="nav__section-title">Empleados</li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/managers" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/managers"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">groups_2</span>
               <span class="nav__title">Gestores</span>
               <span class="nav__badge-text">{{ managersCount() }}</span>
@@ -79,7 +110,12 @@
           </li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/professionals" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/professionals"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">diversity_3</span>
               <span class="nav__title">Profesionales</span>
               <span class="nav__badge-text">{{ professionalsCount() }}</span>
@@ -88,7 +124,12 @@
 
           <li class="nav__section-title">Tareas</li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/categories" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/categories"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">source</span>
               <span class="nav__title">Categorias</span>
               <span class="nav__badge-text">{{ categoriesCount() }}</span>
@@ -96,7 +137,12 @@
           </li>
 
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/tasks" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/tasks"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">fact_check</span>
               <span class="nav__title">Tareas</span>
               <span class="nav__badge-text">{{ tasksCount() }}</span>
@@ -105,7 +151,12 @@
 
           <li class="nav__section-title">Adicionales</li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/devices" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/devices"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">devices_other</span>
               <span class="nav__title">Dispositivos</span>
               <span class="nav__badge-text">{{ devicesCount() }}</span>
@@ -114,14 +165,24 @@
 
           <li class="nav__section-title">Analiticas</li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/behavior" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/behavior"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">assessment</span>
               <span class="nav__title">Comportamiento de residentes</span>
               <span class="nav__badge-text">{{ behaviorCount() }}</span>
             </a>
           </li>
           <li class="nav__item">
-            <a href="#" class="nav__link" routerLink="/dashboard/movements" routerLinkActive="nav__link--active">
+            <a
+              href="#"
+              class="nav__link"
+              routerLink="/dashboard/movements"
+              routerLinkActive="nav__link--active"
+              (click)="closeSidebar()">
               <span class="mat-icon nav__icon">area_chart</span>
               <span class="nav__title">Accesos y movimientos</span>
               <span class="nav__badge-text">{{ movementsCount() }}</span>
