@@ -17,7 +17,7 @@ import { NotificationService } from '../../shared/notification.service';
 import { DeviceOut } from '../../../openapi/generated/models/device-out';
 import { ResidenceOut } from '../../../openapi/generated/models/residence-out';
 import { firstValueFrom } from 'rxjs';
-import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
+import { PaginatedResponseDeviceOut } from '../../../openapi/generated/models/paginated-response-device-out';
 import { ListDevicesDevicesGet$Params } from '../../../openapi/generated/fn/devices/list-devices-devices-get';
 
 export interface DeviceWithDetails extends DeviceOut {
@@ -196,7 +196,7 @@ export class Devices implements OnInit, AfterViewInit {
     }
 
     try {
-      const response = (await firstValueFrom(this.devicesService.listDevicesDevicesGet(params))) as PaginatedResponse;
+      const response = (await firstValueFrom(this.devicesService.listDevicesDevicesGet(params))) as PaginatedResponseDeviceOut;
       const devices = (response.items ?? []).map((item: Record<string, any>) => ({
         id: item['id'],
         name: item['name'],

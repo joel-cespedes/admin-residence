@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PaginatedResponse } from '../../models/paginated-response';
+import { PaginatedResponseDeviceOut } from '../../models/paginated-response-device-out';
 
 export interface ListDevicesDevicesGet$Params {
   residence_id?: (string | null);
@@ -23,7 +23,7 @@ export interface ListDevicesDevicesGet$Params {
   type?: (string | null);
 }
 
-export function listDevicesDevicesGet(http: HttpClient, rootUrl: string, params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+export function listDevicesDevicesGet(http: HttpClient, rootUrl: string, params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseDeviceOut>> {
   const rb = new RequestBuilder(rootUrl, listDevicesDevicesGet.PATH, 'get');
   if (params) {
     rb.query('residence_id', params.residence_id, {});
@@ -43,7 +43,7 @@ export function listDevicesDevicesGet(http: HttpClient, rootUrl: string, params?
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PaginatedResponse>;
+      return r as StrictHttpResponse<PaginatedResponseDeviceOut>;
     })
   );
 }

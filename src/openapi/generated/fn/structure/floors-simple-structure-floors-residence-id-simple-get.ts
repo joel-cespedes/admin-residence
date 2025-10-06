@@ -13,7 +13,9 @@ export interface FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params {
   residence_id: string;
 }
 
-export function floorsSimpleStructureFloorsResidenceIdSimpleGet(http: HttpClient, rootUrl: string, params: FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function floorsSimpleStructureFloorsResidenceIdSimpleGet(http: HttpClient, rootUrl: string, params: FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
   const rb = new RequestBuilder(rootUrl, floorsSimpleStructureFloorsResidenceIdSimpleGet.PATH, 'get');
   if (params) {
     rb.path('residence_id', params.residence_id, {});
@@ -24,7 +26,9 @@ export function floorsSimpleStructureFloorsResidenceIdSimpleGet(http: HttpClient
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<Array<{
+      [key: string]: any;
+      }>>;
     })
   );
 }

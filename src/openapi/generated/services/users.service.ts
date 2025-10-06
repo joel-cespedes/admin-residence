@@ -19,7 +19,7 @@ import { getUserUsersUserIdGet } from '../fn/users/get-user-users-user-id-get';
 import { GetUserUsersUserIdGet$Params } from '../fn/users/get-user-users-user-id-get';
 import { listUsersUsersGet } from '../fn/users/list-users-users-get';
 import { ListUsersUsersGet$Params } from '../fn/users/list-users-users-get';
-import { PaginatedResponse } from '../models/paginated-response';
+import { PaginatedResponseUserOut } from '../models/paginated-response-user-out';
 import { updateUserUsersUserIdPut } from '../fn/users/update-user-users-user-id-put';
 import { UpdateUserUsersUserIdPut$Params } from '../fn/users/update-user-users-user-id-put';
 import { UserOut } from '../models/user-out';
@@ -43,7 +43,7 @@ export class UsersService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listUsersUsersGet$Response(params?: ListUsersUsersGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listUsersUsersGet$Response(params?: ListUsersUsersGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseUserOut>> {
     return listUsersUsersGet(this.http, this.rootUrl, params, context);
   }
 
@@ -57,9 +57,9 @@ export class UsersService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listUsersUsersGet(params?: ListUsersUsersGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listUsersUsersGet(params?: ListUsersUsersGet$Params, context?: HttpContext): Observable<PaginatedResponseUserOut> {
     return this.listUsersUsersGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseUserOut>): PaginatedResponseUserOut => r.body)
     );
   }
 

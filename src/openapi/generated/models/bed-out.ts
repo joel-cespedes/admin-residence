@@ -11,10 +11,24 @@
  *     residence_id (str): ID de la residencia a la que pertenece
  *     room_id (str): ID de la habitación a la que pertenece
  *     name (str): Nombre de la cama
+ *     room_name (Optional[str]): Nombre de la habitación
+ *     floor_name (Optional[str]): Nombre del piso
+ *     residence_name (Optional[str]): Nombre de la residencia
+ *     resident_name (Optional[str]): Nombre del residente asignado
+ *     created_at (Optional[str]): Fecha de creación
+ *     updated_at (Optional[str]): Fecha de actualización
  */
 export interface BedOut {
+  created_at?: (string | null);
+  floor_name?: (string | null);
   id: string;
   name: string;
   residence_id: string;
+  residence_name?: (string | null);
+  resident_name?: (string | null);
   room_id: string;
+  room_name?: (string | null);
+  updated_at?: (string | null);
+
+  [key: string]: any;
 }

@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PaginatedResponse } from '../../models/paginated-response';
+import { PaginatedResponseTagOut } from '../../models/paginated-response-tag-out';
 
 export interface ListTagsTagsGet$Params {
   residence_id?: (string | null);
@@ -23,7 +23,7 @@ export interface ListTagsTagsGet$Params {
   type?: (string | null);
 }
 
-export function listTagsTagsGet(http: HttpClient, rootUrl: string, params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+export function listTagsTagsGet(http: HttpClient, rootUrl: string, params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTagOut>> {
   const rb = new RequestBuilder(rootUrl, listTagsTagsGet.PATH, 'get');
   if (params) {
     rb.query('residence_id', params.residence_id, {});
@@ -43,7 +43,7 @@ export function listTagsTagsGet(http: HttpClient, rootUrl: string, params?: List
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PaginatedResponse>;
+      return r as StrictHttpResponse<PaginatedResponseTagOut>;
     })
   );
 }

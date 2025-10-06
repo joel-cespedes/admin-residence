@@ -10,7 +10,11 @@
  *     id (str): Identificador único de la aplicación
  *     residence_id (str): ID de la residencia a la que pertenece
  *     resident_id (str): ID del residente al que se aplica
+ *     resident_full_name (Optional[str]): Nombre completo del residente
  *     task_template_id (str): ID de la plantilla utilizada
+ *     task_template_name (Optional[str]): Nombre de la plantilla de tarea
+ *     task_category_id (Optional[str]): ID de la categoría de la tarea
+ *     task_category_name (Optional[str]): Nombre de la categoría de la tarea
  *     applied_by_info (Optional[Dict[str, Any]]): Información del usuario que aplicó la tarea
  *     applied_at (datetime): Fecha de aplicación de la tarea
  *     selected_status_index (Optional[int]): Índice del estado seleccionado
@@ -28,9 +32,15 @@ export interface TaskApplicationOut {
   deleted_at?: (string | null);
   id: string;
   residence_id: string;
+  resident_full_name?: (string | null);
   resident_id: string;
   selected_status_index?: (number | null);
   selected_status_text?: (string | null);
+  task_category_id?: (string | null);
+  task_category_name?: (string | null);
   task_template_id: string;
+  task_template_name?: (string | null);
   updated_at: string;
+
+  [key: string]: any;
 }

@@ -23,7 +23,7 @@ import { getResidentResidentsIdGet } from '../fn/residents/get-resident-resident
 import { GetResidentResidentsIdGet$Params } from '../fn/residents/get-resident-residents-id-get';
 import { listResidentsResidentsGet } from '../fn/residents/list-residents-residents-get';
 import { ListResidentsResidentsGet$Params } from '../fn/residents/list-residents-residents-get';
-import { PaginatedResponse } from '../models/paginated-response';
+import { PaginatedResponseResidentOut } from '../models/paginated-response-resident-out';
 import { ResidentOut } from '../models/resident-out';
 import { updateResidentResidentsIdPut } from '../fn/residents/update-resident-residents-id-put';
 import { UpdateResidentResidentsIdPut$Params } from '../fn/residents/update-resident-residents-id-put';
@@ -47,7 +47,7 @@ export class ResidentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listResidentsResidentsGet$Response(params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listResidentsResidentsGet$Response(params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseResidentOut>> {
     return listResidentsResidentsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -61,9 +61,9 @@ export class ResidentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listResidentsResidentsGet(params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listResidentsResidentsGet(params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<PaginatedResponseResidentOut> {
     return this.listResidentsResidentsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseResidentOut>): PaginatedResponseResidentOut => r.body)
     );
   }
 
@@ -113,7 +113,9 @@ export class ResidentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getResidentResidentsIdGet$Response(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  getResidentResidentsIdGet$Response(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: any;
+}>> {
     return getResidentResidentsIdGet(this.http, this.rootUrl, params, context);
   }
 
@@ -127,9 +129,15 @@ export class ResidentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getResidentResidentsIdGet(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<any> {
+  getResidentResidentsIdGet(params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<{
+[key: string]: any;
+}> {
     return this.getResidentResidentsIdGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<{
+[key: string]: any;
+}>): {
+[key: string]: any;
+} => r.body)
     );
   }
 

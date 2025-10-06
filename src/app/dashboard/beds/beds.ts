@@ -22,7 +22,8 @@ import { DeleteBedModal } from './delete-bed-modal/delete-bed-modal';
 import { BedFormModal } from './bed-form-modal/bed-form-modal';
 import { ViewBedModal } from './view-bed-modal/view-bed-modal';
 import { firstValueFrom } from 'rxjs';
-import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
+import { PaginatedResponseBedOut } from '../../../openapi/generated/models/paginated-response-bed-out';
+import { PaginatedResponseResidenceOut } from '../../../openapi/generated/models/paginated-response-residence-out';
 import { ListBedsStructureBedsGet$Params } from '../../../openapi/generated/fn/structure/list-beds-structure-beds-get';
 
 @Component({
@@ -384,7 +385,7 @@ export class Beds implements OnInit, AfterViewInit {
     try {
       const response = (await firstValueFrom(
         this.structureService.listBedsStructureBedsGet(params as ListBedsStructureBedsGet$Params)
-      )) as PaginatedResponse;
+      )) as PaginatedResponseBedOut;
       const items = (response.items ?? []).map((item: Record<string, any>) => ({
         id: item['id'],
         name: item['name'],
@@ -533,7 +534,7 @@ export class Beds implements OnInit, AfterViewInit {
     try {
       const response = (await firstValueFrom(
         this.residencesService.listResidencesResidencesGet({ size: 100 })
-      )) as PaginatedResponse;
+      )) as PaginatedResponseResidenceOut;
       const items = (response.items ?? []).map((item: Record<string, any>) => ({
         id: item['id'],
         name: item['name']

@@ -165,10 +165,11 @@ export class Task implements OnInit, AfterViewInit {
     this.tasksService.listTemplatesTasksTemplatesGet(params).subscribe({
       next: response => {
         const tasksWithDetails = response.items.map(task => {
-          const residence = this.residences().find(r => r.id === task['residence_id']);
+          const residence = this.residences().find(r => r.id === task.residence_id);
+          const taskAny = task as any;
           return {
             ...task,
-            category_name: task['category_name'] || 'Unknown',
+            category_name: taskAny['category_name'] || 'Unknown',
             residence_name: residence?.name || 'Unknown'
           };
         });

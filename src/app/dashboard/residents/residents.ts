@@ -25,7 +25,6 @@ import { ViewResidentModal } from './view-resident-modal/view-resident-modal';
 import { ResidentFormModal } from './resident-form-modal/resident-form-modal';
 import { DeleteResidentModal } from './delete-resident-modal/delete-resident-modal';
 import { firstValueFrom } from 'rxjs';
-import { JsonPipe } from '@angular/common';
 
 interface ResidenceOption {
   id: string;
@@ -71,8 +70,7 @@ interface ResidentFilters {
     MatButtonToggleModule,
     DateFormatPipe,
     DatePipe,
-    Header,
-    JsonPipe
+    Header
   ],
   templateUrl: './residents.html',
   styleUrl: './residents.scss'

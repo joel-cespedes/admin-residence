@@ -13,7 +13,9 @@ export interface GetResidentResidentsIdGet$Params {
   id: string;
 }
 
-export function getResidentResidentsIdGet(http: HttpClient, rootUrl: string, params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function getResidentResidentsIdGet(http: HttpClient, rootUrl: string, params: GetResidentResidentsIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: any;
+}>> {
   const rb = new RequestBuilder(rootUrl, getResidentResidentsIdGet.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
@@ -24,7 +26,9 @@ export function getResidentResidentsIdGet(http: HttpClient, rootUrl: string, par
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<{
+      [key: string]: any;
+      }>;
     })
   );
 }

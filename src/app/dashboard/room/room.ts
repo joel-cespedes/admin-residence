@@ -23,7 +23,8 @@ import { DeleteRoomModal } from './delete-room-modal/delete-room-modal';
 import { RoomFormModal } from './room-form-modal/room-form-modal';
 import { ViewRoomModal } from './view-room-modal/view-room-modal';
 import { firstValueFrom } from 'rxjs';
-import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
+import { PaginatedResponseRoomOut } from '../../../openapi/generated/models/paginated-response-room-out';
+import { PaginatedResponseResidenceOut } from '../../../openapi/generated/models/paginated-response-residence-out';
 import { ListRoomsStructureRoomsGet$Params } from '../../../openapi/generated/fn/structure/list-rooms-structure-rooms-get';
 
 interface ResidenceOption {
@@ -264,7 +265,7 @@ export class Room implements OnInit, AfterViewInit {
     try {
       const response = (await firstValueFrom(
         this.residencesService.listResidencesResidencesGet({ size: 100 })
-      )) as PaginatedResponse;
+      )) as PaginatedResponseResidenceOut;
       const items = (response.items ?? []).map((item: Record<string, any>) => ({
         id: item['id'],
         name: item['name']
@@ -329,7 +330,7 @@ export class Room implements OnInit, AfterViewInit {
     }
 
     try {
-      const response = (await firstValueFrom(this.structureService.listRoomsStructureRoomsGet(params))) as PaginatedResponse;
+      const response = (await firstValueFrom(this.structureService.listRoomsStructureRoomsGet(params))) as PaginatedResponseRoomOut;
       const rooms = (response.items ?? []).map((item: Record<string, any>) => ({
         id: item['id'],
         name: item['name'],

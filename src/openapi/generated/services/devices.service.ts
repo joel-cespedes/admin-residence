@@ -22,7 +22,7 @@ import { getDeviceHistoryDevicesIdHistoryGet } from '../fn/devices/get-device-hi
 import { GetDeviceHistoryDevicesIdHistoryGet$Params } from '../fn/devices/get-device-history-devices-id-history-get';
 import { listDevicesDevicesGet } from '../fn/devices/list-devices-devices-get';
 import { ListDevicesDevicesGet$Params } from '../fn/devices/list-devices-devices-get';
-import { PaginatedResponse } from '../models/paginated-response';
+import { PaginatedResponseDeviceOut } from '../models/paginated-response-device-out';
 import { updateDeviceDevicesIdPut } from '../fn/devices/update-device-devices-id-put';
 import { UpdateDeviceDevicesIdPut$Params } from '../fn/devices/update-device-devices-id-put';
 
@@ -45,7 +45,7 @@ export class DevicesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listDevicesDevicesGet$Response(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listDevicesDevicesGet$Response(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseDeviceOut>> {
     return listDevicesDevicesGet(this.http, this.rootUrl, params, context);
   }
 
@@ -59,9 +59,9 @@ export class DevicesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listDevicesDevicesGet(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listDevicesDevicesGet(params?: ListDevicesDevicesGet$Params, context?: HttpContext): Observable<PaginatedResponseDeviceOut> {
     return this.listDevicesDevicesGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseDeviceOut>): PaginatedResponseDeviceOut => r.body)
     );
   }
 

@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PaginatedResponse } from '../../models/paginated-response';
+import { PaginatedResponseResidentOut } from '../../models/paginated-response-resident-out';
 
 export interface ListResidentsResidentsGet$Params {
   floor_id?: (string | null);
@@ -26,7 +26,7 @@ export interface ListResidentsResidentsGet$Params {
   type?: (string | null);
 }
 
-export function listResidentsResidentsGet(http: HttpClient, rootUrl: string, params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+export function listResidentsResidentsGet(http: HttpClient, rootUrl: string, params?: ListResidentsResidentsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseResidentOut>> {
   const rb = new RequestBuilder(rootUrl, listResidentsResidentsGet.PATH, 'get');
   if (params) {
     rb.query('floor_id', params.floor_id, {});
@@ -49,7 +49,7 @@ export function listResidentsResidentsGet(http: HttpClient, rootUrl: string, par
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PaginatedResponse>;
+      return r as StrictHttpResponse<PaginatedResponseResidentOut>;
     })
   );
 }

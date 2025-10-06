@@ -43,7 +43,9 @@ import { listFloorsStructureFloorsGet } from '../fn/structure/list-floors-struct
 import { ListFloorsStructureFloorsGet$Params } from '../fn/structure/list-floors-structure-floors-get';
 import { listRoomsStructureRoomsGet } from '../fn/structure/list-rooms-structure-rooms-get';
 import { ListRoomsStructureRoomsGet$Params } from '../fn/structure/list-rooms-structure-rooms-get';
-import { PaginatedResponse } from '../models/paginated-response';
+import { PaginatedResponseBedOut } from '../models/paginated-response-bed-out';
+import { PaginatedResponseFloorOut } from '../models/paginated-response-floor-out';
+import { PaginatedResponseRoomOut } from '../models/paginated-response-room-out';
 import { RoomOut } from '../models/room-out';
 import { roomsSimpleStructureRoomsFloorIdSimpleGet } from '../fn/structure/rooms-simple-structure-rooms-floor-id-simple-get';
 import { RoomsSimpleStructureRoomsFloorIdSimpleGet$Params } from '../fn/structure/rooms-simple-structure-rooms-floor-id-simple-get';
@@ -73,7 +75,7 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listFloorsStructureFloorsGet$Response(params?: ListFloorsStructureFloorsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listFloorsStructureFloorsGet$Response(params?: ListFloorsStructureFloorsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseFloorOut>> {
     return listFloorsStructureFloorsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -87,9 +89,9 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listFloorsStructureFloorsGet(params?: ListFloorsStructureFloorsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listFloorsStructureFloorsGet(params?: ListFloorsStructureFloorsGet$Params, context?: HttpContext): Observable<PaginatedResponseFloorOut> {
     return this.listFloorsStructureFloorsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseFloorOut>): PaginatedResponseFloorOut => r.body)
     );
   }
 
@@ -139,7 +141,9 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  floorsSimpleStructureFloorsResidenceIdSimpleGet$Response(params: FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  floorsSimpleStructureFloorsResidenceIdSimpleGet$Response(params: FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
     return floorsSimpleStructureFloorsResidenceIdSimpleGet(this.http, this.rootUrl, params, context);
   }
 
@@ -153,9 +157,15 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  floorsSimpleStructureFloorsResidenceIdSimpleGet(params: FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params, context?: HttpContext): Observable<any> {
+  floorsSimpleStructureFloorsResidenceIdSimpleGet(params: FloorsSimpleStructureFloorsResidenceIdSimpleGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
     return this.floorsSimpleStructureFloorsResidenceIdSimpleGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
     );
   }
 
@@ -271,7 +281,7 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listRoomsStructureRoomsGet$Response(params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listRoomsStructureRoomsGet$Response(params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseRoomOut>> {
     return listRoomsStructureRoomsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -285,9 +295,9 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listRoomsStructureRoomsGet(params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listRoomsStructureRoomsGet(params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<PaginatedResponseRoomOut> {
     return this.listRoomsStructureRoomsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseRoomOut>): PaginatedResponseRoomOut => r.body)
     );
   }
 
@@ -337,7 +347,9 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  roomsSimpleStructureRoomsFloorIdSimpleGet$Response(params: RoomsSimpleStructureRoomsFloorIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  roomsSimpleStructureRoomsFloorIdSimpleGet$Response(params: RoomsSimpleStructureRoomsFloorIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
     return roomsSimpleStructureRoomsFloorIdSimpleGet(this.http, this.rootUrl, params, context);
   }
 
@@ -351,9 +363,15 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  roomsSimpleStructureRoomsFloorIdSimpleGet(params: RoomsSimpleStructureRoomsFloorIdSimpleGet$Params, context?: HttpContext): Observable<any> {
+  roomsSimpleStructureRoomsFloorIdSimpleGet(params: RoomsSimpleStructureRoomsFloorIdSimpleGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
     return this.roomsSimpleStructureRoomsFloorIdSimpleGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
     );
   }
 
@@ -469,7 +487,7 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listBedsStructureBedsGet$Response(params?: ListBedsStructureBedsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listBedsStructureBedsGet$Response(params?: ListBedsStructureBedsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseBedOut>> {
     return listBedsStructureBedsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -483,9 +501,9 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listBedsStructureBedsGet(params?: ListBedsStructureBedsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listBedsStructureBedsGet(params?: ListBedsStructureBedsGet$Params, context?: HttpContext): Observable<PaginatedResponseBedOut> {
     return this.listBedsStructureBedsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseBedOut>): PaginatedResponseBedOut => r.body)
     );
   }
 
@@ -535,7 +553,9 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bedsSimpleStructureBedsRoomIdSimpleGet$Response(params: BedsSimpleStructureBedsRoomIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  bedsSimpleStructureBedsRoomIdSimpleGet$Response(params: BedsSimpleStructureBedsRoomIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
     return bedsSimpleStructureBedsRoomIdSimpleGet(this.http, this.rootUrl, params, context);
   }
 
@@ -549,9 +569,15 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bedsSimpleStructureBedsRoomIdSimpleGet(params: BedsSimpleStructureBedsRoomIdSimpleGet$Params, context?: HttpContext): Observable<any> {
+  bedsSimpleStructureBedsRoomIdSimpleGet(params: BedsSimpleStructureBedsRoomIdSimpleGet$Params, context?: HttpContext): Observable<Array<{
+[key: string]: any;
+}>> {
     return this.bedsSimpleStructureBedsRoomIdSimpleGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<Array<{
+[key: string]: any;
+}>>): Array<{
+[key: string]: any;
+}> => r.body)
     );
   }
 
@@ -667,7 +693,9 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bedDetailsStructureBedsIdDetailsGet$Response(params: BedDetailsStructureBedsIdDetailsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  bedDetailsStructureBedsIdDetailsGet$Response(params: BedDetailsStructureBedsIdDetailsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: any;
+}>> {
     return bedDetailsStructureBedsIdDetailsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -681,9 +709,15 @@ export class StructureService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  bedDetailsStructureBedsIdDetailsGet(params: BedDetailsStructureBedsIdDetailsGet$Params, context?: HttpContext): Observable<any> {
+  bedDetailsStructureBedsIdDetailsGet(params: BedDetailsStructureBedsIdDetailsGet$Params, context?: HttpContext): Observable<{
+[key: string]: any;
+}> {
     return this.bedDetailsStructureBedsIdDetailsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<{
+[key: string]: any;
+}>): {
+[key: string]: any;
+} => r.body)
     );
   }
 

@@ -177,7 +177,15 @@ export class BaseEntityComponent<
       const response = await this.structureService
         .floorsSimpleStructureFloorsResidenceIdSimpleGet({ residence_id: this.filters().residence_id })
         .toPromise();
-      this.floors.set(response || []);
+      const floors = (response || []).map((item: any) => ({
+        id: item['id'],
+        name: item['name'],
+        residence_id: item['residence_id'],
+        residence_name: item['residence_name'],
+        created_at: item['created_at'],
+        updated_at: item['updated_at']
+      })) as FloorWithDetails[];
+      this.floors.set(floors);
     } catch (error) {
       this.notificationService.handleApiError(error, 'Error al cargar los pisos');
     } finally {
@@ -193,7 +201,17 @@ export class BaseEntityComponent<
       const response = await this.structureService
         .roomsSimpleStructureRoomsFloorIdSimpleGet({ floor_id: this.filters().floor_id })
         .toPromise();
-      this.rooms.set(response || []);
+      const rooms = (response || []).map((item: any) => ({
+        id: item['id'],
+        name: item['name'],
+        residence_id: item['residence_id'],
+        floor_id: item['floor_id'],
+        residence_name: item['residence_name'],
+        floor_name: item['floor_name'],
+        created_at: item['created_at'],
+        updated_at: item['updated_at']
+      })) as RoomWithDetails[];
+      this.rooms.set(rooms);
     } catch (error) {
       this.notificationService.handleApiError(error, 'Error al cargar las habitaciones');
     } finally {
@@ -209,7 +227,19 @@ export class BaseEntityComponent<
       const response = await this.structureService
         .bedsSimpleStructureBedsRoomIdSimpleGet({ room_id: this.filters().room_id })
         .toPromise();
-      this.beds.set(response || []);
+      const beds = (response || []).map((item: any) => ({
+        id: item['id'],
+        name: item['name'],
+        residence_id: item['residence_id'],
+        room_id: item['room_id'],
+        residence_name: item['residence_name'],
+        room_name: item['room_name'],
+        floor_name: item['floor_name'],
+        resident_name: item['resident_name'],
+        created_at: item['created_at'],
+        updated_at: item['updated_at']
+      })) as BedWithDetails[];
+      this.beds.set(beds);
     } catch (error) {
       this.notificationService.handleApiError(error, 'Error al cargar las camas');
     } finally {

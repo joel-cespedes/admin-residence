@@ -35,4 +35,6 @@ export interface DeviceOut {
 } | null);
   type: 'blood_pressure' | 'pulse_oximeter' | 'scale' | 'thermometer';
   updated_at: string;
+
+  [key: string]: any;
 }

@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PaginatedResponse } from '../../models/paginated-response';
+import { PaginatedResponseRoomOut } from '../../models/paginated-response-room-out';
 
 export interface ListRoomsStructureRoomsGet$Params {
 
@@ -32,7 +32,7 @@ export interface ListRoomsStructureRoomsGet$Params {
   type?: (string | null);
 }
 
-export function listRoomsStructureRoomsGet(http: HttpClient, rootUrl: string, params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+export function listRoomsStructureRoomsGet(http: HttpClient, rootUrl: string, params?: ListRoomsStructureRoomsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseRoomOut>> {
   const rb = new RequestBuilder(rootUrl, listRoomsStructureRoomsGet.PATH, 'get');
   if (params) {
     rb.query('residence_id', params.residence_id, {});
@@ -53,7 +53,7 @@ export function listRoomsStructureRoomsGet(http: HttpClient, rootUrl: string, pa
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PaginatedResponse>;
+      return r as StrictHttpResponse<PaginatedResponseRoomOut>;
     })
   );
 }

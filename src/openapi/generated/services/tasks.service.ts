@@ -15,14 +15,26 @@ import { applyTaskTasksApplicationsPost } from '../fn/tasks/apply-task-tasks-app
 import { ApplyTaskTasksApplicationsPost$Params } from '../fn/tasks/apply-task-tasks-applications-post';
 import { createCategoryTasksCategoriesPost } from '../fn/tasks/create-category-tasks-categories-post';
 import { CreateCategoryTasksCategoriesPost$Params } from '../fn/tasks/create-category-tasks-categories-post';
+import { createTaskApplicationsBatchTasksApplicationsBatchPost } from '../fn/tasks/create-task-applications-batch-tasks-applications-batch-post';
+import { CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params } from '../fn/tasks/create-task-applications-batch-tasks-applications-batch-post';
 import { createTemplateTasksTemplatesPost } from '../fn/tasks/create-template-tasks-templates-post';
 import { CreateTemplateTasksTemplatesPost$Params } from '../fn/tasks/create-template-tasks-templates-post';
+import { createVoiceApplicationTasksApplicationsVoicePost } from '../fn/tasks/create-voice-application-tasks-applications-voice-post';
+import { CreateVoiceApplicationTasksApplicationsVoicePost$Params } from '../fn/tasks/create-voice-application-tasks-applications-voice-post';
 import { deleteApplicationTasksApplicationsApplicationIdDelete } from '../fn/tasks/delete-application-tasks-applications-application-id-delete';
 import { DeleteApplicationTasksApplicationsApplicationIdDelete$Params } from '../fn/tasks/delete-application-tasks-applications-application-id-delete';
 import { deleteCategoryTasksCategoriesCategoryIdDelete } from '../fn/tasks/delete-category-tasks-categories-category-id-delete';
 import { DeleteCategoryTasksCategoriesCategoryIdDelete$Params } from '../fn/tasks/delete-category-tasks-categories-category-id-delete';
 import { deleteTemplateTasksTemplatesTemplateIdDelete } from '../fn/tasks/delete-template-tasks-templates-template-id-delete';
 import { DeleteTemplateTasksTemplatesTemplateIdDelete$Params } from '../fn/tasks/delete-template-tasks-templates-template-id-delete';
+import { getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet } from '../fn/tasks/get-task-applications-by-resident-date-tasks-applications-resident-resident-id-date-date-get';
+import { GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Params } from '../fn/tasks/get-task-applications-by-resident-date-tasks-applications-resident-resident-id-date-date-get';
+import { getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet } from '../fn/tasks/get-task-applications-by-resident-tasks-residents-resident-id-task-applications-get';
+import { GetTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet$Params } from '../fn/tasks/get-task-applications-by-resident-tasks-residents-resident-id-task-applications-get';
+import { getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet } from '../fn/tasks/get-task-applications-daily-summary-tasks-applications-daily-summary-get';
+import { GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Params } from '../fn/tasks/get-task-applications-daily-summary-tasks-applications-daily-summary-get';
+import { getUserAssignersTasksUsersAssignersGet } from '../fn/tasks/get-user-assigners-tasks-users-assigners-get';
+import { GetUserAssignersTasksUsersAssignersGet$Params } from '../fn/tasks/get-user-assigners-tasks-users-assigners-get';
 import { listApplicationsSimpleTasksApplicationsSimpleGet } from '../fn/tasks/list-applications-simple-tasks-applications-simple-get';
 import { ListApplicationsSimpleTasksApplicationsSimpleGet$Params } from '../fn/tasks/list-applications-simple-tasks-applications-simple-get';
 import { listApplicationsTasksApplicationsGet } from '../fn/tasks/list-applications-tasks-applications-get';
@@ -35,10 +47,17 @@ import { listTemplatesSimpleTasksTemplatesSimpleGet } from '../fn/tasks/list-tem
 import { ListTemplatesSimpleTasksTemplatesSimpleGet$Params } from '../fn/tasks/list-templates-simple-tasks-templates-simple-get';
 import { listTemplatesTasksTemplatesGet } from '../fn/tasks/list-templates-tasks-templates-get';
 import { ListTemplatesTasksTemplatesGet$Params } from '../fn/tasks/list-templates-tasks-templates-get';
-import { PaginatedResponse } from '../models/paginated-response';
+import { PaginatedResponseTaskApplicationDailySummary } from '../models/paginated-response-task-application-daily-summary';
+import { PaginatedResponseTaskApplicationOut } from '../models/paginated-response-task-application-out';
+import { PaginatedResponseTaskCategoryOut } from '../models/paginated-response-task-category-out';
+import { PaginatedResponseTaskTemplateOut } from '../models/paginated-response-task-template-out';
+import { parseVoiceTranscriptTasksApplicationsParseVoicePost } from '../fn/tasks/parse-voice-transcript-tasks-applications-parse-voice-post';
+import { ParseVoiceTranscriptTasksApplicationsParseVoicePost$Params } from '../fn/tasks/parse-voice-transcript-tasks-applications-parse-voice-post';
 import { patchCategoryTasksCategoriesCategoryIdPatch } from '../fn/tasks/patch-category-tasks-categories-category-id-patch';
 import { PatchCategoryTasksCategoriesCategoryIdPatch$Params } from '../fn/tasks/patch-category-tasks-categories-category-id-patch';
+import { TaskApplicationBatchResponse } from '../models/task-application-batch-response';
 import { TaskApplicationOut } from '../models/task-application-out';
+import { TaskApplicationResidentDay } from '../models/task-application-resident-day';
 import { TaskCategoryOut } from '../models/task-category-out';
 import { TaskTemplateOut } from '../models/task-template-out';
 import { updateApplicationTasksApplicationsApplicationIdPatch } from '../fn/tasks/update-application-tasks-applications-application-id-patch';
@@ -47,6 +66,9 @@ import { updateCategoryTasksCategoriesCategoryIdPut } from '../fn/tasks/update-c
 import { UpdateCategoryTasksCategoriesCategoryIdPut$Params } from '../fn/tasks/update-category-tasks-categories-category-id-put';
 import { updateTemplateTasksTemplatesTemplateIdPatch } from '../fn/tasks/update-template-tasks-templates-template-id-patch';
 import { UpdateTemplateTasksTemplatesTemplateIdPatch$Params } from '../fn/tasks/update-template-tasks-templates-template-id-patch';
+import { UserAssigner } from '../models/user-assigner';
+import { VoiceApplicationResponse } from '../models/voice-application-response';
+import { VoiceParseResponse } from '../models/voice-parse-response';
 
 @Injectable({ providedIn: 'root' })
 export class TasksService extends BaseService {
@@ -67,7 +89,7 @@ export class TasksService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listCategoriesTasksCategoriesGet$Response(params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listCategoriesTasksCategoriesGet$Response(params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTaskCategoryOut>> {
     return listCategoriesTasksCategoriesGet(this.http, this.rootUrl, params, context);
   }
 
@@ -81,9 +103,9 @@ export class TasksService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listCategoriesTasksCategoriesGet(params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listCategoriesTasksCategoriesGet(params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<PaginatedResponseTaskCategoryOut> {
     return this.listCategoriesTasksCategoriesGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseTaskCategoryOut>): PaginatedResponseTaskCategoryOut => r.body)
     );
   }
 
@@ -265,7 +287,7 @@ export class TasksService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTemplatesTasksTemplatesGet$Response(params?: ListTemplatesTasksTemplatesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listTemplatesTasksTemplatesGet$Response(params?: ListTemplatesTasksTemplatesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTaskTemplateOut>> {
     return listTemplatesTasksTemplatesGet(this.http, this.rootUrl, params, context);
   }
 
@@ -279,9 +301,9 @@ export class TasksService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTemplatesTasksTemplatesGet(params?: ListTemplatesTasksTemplatesGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listTemplatesTasksTemplatesGet(params?: ListTemplatesTasksTemplatesGet$Params, context?: HttpContext): Observable<PaginatedResponseTaskTemplateOut> {
     return this.listTemplatesTasksTemplatesGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseTaskTemplateOut>): PaginatedResponseTaskTemplateOut => r.body)
     );
   }
 
@@ -430,7 +452,7 @@ export class TasksService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listApplicationsTasksApplicationsGet$Response(params?: ListApplicationsTasksApplicationsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listApplicationsTasksApplicationsGet$Response(params?: ListApplicationsTasksApplicationsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTaskApplicationOut>> {
     return listApplicationsTasksApplicationsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -444,9 +466,9 @@ export class TasksService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listApplicationsTasksApplicationsGet(params?: ListApplicationsTasksApplicationsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listApplicationsTasksApplicationsGet(params?: ListApplicationsTasksApplicationsGet$Params, context?: HttpContext): Observable<PaginatedResponseTaskApplicationOut> {
     return this.listApplicationsTasksApplicationsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseTaskApplicationOut>): PaginatedResponseTaskApplicationOut => r.body)
     );
   }
 
@@ -579,6 +601,293 @@ export class TasksService extends BaseService {
   updateApplicationTasksApplicationsApplicationIdPatch(params: UpdateApplicationTasksApplicationsApplicationIdPatch$Params, context?: HttpContext): Observable<TaskApplicationOut> {
     return this.updateApplicationTasksApplicationsApplicationIdPatch$Response(params, context).pipe(
       map((r: StrictHttpResponse<TaskApplicationOut>): TaskApplicationOut => r.body)
+    );
+  }
+
+  /** Path part for operation `getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet()` */
+  static readonly GetTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGetPath = '/tasks/residents/{resident_id}/task-applications';
+
+  /**
+   * Get Task Applications By Resident.
+   *
+   * Get task applications for a specific resident with time filters and category information.
+   *
+   * Time filters:
+   * - 7d: Last 7 days
+   * - 15d: Last 15 days  
+   * - 30d: Last 30 days
+   * - 1y: Last year
+   * - all: All applications
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet$Response(params: GetTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTaskApplicationOut>> {
+    return getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Task Applications By Resident.
+   *
+   * Get task applications for a specific resident with time filters and category information.
+   *
+   * Time filters:
+   * - 7d: Last 7 days
+   * - 15d: Last 15 days  
+   * - 30d: Last 30 days
+   * - 1y: Last year
+   * - all: All applications
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet(params: GetTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet$Params, context?: HttpContext): Observable<PaginatedResponseTaskApplicationOut> {
+    return this.getTaskApplicationsByResidentTasksResidentsResidentIdTaskApplicationsGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponseTaskApplicationOut>): PaginatedResponseTaskApplicationOut => r.body)
+    );
+  }
+
+  /** Path part for operation `createTaskApplicationsBatchTasksApplicationsBatchPost()` */
+  static readonly CreateTaskApplicationsBatchTasksApplicationsBatchPostPath = '/tasks/applications/batch';
+
+  /**
+   * Create Task Applications Batch.
+   *
+   * Crea aplicaciones de tareas en lote para múltiples residentes.
+   *
+   * Crea una aplicación de tarea por cada combinación de resident_id × task_template_id.
+   * Ejemplo: 3 residentes × 3 tareas = 9 registros creados.
+   *
+   * Args:
+   *     payload: Solicitud con resident_ids, task_template_ids y residence_id
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createTaskApplicationsBatchTasksApplicationsBatchPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createTaskApplicationsBatchTasksApplicationsBatchPost$Response(params: CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskApplicationBatchResponse>> {
+    return createTaskApplicationsBatchTasksApplicationsBatchPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create Task Applications Batch.
+   *
+   * Crea aplicaciones de tareas en lote para múltiples residentes.
+   *
+   * Crea una aplicación de tarea por cada combinación de resident_id × task_template_id.
+   * Ejemplo: 3 residentes × 3 tareas = 9 registros creados.
+   *
+   * Args:
+   *     payload: Solicitud con resident_ids, task_template_ids y residence_id
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createTaskApplicationsBatchTasksApplicationsBatchPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createTaskApplicationsBatchTasksApplicationsBatchPost(params: CreateTaskApplicationsBatchTasksApplicationsBatchPost$Params, context?: HttpContext): Observable<TaskApplicationBatchResponse> {
+    return this.createTaskApplicationsBatchTasksApplicationsBatchPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<TaskApplicationBatchResponse>): TaskApplicationBatchResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet()` */
+  static readonly GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGetPath = '/tasks/applications/daily-summary';
+
+  /**
+   * Get Task Applications Daily Summary.
+   *
+   * Obtiene resumen diario de aplicaciones de tareas por residente.
+   *
+   * Agrupa las aplicaciones por residente y fecha, mostrando estadísticas
+   * de cuántas tareas se aplicaron cada día.
+   *
+   * Si no se proporcionan date_from y date_to, retorna TODO el historial.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Response(params: GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTaskApplicationDailySummary>> {
+    return getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Task Applications Daily Summary.
+   *
+   * Obtiene resumen diario de aplicaciones de tareas por residente.
+   *
+   * Agrupa las aplicaciones por residente y fecha, mostrando estadísticas
+   * de cuántas tareas se aplicaron cada día.
+   *
+   * Si no se proporcionan date_from y date_to, retorna TODO el historial.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet(params: GetTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Params, context?: HttpContext): Observable<PaginatedResponseTaskApplicationDailySummary> {
+    return this.getTaskApplicationsDailySummaryTasksApplicationsDailySummaryGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PaginatedResponseTaskApplicationDailySummary>): PaginatedResponseTaskApplicationDailySummary => r.body)
+    );
+  }
+
+  /** Path part for operation `getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet()` */
+  static readonly GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGetPath = '/tasks/applications/resident/{resident_id}/date/{date}';
+
+  /**
+   * Get Task Applications By Resident Date.
+   *
+   * Obtiene todas las aplicaciones de tareas de un residente en una fecha específica.
+   *
+   * Muestra el detalle completo de todas las tareas asignadas al residente
+   * en el día especificado, ordenadas por hora de asignación.
+   *
+   * Si assigned_by_id está presente, solo retorna las tareas creadas/asignadas
+   * por ese profesional o gestor específico.
+   *
+   * Si assigned_by_id es None, retorna todas las tareas de ese día.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Response(params: GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Params, context?: HttpContext): Observable<StrictHttpResponse<TaskApplicationResidentDay>> {
+    return getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Task Applications By Resident Date.
+   *
+   * Obtiene todas las aplicaciones de tareas de un residente en una fecha específica.
+   *
+   * Muestra el detalle completo de todas las tareas asignadas al residente
+   * en el día especificado, ordenadas por hora de asignación.
+   *
+   * Si assigned_by_id está presente, solo retorna las tareas creadas/asignadas
+   * por ese profesional o gestor específico.
+   *
+   * Si assigned_by_id es None, retorna todas las tareas de ese día.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet(params: GetTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Params, context?: HttpContext): Observable<TaskApplicationResidentDay> {
+    return this.getTaskApplicationsByResidentDateTasksApplicationsResidentResidentIdDateDateGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<TaskApplicationResidentDay>): TaskApplicationResidentDay => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserAssignersTasksUsersAssignersGet()` */
+  static readonly GetUserAssignersTasksUsersAssignersGetPath = '/tasks/users/assigners';
+
+  /**
+   * Get User Assigners.
+   *
+   * Obtiene lista de usuarios que pueden asignar tareas en la residencia.
+   *
+   * Retorna profesionales y gestores que tienen permisos para asignar tareas.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserAssignersTasksUsersAssignersGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserAssignersTasksUsersAssignersGet$Response(params: GetUserAssignersTasksUsersAssignersGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserAssigner>>> {
+    return getUserAssignersTasksUsersAssignersGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get User Assigners.
+   *
+   * Obtiene lista de usuarios que pueden asignar tareas en la residencia.
+   *
+   * Retorna profesionales y gestores que tienen permisos para asignar tareas.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserAssignersTasksUsersAssignersGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserAssignersTasksUsersAssignersGet(params: GetUserAssignersTasksUsersAssignersGet$Params, context?: HttpContext): Observable<Array<UserAssigner>> {
+    return this.getUserAssignersTasksUsersAssignersGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserAssigner>>): Array<UserAssigner> => r.body)
+    );
+  }
+
+  /** Path part for operation `parseVoiceTranscriptTasksApplicationsParseVoicePost()` */
+  static readonly ParseVoiceTranscriptTasksApplicationsParseVoicePostPath = '/tasks/applications/parse-voice';
+
+  /**
+   * Parse Voice Transcript.
+   *
+   * Parsea un transcript de voz usando Dialogflow y encuentra residente/tarea con fuzzy matching
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `parseVoiceTranscriptTasksApplicationsParseVoicePost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  parseVoiceTranscriptTasksApplicationsParseVoicePost$Response(params: ParseVoiceTranscriptTasksApplicationsParseVoicePost$Params, context?: HttpContext): Observable<StrictHttpResponse<VoiceParseResponse>> {
+    return parseVoiceTranscriptTasksApplicationsParseVoicePost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Parse Voice Transcript.
+   *
+   * Parsea un transcript de voz usando Dialogflow y encuentra residente/tarea con fuzzy matching
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `parseVoiceTranscriptTasksApplicationsParseVoicePost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  parseVoiceTranscriptTasksApplicationsParseVoicePost(params: ParseVoiceTranscriptTasksApplicationsParseVoicePost$Params, context?: HttpContext): Observable<VoiceParseResponse> {
+    return this.parseVoiceTranscriptTasksApplicationsParseVoicePost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<VoiceParseResponse>): VoiceParseResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `createVoiceApplicationTasksApplicationsVoicePost()` */
+  static readonly CreateVoiceApplicationTasksApplicationsVoicePostPath = '/tasks/applications/voice';
+
+  /**
+   * Create Voice Application.
+   *
+   * Crea una aplicación de tarea basada en los datos parseados por voz
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createVoiceApplicationTasksApplicationsVoicePost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createVoiceApplicationTasksApplicationsVoicePost$Response(params: CreateVoiceApplicationTasksApplicationsVoicePost$Params, context?: HttpContext): Observable<StrictHttpResponse<VoiceApplicationResponse>> {
+    return createVoiceApplicationTasksApplicationsVoicePost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create Voice Application.
+   *
+   * Crea una aplicación de tarea basada en los datos parseados por voz
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createVoiceApplicationTasksApplicationsVoicePost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createVoiceApplicationTasksApplicationsVoicePost(params: CreateVoiceApplicationTasksApplicationsVoicePost$Params, context?: HttpContext): Observable<VoiceApplicationResponse> {
+    return this.createVoiceApplicationTasksApplicationsVoicePost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<VoiceApplicationResponse>): VoiceApplicationResponse => r.body)
     );
   }
 

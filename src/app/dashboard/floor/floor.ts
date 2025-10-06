@@ -24,7 +24,8 @@ import { FloorFormModal } from './floor-form-modal/floor-form-modal';
 import { ViewFloorModal } from './view-floor-modal/view-floor-modal';
 import { firstValueFrom } from 'rxjs';
 import { ListFloorsStructureFloorsGet$Params } from '../../../openapi/generated/fn/structure/list-floors-structure-floors-get';
-import { PaginatedResponse } from '../../../openapi/generated/models/paginated-response';
+import { PaginatedResponseFloorOut } from '../../../openapi/generated/models/paginated-response-floor-out';
+import { PaginatedResponseResidenceOut } from '../../../openapi/generated/models/paginated-response-residence-out';
 
 @Component({
   selector: 'app-floor',
@@ -235,7 +236,7 @@ export class Floor implements OnInit, AfterViewInit {
     }
 
     try {
-      const response = (await firstValueFrom(this.structureService.listFloorsStructureFloorsGet(params))) as PaginatedResponse;
+      const response = (await firstValueFrom(this.structureService.listFloorsStructureFloorsGet(params))) as PaginatedResponseFloorOut;
       const floors = (response.items ?? []).map((item: Record<string, any>) => ({
         id: item['id'],
         name: item['name'],
@@ -259,7 +260,7 @@ export class Floor implements OnInit, AfterViewInit {
     try {
       const response = (await firstValueFrom(
         this.residencesService.listResidencesResidencesGet({ size: 100 })
-      )) as PaginatedResponse;
+      )) as PaginatedResponseResidenceOut;
       const items = (response.items ?? []).map((item: Record<string, any>) => ({
         id: item['id'],
         name: item['name']

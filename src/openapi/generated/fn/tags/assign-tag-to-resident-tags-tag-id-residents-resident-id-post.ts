@@ -14,7 +14,9 @@ export interface AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params {
   resident_id: string;
 }
 
-export function assignTagToResidentTagsTagIdResidentsResidentIdPost(http: HttpClient, rootUrl: string, params: AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function assignTagToResidentTagsTagIdResidentsResidentIdPost(http: HttpClient, rootUrl: string, params: AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: any;
+}>> {
   const rb = new RequestBuilder(rootUrl, assignTagToResidentTagsTagIdResidentsResidentIdPost.PATH, 'post');
   if (params) {
     rb.path('tag_id', params.tag_id, {});
@@ -26,7 +28,9 @@ export function assignTagToResidentTagsTagIdResidentsResidentIdPost(http: HttpCl
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<{
+      [key: string]: any;
+      }>;
     })
   );
 }

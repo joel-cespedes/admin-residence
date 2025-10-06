@@ -13,7 +13,9 @@ export interface BedDetailsStructureBedsIdDetailsGet$Params {
   id: string;
 }
 
-export function bedDetailsStructureBedsIdDetailsGet(http: HttpClient, rootUrl: string, params: BedDetailsStructureBedsIdDetailsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function bedDetailsStructureBedsIdDetailsGet(http: HttpClient, rootUrl: string, params: BedDetailsStructureBedsIdDetailsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: any;
+}>> {
   const rb = new RequestBuilder(rootUrl, bedDetailsStructureBedsIdDetailsGet.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
@@ -24,7 +26,9 @@ export function bedDetailsStructureBedsIdDetailsGet(http: HttpClient, rootUrl: s
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<{
+      [key: string]: any;
+      }>;
     })
   );
 }

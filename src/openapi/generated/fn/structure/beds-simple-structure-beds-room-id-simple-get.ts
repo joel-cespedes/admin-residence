@@ -13,7 +13,9 @@ export interface BedsSimpleStructureBedsRoomIdSimpleGet$Params {
   room_id: string;
 }
 
-export function bedsSimpleStructureBedsRoomIdSimpleGet(http: HttpClient, rootUrl: string, params: BedsSimpleStructureBedsRoomIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function bedsSimpleStructureBedsRoomIdSimpleGet(http: HttpClient, rootUrl: string, params: BedsSimpleStructureBedsRoomIdSimpleGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
+[key: string]: any;
+}>>> {
   const rb = new RequestBuilder(rootUrl, bedsSimpleStructureBedsRoomIdSimpleGet.PATH, 'get');
   if (params) {
     rb.path('room_id', params.room_id, {});
@@ -24,7 +26,9 @@ export function bedsSimpleStructureBedsRoomIdSimpleGet(http: HttpClient, rootUrl
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<Array<{
+      [key: string]: any;
+      }>>;
     })
   );
 }

@@ -14,7 +14,9 @@ export interface AssignUserToResidenceResidencesIdUsersUserIdPost$Params {
   user_id: string;
 }
 
-export function assignUserToResidenceResidencesIdUsersUserIdPost(http: HttpClient, rootUrl: string, params: AssignUserToResidenceResidencesIdUsersUserIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function assignUserToResidenceResidencesIdUsersUserIdPost(http: HttpClient, rootUrl: string, params: AssignUserToResidenceResidencesIdUsersUserIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: any;
+}>> {
   const rb = new RequestBuilder(rootUrl, assignUserToResidenceResidencesIdUsersUserIdPost.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
@@ -26,7 +28,9 @@ export function assignUserToResidenceResidencesIdUsersUserIdPost(http: HttpClien
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<{
+      [key: string]: any;
+      }>;
     })
   );
 }

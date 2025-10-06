@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PaginatedResponse } from '../../models/paginated-response';
+import { PaginatedResponseUserOut } from '../../models/paginated-response-user-out';
 
 export interface ListUsersUsersGet$Params {
 
@@ -27,7 +27,7 @@ export interface ListUsersUsersGet$Params {
   type?: (string | null);
 }
 
-export function listUsersUsersGet(http: HttpClient, rootUrl: string, params?: ListUsersUsersGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+export function listUsersUsersGet(http: HttpClient, rootUrl: string, params?: ListUsersUsersGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseUserOut>> {
   const rb = new RequestBuilder(rootUrl, listUsersUsersGet.PATH, 'get');
   if (params) {
     rb.query('role', params.role, {});
@@ -47,7 +47,7 @@ export function listUsersUsersGet(http: HttpClient, rootUrl: string, params?: Li
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PaginatedResponse>;
+      return r as StrictHttpResponse<PaginatedResponseUserOut>;
     })
   );
 }

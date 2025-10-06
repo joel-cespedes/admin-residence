@@ -10,9 +10,13 @@
  *     id (str): Identificador único de la medición
  *     residence_id (str): ID de la residencia a la que pertenece
  *     resident_id (str): ID del residente medido
+ *     resident_full_name (Optional[str]): Nombre completo del residente
+ *     bed_name (Optional[str]): Nombre de la cama asignada al residente
  *     recorded_by (str): ID del usuario que registró la medición
+ *     recorded_by_name (Optional[str]): Nombre del profesional/gestor que registró la medición
  *     source (MeasurementSource): Fuente de la medición
  *     device_id (Optional[str]): ID del dispositivo utilizado
+ *     device_name (Optional[str]): Nombre del dispositivo utilizado
  *     type (MeasurementType): Tipo de medición
  *     systolic (Optional[int]): Presión sistólica
  *     diastolic (Optional[int]): Presión diastólica
@@ -26,14 +30,18 @@
  *     deleted_at (Optional[datetime]): Fecha de eliminación (soft delete)
  */
 export interface MeasurementOut {
+  bed_name?: (string | null);
   created_at: string;
   deleted_at?: (string | null);
   device_id?: (string | null);
+  device_name?: (string | null);
   diastolic?: (number | null);
   id: string;
   pulse_bpm?: (number | null);
   recorded_by: string;
+  recorded_by_name?: (string | null);
   residence_id: string;
+  resident_full_name?: (string | null);
   resident_id: string;
   source: 'device' | 'voice' | 'manual';
   spo2?: (number | null);
@@ -43,4 +51,6 @@ export interface MeasurementOut {
   type: 'bp' | 'spo2' | 'weight' | 'temperature';
   updated_at: string;
   weight_kg?: (number | null);
+
+  [key: string]: any;
 }

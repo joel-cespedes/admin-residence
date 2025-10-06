@@ -25,7 +25,7 @@ import { listTagsSimpleTagsSimpleGet } from '../fn/tags/list-tags-simple-tags-si
 import { ListTagsSimpleTagsSimpleGet$Params } from '../fn/tags/list-tags-simple-tags-simple-get';
 import { listTagsTagsGet } from '../fn/tags/list-tags-tags-get';
 import { ListTagsTagsGet$Params } from '../fn/tags/list-tags-tags-get';
-import { PaginatedResponse } from '../models/paginated-response';
+import { PaginatedResponseTagOut } from '../models/paginated-response-tag-out';
 import { removeTagFromResidentTagsTagIdResidentsResidentIdDelete } from '../fn/tags/remove-tag-from-resident-tags-tag-id-residents-resident-id-delete';
 import { RemoveTagFromResidentTagsTagIdResidentsResidentIdDelete$Params } from '../fn/tags/remove-tag-from-resident-tags-tag-id-residents-resident-id-delete';
 import { TagOut } from '../models/tag-out';
@@ -51,7 +51,7 @@ export class TagsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTagsTagsGet$Response(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+  listTagsTagsGet$Response(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTagOut>> {
     return listTagsTagsGet(this.http, this.rootUrl, params, context);
   }
 
@@ -65,9 +65,9 @@ export class TagsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTagsTagsGet(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<PaginatedResponse> {
+  listTagsTagsGet(params?: ListTagsTagsGet$Params, context?: HttpContext): Observable<PaginatedResponseTagOut> {
     return this.listTagsTagsGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PaginatedResponse>): PaginatedResponse => r.body)
+      map((r: StrictHttpResponse<PaginatedResponseTagOut>): PaginatedResponseTagOut => r.body)
     );
   }
 
@@ -257,7 +257,9 @@ export class TagsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  assignTagToResidentTagsTagIdResidentsResidentIdPost$Response(params: AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  assignTagToResidentTagsTagIdResidentsResidentIdPost$Response(params: AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: any;
+}>> {
     return assignTagToResidentTagsTagIdResidentsResidentIdPost(this.http, this.rootUrl, params, context);
   }
 
@@ -271,9 +273,15 @@ export class TagsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  assignTagToResidentTagsTagIdResidentsResidentIdPost(params: AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params, context?: HttpContext): Observable<any> {
+  assignTagToResidentTagsTagIdResidentsResidentIdPost(params: AssignTagToResidentTagsTagIdResidentsResidentIdPost$Params, context?: HttpContext): Observable<{
+[key: string]: any;
+}> {
     return this.assignTagToResidentTagsTagIdResidentsResidentIdPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<{
+[key: string]: any;
+}>): {
+[key: string]: any;
+} => r.body)
     );
   }
 

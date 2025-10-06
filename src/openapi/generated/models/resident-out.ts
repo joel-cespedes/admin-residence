@@ -20,21 +20,29 @@
  *     bed_id (Optional[str]): ID de la cama asignada
  *     room_id (Optional[str]): ID de la habitación asignada
  *     floor_id (Optional[str]): ID del piso asignado
+ *     bed_name (Optional[str]): Nombre de la cama asignada
+ *     room_name (Optional[str]): Nombre de la habitación asignada
+ *     floor_name (Optional[str]): Nombre del piso asignado
+ *     residence_name (Optional[str]): Nombre de la residencia
  *     created_at (datetime): Fecha de creación del registro
  *     updated_at (datetime): Fecha de última actualización
  */
 export interface ResidentOut {
   bed_id?: (string | null);
+  bed_name?: (string | null);
   birth_date: string;
   comments?: (string | null);
   created_at: string;
   deleted_at?: (string | null);
   floor_id?: (string | null);
+  floor_name?: (string | null);
   full_name: string;
   gender?: (string | null);
   id: string;
   residence_id: string;
+  residence_name?: (string | null);
   room_id?: (string | null);
+  room_name?: (string | null);
   sex?: (string | null);
   status: 'active' | 'discharged' | 'deceased';
   status_changed_at?: (string | null);

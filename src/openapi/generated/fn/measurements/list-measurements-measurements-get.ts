@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PaginatedResponse } from '../../models/paginated-response';
+import { PaginatedResponseMeasurementOut } from '../../models/paginated-response-measurement-out';
 
 export interface ListMeasurementsMeasurementsGet$Params {
 
@@ -28,7 +28,7 @@ export interface ListMeasurementsMeasurementsGet$Params {
   type?: (string | null);
 }
 
-export function listMeasurementsMeasurementsGet(http: HttpClient, rootUrl: string, params?: ListMeasurementsMeasurementsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+export function listMeasurementsMeasurementsGet(http: HttpClient, rootUrl: string, params?: ListMeasurementsMeasurementsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseMeasurementOut>> {
   const rb = new RequestBuilder(rootUrl, listMeasurementsMeasurementsGet.PATH, 'get');
   if (params) {
     rb.query('residence_id', params.residence_id, {});
@@ -49,7 +49,7 @@ export function listMeasurementsMeasurementsGet(http: HttpClient, rootUrl: strin
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PaginatedResponse>;
+      return r as StrictHttpResponse<PaginatedResponseMeasurementOut>;
     })
   );
 }

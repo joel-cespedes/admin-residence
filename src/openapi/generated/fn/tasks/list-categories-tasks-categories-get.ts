@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PaginatedResponse } from '../../models/paginated-response';
+import { PaginatedResponseTaskCategoryOut } from '../../models/paginated-response-task-category-out';
 
 export interface ListCategoriesTasksCategoriesGet$Params {
 
@@ -27,7 +27,7 @@ export interface ListCategoriesTasksCategoriesGet$Params {
   type?: (string | null);
 }
 
-export function listCategoriesTasksCategoriesGet(http: HttpClient, rootUrl: string, params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponse>> {
+export function listCategoriesTasksCategoriesGet(http: HttpClient, rootUrl: string, params?: ListCategoriesTasksCategoriesGet$Params, context?: HttpContext): Observable<StrictHttpResponse<PaginatedResponseTaskCategoryOut>> {
   const rb = new RequestBuilder(rootUrl, listCategoriesTasksCategoriesGet.PATH, 'get');
   if (params) {
     rb.query('residence_id', params.residence_id, {});
@@ -47,7 +47,7 @@ export function listCategoriesTasksCategoriesGet(http: HttpClient, rootUrl: stri
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PaginatedResponse>;
+      return r as StrictHttpResponse<PaginatedResponseTaskCategoryOut>;
     })
   );
 }
