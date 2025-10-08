@@ -7,10 +7,14 @@
  * Esquema para la creación de una nueva cama.
  *
  * Attributes:
- *     room_id (str): ID de la habitación a la que pertenece la cama
  *     name (str): Nombre de la cama
+ *     residence_id (str): ID de la residencia a la que pertenece
+ *     floor_id (str): ID del piso al que pertenece
+ *     room_id (str): ID de la habitación a la que pertenece
  */
 export interface BedCreate {
+  floor_id: string;
   name: string;
+  residence_id: string;
   room_id: string;
 }

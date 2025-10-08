@@ -9,7 +9,7 @@ import { UserResidenceAssignment } from '../models/user-residence-assignment';
  */
 export interface UserOut {
   alias: string;
-  created_at: string;
+  created_at?: (string | null);
   created_by?: ({
 [key: string]: any;
 } | null);

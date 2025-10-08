@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, JsonPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -41,7 +41,8 @@ import { ListBedsStructureBedsGet$Params } from '../../../openapi/generated/fn/s
     MatSortModule,
     MatButtonToggleModule,
     DatePipe,
-    Header
+    Header,
+    JsonPipe
   ],
   templateUrl: './beds.html',
   styleUrl: './beds.scss'
@@ -231,6 +232,8 @@ export class Beds implements OnInit, AfterViewInit {
             .createBedStructureBedsPost({
               body: {
                 name: result.name,
+                residence_id: result.residence_id,
+                floor_id: result.floor_id,
                 room_id: result.room_id
               }
             })

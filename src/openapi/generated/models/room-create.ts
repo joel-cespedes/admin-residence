@@ -7,10 +7,12 @@
  * Esquema para la creación de una nueva habitación.
  *
  * Attributes:
- *     floor_id (str): ID del piso al que pertenece la habitación
  *     name (str): Nombre de la habitación
+ *     residence_id (str): ID de la residencia a la que pertenece
+ *     floor_id (str): ID del piso al que pertenece
  */
 export interface RoomCreate {
   floor_id: string;
   name: string;
+  residence_id: string;
 }

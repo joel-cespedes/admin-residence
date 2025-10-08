@@ -7,8 +7,10 @@
  * Esquema para la creación de un nuevo piso.
  *
  * Attributes:
- *     name (str): Nombre del piso (obligatorio)
+ *     name (str): Nombre del piso
+ *     residence_id (str): ID de la residencia a la que pertenece
  */
 export interface FloorCreate {
   name: string;
+  residence_id: string;
 }

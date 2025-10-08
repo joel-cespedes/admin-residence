@@ -10,17 +10,21 @@
  *     full_name (str): Nombre completo del residente
  *     birth_date (date): Fecha de nacimiento del residente
  *     sex (Optional[str]): Sexo del residente
- *     comments (Optional[str]): Comentarios adicionales sobre el residente
+ *     residence_id (str): ID de la residencia a la que pertenece
  *     status (ResidentStatus): Estado del residente (default: 'active')
- *     residence_id (str): ID de la residencia a la que pertenece el residente
- *     bed_id (Optional[str]): ID de la cama asignada (solo para residentes activos)
+ *     bed_id (Optional[str]): ID de la cama asignada
+ *     room_id (Optional[str]): ID de la habitación asignada
+ *     floor_id (Optional[str]): ID del piso asignado
+ *     comments (Optional[str]): Comentarios adicionales
  */
 export interface ResidentCreate {
   bed_id?: (string | null);
   birth_date: string;
   comments?: (string | null);
+  floor_id?: (string | null);
   full_name: string;
   residence_id: string;
+  room_id?: (string | null);
   sex?: (string | null);
   status?: 'active' | 'discharged' | 'deceased';
 }

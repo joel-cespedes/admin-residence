@@ -162,6 +162,7 @@ export class RoomFormModal {
           // Create new room
           const roomCreate: RoomCreate = {
             name: formValue.name,
+            residence_id: formValue.residence_id,
             floor_id: formValue.floor_id
           };
 

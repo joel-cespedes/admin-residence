@@ -124,10 +124,14 @@ export class FloorFormModal {
         }
       });
     } else {
+      const residenceId = formData.residence_id ?? this.data?.preselectedResidenceId ?? this.data?.residence_id ?? '';
       this.structureService
         .createFloorStructureFloorsPost({
-          residence_id: (formData.residence_id ?? this.data?.preselectedResidenceId ?? this.data?.residence_id),
-          body: { name: formData.name }
+          residence_id: residenceId,
+          body: {
+            name: formData.name,
+            residence_id: residenceId
+          }
         })
         .subscribe({
           next: response => {
