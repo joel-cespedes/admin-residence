@@ -10,7 +10,15 @@ import { UserResidenceAssignment } from '../models/user-residence-assignment';
 export interface UserOut {
   alias: string;
   created_at: string;
+  created_by?: ({
+[key: string]: any;
+} | null);
   id: string;
+  name?: (string | null);
+  residence_names?: (Array<string> | null);
   residences: Array<UserResidenceAssignment>;
   role: 'superadmin' | 'manager' | 'professional';
+  updated_at?: (string | null);
+
+  [key: string]: any;
 }

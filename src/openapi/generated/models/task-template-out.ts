@@ -14,14 +14,17 @@
  *     status1-6 (Optional[str]): Textos para estados
  *     audio_phrase (Optional[str]): Frase de audio asociada
  *     is_block (Optional[bool]): Estado de bloqueo
+ *     category_name (Optional[str]): Nombre de la categoría
+ *     residence_name (Optional[str]): Nombre de la residencia
  *     created_by_info (Optional[Dict[str, Any]]): Información del usuario que creó la plantilla
- *     created_at (datetime): Fecha de creación del registro
- *     updated_at (datetime): Fecha de última actualización
- *     deleted_at (Optional[datetime]): Fecha de eliminación (soft delete)
+ *     created_at (Optional[str]): Fecha de creación del registro
+ *     updated_at (Optional[str]): Fecha de última actualización
+ *     deleted_at (Optional[str]): Fecha de eliminación (soft delete)
  */
 export interface TaskTemplateOut {
   audio_phrase?: (string | null);
-  created_at: string;
+  category_name?: (string | null);
+  created_at?: (string | null);
   created_by_info?: ({
 [key: string]: any;
 } | null);
@@ -30,6 +33,7 @@ export interface TaskTemplateOut {
   is_block?: (boolean | null);
   name: string;
   residence_id: string;
+  residence_name?: (string | null);
   status1?: (string | null);
   status2?: (string | null);
   status3?: (string | null);
@@ -37,5 +41,7 @@ export interface TaskTemplateOut {
   status5?: (string | null);
   status6?: (string | null);
   task_category_id: string;
-  updated_at: string;
+  updated_at?: (string | null);
+
+  [key: string]: any;
 }

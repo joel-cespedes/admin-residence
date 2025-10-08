@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { confirmVoiceMeasurementMeasurementsVoiceConfirmPost } from '../fn/measurements/confirm-voice-measurement-measurements-voice-confirm-post';
+import { ConfirmVoiceMeasurementMeasurementsVoiceConfirmPost$Params } from '../fn/measurements/confirm-voice-measurement-measurements-voice-confirm-post';
 import { createMeasurementMeasurementsPost } from '../fn/measurements/create-measurement-measurements-post';
 import { CreateMeasurementMeasurementsPost$Params } from '../fn/measurements/create-measurement-measurements-post';
 import { deleteMeasurementMeasurementsMeasurementIdDelete } from '../fn/measurements/delete-measurement-measurements-measurement-id-delete';
@@ -34,8 +36,11 @@ import { PaginatedResponseMeasurementDailySummary } from '../models/paginated-re
 import { PaginatedResponseMeasurementOut } from '../models/paginated-response-measurement-out';
 import { patchMeasurementMeasurementsMeasurementIdPatch } from '../fn/measurements/patch-measurement-measurements-measurement-id-patch';
 import { PatchMeasurementMeasurementsMeasurementIdPatch$Params } from '../fn/measurements/patch-measurement-measurements-measurement-id-patch';
+import { processVoiceMeasurementMeasurementsVoicePost } from '../fn/measurements/process-voice-measurement-measurements-voice-post';
+import { ProcessVoiceMeasurementMeasurementsVoicePost$Params } from '../fn/measurements/process-voice-measurement-measurements-voice-post';
 import { updateMeasurementMeasurementsMeasurementIdPut } from '../fn/measurements/update-measurement-measurements-measurement-id-put';
 import { UpdateMeasurementMeasurementsMeasurementIdPut$Params } from '../fn/measurements/update-measurement-measurements-measurement-id-put';
+import { VoiceMeasurementResponse } from '../models/voice-measurement-response';
 
 @Injectable({ providedIn: 'root' })
 export class MeasurementsService extends BaseService {
@@ -439,6 +444,86 @@ export class MeasurementsService extends BaseService {
 }>>): Array<{
 [key: string]: any;
 }> => r.body)
+    );
+  }
+
+  /** Path part for operation `processVoiceMeasurementMeasurementsVoicePost()` */
+  static readonly ProcessVoiceMeasurementMeasurementsVoicePostPath = '/measurements/voice';
+
+  /**
+   * Process Voice Measurement.
+   *
+   * Procesa un transcript de voz para registrar una medición médica.
+   *
+   * Ejemplos de transcripts:
+   * - "Tensión de Juan Pérez 120 80"
+   * - "Oxígeno de María García 98"
+   * - "Peso de Pedro López 75 kilos"
+   * - "Temperatura de Ana Martínez 36.5"
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `processVoiceMeasurementMeasurementsVoicePost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  processVoiceMeasurementMeasurementsVoicePost$Response(params: ProcessVoiceMeasurementMeasurementsVoicePost$Params, context?: HttpContext): Observable<StrictHttpResponse<VoiceMeasurementResponse>> {
+    return processVoiceMeasurementMeasurementsVoicePost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Process Voice Measurement.
+   *
+   * Procesa un transcript de voz para registrar una medición médica.
+   *
+   * Ejemplos de transcripts:
+   * - "Tensión de Juan Pérez 120 80"
+   * - "Oxígeno de María García 98"
+   * - "Peso de Pedro López 75 kilos"
+   * - "Temperatura de Ana Martínez 36.5"
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `processVoiceMeasurementMeasurementsVoicePost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  processVoiceMeasurementMeasurementsVoicePost(params: ProcessVoiceMeasurementMeasurementsVoicePost$Params, context?: HttpContext): Observable<VoiceMeasurementResponse> {
+    return this.processVoiceMeasurementMeasurementsVoicePost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<VoiceMeasurementResponse>): VoiceMeasurementResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `confirmVoiceMeasurementMeasurementsVoiceConfirmPost()` */
+  static readonly ConfirmVoiceMeasurementMeasurementsVoiceConfirmPostPath = '/measurements/voice/confirm';
+
+  /**
+   * Confirm Voice Measurement.
+   *
+   * Confirma y registra una medición después de resolver ambigüedad.
+   * Se usa cuando el usuario selecciona manualmente el residente correcto.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `confirmVoiceMeasurementMeasurementsVoiceConfirmPost()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  confirmVoiceMeasurementMeasurementsVoiceConfirmPost$Response(params: ConfirmVoiceMeasurementMeasurementsVoiceConfirmPost$Params, context?: HttpContext): Observable<StrictHttpResponse<VoiceMeasurementResponse>> {
+    return confirmVoiceMeasurementMeasurementsVoiceConfirmPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Confirm Voice Measurement.
+   *
+   * Confirma y registra una medición después de resolver ambigüedad.
+   * Se usa cuando el usuario selecciona manualmente el residente correcto.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `confirmVoiceMeasurementMeasurementsVoiceConfirmPost$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  confirmVoiceMeasurementMeasurementsVoiceConfirmPost(params: ConfirmVoiceMeasurementMeasurementsVoiceConfirmPost$Params, context?: HttpContext): Observable<VoiceMeasurementResponse> {
+    return this.confirmVoiceMeasurementMeasurementsVoiceConfirmPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<VoiceMeasurementResponse>): VoiceMeasurementResponse => r.body)
     );
   }
 

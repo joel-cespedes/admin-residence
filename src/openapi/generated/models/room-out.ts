@@ -11,10 +11,20 @@
  *     residence_id (str): ID de la residencia a la que pertenece
  *     floor_id (str): ID del piso al que pertenece
  *     name (str): Nombre de la habitación
+ *     floor_name (Optional[str]): Nombre del piso
+ *     residence_name (Optional[str]): Nombre de la residencia
+ *     created_at (Optional[str]): Fecha de creación
+ *     updated_at (Optional[str]): Fecha de actualización
  */
 export interface RoomOut {
+  created_at?: (string | null);
   floor_id: string;
+  floor_name?: (string | null);
   id: string;
   name: string;
   residence_id: string;
+  residence_name?: (string | null);
+  updated_at?: (string | null);
+
+  [key: string]: any;
 }

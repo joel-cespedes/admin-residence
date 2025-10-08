@@ -6,7 +6,7 @@
 /**
  * Opción de residente para selección cuando hay ambigüedad
  */
-export interface ResidentOption {
+export interface AppSchemasTaskResidentOption {
   bed_number?: (string | null);
   full_name: string;
   id: string;

@@ -10,9 +10,17 @@
  *     id (str): Identificador único del piso
  *     residence_id (str): ID de la residencia a la que pertenece
  *     name (str): Nombre del piso
+ *     residence_name (Optional[str]): Nombre de la residencia
+ *     created_at (Optional[str]): Fecha de creación
+ *     updated_at (Optional[str]): Fecha de actualización
  */
 export interface FloorOut {
+  created_at?: (string | null);
   id: string;
   name: string;
   residence_id: string;
+  residence_name?: (string | null);
+  updated_at?: (string | null);
+
+  [key: string]: any;
 }

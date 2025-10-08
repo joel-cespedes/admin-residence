@@ -27,7 +27,7 @@ export class AuthService extends BaseService {
   /**
    * Login.
    *
-   *
+   * Login endpoint con rate limiting de 5 intentos por minuto para prevenir brute force.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `loginAuthLoginPost()` instead.
@@ -41,7 +41,7 @@ export class AuthService extends BaseService {
   /**
    * Login.
    *
-   *
+   * Login endpoint con rate limiting de 5 intentos por minuto para prevenir brute force.
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `loginAuthLoginPost$Response()` instead.

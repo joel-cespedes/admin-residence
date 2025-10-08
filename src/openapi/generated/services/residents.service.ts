@@ -17,6 +17,8 @@ import { createResidentResidentsPost } from '../fn/residents/create-resident-res
 import { CreateResidentResidentsPost$Params } from '../fn/residents/create-resident-residents-post';
 import { deleteResidentResidentsIdDelete } from '../fn/residents/delete-resident-residents-id-delete';
 import { DeleteResidentResidentsIdDelete$Params } from '../fn/residents/delete-resident-residents-id-delete';
+import { getResidentChronologyResidentsIdChronologyGet } from '../fn/residents/get-resident-chronology-residents-id-chronology-get';
+import { GetResidentChronologyResidentsIdChronologyGet$Params } from '../fn/residents/get-resident-chronology-residents-id-chronology-get';
 import { getResidentHistoryResidentsIdHistoryGet } from '../fn/residents/get-resident-history-residents-id-history-get';
 import { GetResidentHistoryResidentsIdHistoryGet$Params } from '../fn/residents/get-resident-history-residents-id-history-get';
 import { getResidentResidentsIdGet } from '../fn/residents/get-resident-residents-id-get';
@@ -24,6 +26,7 @@ import { GetResidentResidentsIdGet$Params } from '../fn/residents/get-resident-r
 import { listResidentsResidentsGet } from '../fn/residents/list-residents-residents-get';
 import { ListResidentsResidentsGet$Params } from '../fn/residents/list-residents-residents-get';
 import { PaginatedResponseResidentOut } from '../models/paginated-response-resident-out';
+import { ResidentChronologyResponse } from '../models/resident-chronology-response';
 import { ResidentOut } from '../models/resident-out';
 import { updateResidentResidentsIdPut } from '../fn/residents/update-resident-residents-id-put';
 import { UpdateResidentResidentsIdPut$Params } from '../fn/residents/update-resident-residents-id-put';
@@ -278,6 +281,41 @@ export class ResidentsService extends BaseService {
 }>>): Array<{
 [key: string]: any;
 }> => r.body)
+    );
+  }
+
+  /** Path part for operation `getResidentChronologyResidentsIdChronologyGet()` */
+  static readonly GetResidentChronologyResidentsIdChronologyGetPath = '/residents/{id}/chronology';
+
+  /**
+   * Get Resident Chronology.
+   *
+   * Obtiene la cronología completa de un residente: mediciones, tareas y cambios de cama/estado.
+   * Los eventos se retornan ordenados por fecha descendente (más recientes primero).
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getResidentChronologyResidentsIdChronologyGet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResidentChronologyResidentsIdChronologyGet$Response(params: GetResidentChronologyResidentsIdChronologyGet$Params, context?: HttpContext): Observable<StrictHttpResponse<ResidentChronologyResponse>> {
+    return getResidentChronologyResidentsIdChronologyGet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get Resident Chronology.
+   *
+   * Obtiene la cronología completa de un residente: mediciones, tareas y cambios de cama/estado.
+   * Los eventos se retornan ordenados por fecha descendente (más recientes primero).
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getResidentChronologyResidentsIdChronologyGet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResidentChronologyResidentsIdChronologyGet(params: GetResidentChronologyResidentsIdChronologyGet$Params, context?: HttpContext): Observable<ResidentChronologyResponse> {
+    return this.getResidentChronologyResidentsIdChronologyGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ResidentChronologyResponse>): ResidentChronologyResponse => r.body)
     );
   }
 
